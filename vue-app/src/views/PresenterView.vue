@@ -1,5 +1,5 @@
 <template>
-  <div class="presenter-container" :class="{ 'fullscreen': isFullscreen }">
+  <div class="presenter-container" :class="{ fullscreen: isFullscreen }">
     <!-- Progress Bar -->
     <div class="progress-bar">
       <span class="progress-text">Foto {{ currentPhotoIndex + 1 }} / {{ totalPhotos }}</span>
@@ -8,10 +8,7 @@
     <!-- Main Content Area -->
     <div class="main-content">
       <!-- Photo Container -->
-      <div
-        class="photo-container"
-        :class="{ 'with-questions': questionsVisible }"
-      >
+      <div class="photo-container" :class="{ 'with-questions': questionsVisible }">
         <img
           v-if="currentQuiz"
           :src="getImageUrl(currentQuiz.image)"
@@ -23,10 +20,7 @@
 
       <!-- Questions Container -->
       <transition name="slide">
-        <div
-          v-if="questionsVisible"
-          class="questions-container"
-        >
+        <div v-if="questionsVisible" class="questions-container">
           <QuestionCard
             :question="currentQuestion"
             :questionIndex="currentQuestionIndex"
@@ -46,13 +40,13 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useGameStore } from '@/stores/gameStore'
-import { getImageUrl } from '@/data/quizData'
-import QuestionCard from '@/components/QuestionCard.vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useGameStore } from '@/stores/gameStore';
+import { getImageUrl } from '@/data/quizData';
+import QuestionCard from '@/components/QuestionCard.vue';
 
-const gameStore = useGameStore()
+const gameStore = useGameStore();
 const {
   currentPhotoIndex,
   currentQuestionIndex,
@@ -61,78 +55,78 @@ const {
   currentQuiz,
   currentQuestion,
   totalPhotos,
-  totalQuestions
-} = storeToRefs(gameStore)
+  totalQuestions,
+} = storeToRefs(gameStore);
 
-const isFullscreen = ref(false)
+const isFullscreen = ref(false);
 
 const controlsHintText = computed(() => {
   if (questionsVisible.value) {
-    return 'Mezerník skryje | ↑↓ Otázky | A Odpovědi'
+    return 'Mezerník skryje | ↑↓ Otázky | A Odpovědi';
   }
-  return 'Mezerník zobrazí otázky | F pro celou obrazovku'
-})
+  return 'Mezerník zobrazí otázky | F pro celou obrazovku';
+});
 
 // Keyboard event handler
 function handleKeyPress(e) {
-  switch(e.key) {
+  switch (e.key) {
     case ' ':
-      e.preventDefault()
-      gameStore.toggleQuestions()
-      break
+      e.preventDefault();
+      gameStore.toggleQuestions();
+      break;
     case 'ArrowRight':
-      e.preventDefault()
-      gameStore.nextPhoto()
-      break
+      e.preventDefault();
+      gameStore.nextPhoto();
+      break;
     case 'ArrowLeft':
-      e.preventDefault()
-      gameStore.previousPhoto()
-      break
+      e.preventDefault();
+      gameStore.previousPhoto();
+      break;
     case 'ArrowDown':
-      e.preventDefault()
-      gameStore.nextQuestion()
-      break
+      e.preventDefault();
+      gameStore.nextQuestion();
+      break;
     case 'ArrowUp':
-      e.preventDefault()
-      gameStore.previousQuestion()
-      break
+      e.preventDefault();
+      gameStore.previousQuestion();
+      break;
     case 'a':
     case 'A':
-      e.preventDefault()
-      gameStore.revealAnswer()
-      break
+      e.preventDefault();
+      gameStore.revealAnswer();
+      break;
     case 'f':
     case 'F':
-      e.preventDefault()
-      toggleFullscreen()
-      break
+      e.preventDefault();
+      toggleFullscreen();
+      break;
     case 'Escape':
       if (questionsVisible.value) {
-        gameStore.hideQuestions()
+        gameStore.hideQuestions();
       } else if (document.fullscreenElement) {
-        document.exitFullscreen()
+        document.exitFullscreen();
       }
-      break
+      break;
   }
 }
 
 function toggleFullscreen() {
   if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen()
-    isFullscreen.value = true
+    document.documentElement.requestFullscreen();
+    isFullscreen.value = true;
   } else {
-    document.exitFullscreen()
-    isFullscreen.value = false
+    document.exitFullscreen();
+    isFullscreen.value = false;
   }
 }
 
 onMounted(() => {
-  window.addEventListener('keydown', handleKeyPress)
-})
+  window.addEventListener('keydown', handleKeyPress);
+});
 
 onUnmounted(() => {
-  window.removeEventListener('keydown', handleKeyPress)
-})
+  window.removeEventListener('keydown', handleKeyPress);
+});
 </script>
 
 <style scoped>
@@ -217,7 +211,8 @@ onUnmounted(() => {
 }
 
 /* Transitions */
-.slide-enter-active, .slide-leave-active {
+.slide-enter-active,
+.slide-leave-active {
   transition: all 0.4s ease;
 }
 

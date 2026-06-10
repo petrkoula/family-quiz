@@ -14,11 +14,7 @@
         @keyup.enter="registerTeam"
       />
 
-      <button
-        class="button button-primary"
-        @click="registerTeam"
-        :disabled="!teamName.trim()"
-      >
+      <button class="button button-primary" @click="registerTeam" :disabled="!teamName.trim()">
         Připojit se
       </button>
     </div>
@@ -28,20 +24,20 @@
       <!-- Team Info Card -->
       <div class="card team-info">
         <h1>🎯 Family Quiz</h1>
-        <div class="score">Skóre: <span>{{ teamScore }}</span></div>
-        <p class="team-name-display">Tým: <strong>{{ teamName }}</strong></p>
+        <div class="score">
+          Skóre: <span>{{ teamScore }}</span>
+        </div>
+        <p class="team-name-display">
+          Tým: <strong>{{ teamName }}</strong>
+        </p>
       </div>
 
       <!-- Question Card -->
       <div class="card question-card">
-        <div v-if="!questionsVisible" class="status waiting">
-          ⏳ Čekáme na další otázku...
-        </div>
+        <div v-if="!questionsVisible" class="status waiting">⏳ Čekáme na další otázku...</div>
 
         <div v-else class="question-content">
-          <div class="photo-info">
-            Fotka {{ currentPhotoIndex + 1 }} / {{ totalPhotos }}
-          </div>
+          <div class="photo-info">Fotka {{ currentPhotoIndex + 1 }} / {{ totalPhotos }}</div>
 
           <!-- Progress Dots -->
           <div class="progress-dots">
@@ -82,65 +78,65 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useGameStore } from '@/stores/gameStore'
+import { ref, computed, watch } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useGameStore } from '@/stores/gameStore';
 
-const gameStore = useGameStore()
+const gameStore = useGameStore();
 const {
   currentPhotoIndex,
   currentQuestionIndex,
   questionsVisible,
   currentQuestion,
   totalPhotos,
-  totalQuestions
-} = storeToRefs(gameStore)
+  totalQuestions,
+} = storeToRefs(gameStore);
 
-const isRegistered = ref(false)
-const teamName = ref('')
-const teamScore = ref(0)
-const selectedAnswer = ref(null)
-const answerSubmitted = ref(false)
+const isRegistered = ref(false);
+const teamName = ref('');
+const teamScore = ref(0);
+const selectedAnswer = ref(null);
+const answerSubmitted = ref(false);
 
 function registerTeam() {
-  if (!teamName.value.trim()) return
+  if (!teamName.value.trim()) return;
 
-  isRegistered.value = true
+  isRegistered.value = true;
   // In production, this would send to Firebase
-  console.log('Team registered:', teamName.value)
+  console.log('Team registered:', teamName.value);
 }
 
 function selectAnswer(index) {
-  if (answerSubmitted.value) return
-  selectedAnswer.value = index
+  if (answerSubmitted.value) return;
+  selectedAnswer.value = index;
 }
 
 function submitAnswer() {
-  if (selectedAnswer.value === null || answerSubmitted.value) return
+  if (selectedAnswer.value === null || answerSubmitted.value) return;
 
-  answerSubmitted.value = true
+  answerSubmitted.value = true;
   // In production, send answer to Firebase
-  console.log('Answer submitted:', selectedAnswer.value)
+  console.log('Answer submitted:', selectedAnswer.value);
 
   // Check if correct (for demo purposes)
   if (selectedAnswer.value === currentQuestion.value.correct) {
-    teamScore.value++
+    teamScore.value++;
   }
 }
 
 // Reset answer when question changes
 watch([currentPhotoIndex, currentQuestionIndex], () => {
-  selectedAnswer.value = null
-  answerSubmitted.value = false
-})
+  selectedAnswer.value = null;
+  answerSubmitted.value = false;
+});
 
 // Reset when questions hide
-watch(questionsVisible, (visible) => {
+watch(questionsVisible, visible => {
   if (!visible) {
-    selectedAnswer.value = null
-    answerSubmitted.value = false
+    selectedAnswer.value = null;
+    answerSubmitted.value = false;
   }
-})
+});
 </script>
 
 <style scoped>

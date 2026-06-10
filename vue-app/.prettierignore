@@ -1,0 +1,23 @@
+# Dependencies
+node_modules
+dist
+.vite
+
+# Build outputs
+dist
+build
+*.min.js
+*.min.css
+
+# Coverage
+coverage
+
+# IDE
+.idea
+.vscode
+
+# Logs
+*.log
+
+# Test screenshots
+tests/screenshots

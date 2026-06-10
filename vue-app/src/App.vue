@@ -5,15 +5,15 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
-import { useGameStore } from '@/stores/gameStore'
+import { onMounted } from 'vue';
+import { useGameStore } from '@/stores/gameStore';
 
-const gameStore = useGameStore()
+const gameStore = useGameStore();
 
 onMounted(() => {
   // Initialize quiz data on app load (local-first)
-  gameStore.initializeQuizData()
-})
+  gameStore.initializeQuizData();
+});
 </script>
 
 <style>

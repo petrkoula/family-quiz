@@ -33,21 +33,21 @@
 defineProps({
   question: {
     type: Object,
-    required: true
+    required: true,
   },
   questionIndex: {
     type: Number,
-    required: true
+    required: true,
   },
   totalQuestions: {
     type: Number,
-    required: true
+    required: true,
   },
   answersRevealed: {
     type: Boolean,
-    default: false
-  }
-})
+    default: false,
+  },
+});
 </script>
 
 <style scoped>
@@ -130,7 +130,7 @@ defineProps({
 }
 
 .option.correct::after {
-  content: " ✓";
+  content: ' ✓';
   margin-left: 15px;
   font-size: 2.2rem;
 }

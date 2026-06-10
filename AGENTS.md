@@ -76,11 +76,15 @@ Before substantial work: consult `.ub-workflows/status.md` for current work stat
 ## Quality Gates
 
 All code changes must:
-1. Maintain separator column alignment (longest-left-token rule)
+1. Be formatted with Prettier (runs automatically on commit via git hooks)
 2. Use Vue 3 Composition API with `<script setup>`
-3. Format embedded `<style>` and `<script>` blocks as native CSS/JS
-4. Pass E2E tests (`npm run test:e2e`)
-5. Build successfully (`npm run build`)
+3. Pass E2E tests (`yarn test:e2e`)
+4. Build successfully (`yarn build`)
+
+**Formatting Workflow:**
+- Automatic: Pre-commit hook formats staged files via nano-staged
+- Manual: `yarn format` to format all files
+- Check: `yarn format:check` to verify formatting without changes
 
 ## Version Policy
 

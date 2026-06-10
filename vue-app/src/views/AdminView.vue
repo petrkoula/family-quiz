@@ -20,35 +20,31 @@
       <!-- Teams Leaderboard (Placeholder) -->
       <div class="card">
         <h2>🏆 Žebříček týmů</h2>
-        <div class="no-data">
-          Připojení týmů se zobrazí po integraci s Firebase
-        </div>
+        <div class="no-data">Připojení týmů se zobrazí po integraci s Firebase</div>
       </div>
 
       <!-- Current Responses (Placeholder) -->
       <div class="card">
         <h2>📝 Odpovědi na aktuální otázku</h2>
-        <div class="no-data">
-          Odpovědi týmů se zobrazí po integraci s Firebase
-        </div>
+        <div class="no-data">Odpovědi týmů se zobrazí po integraci s Firebase</div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { storeToRefs } from 'pinia'
-import { useGameStore } from '@/stores/gameStore'
+import { storeToRefs } from 'pinia';
+import { useGameStore } from '@/stores/gameStore';
 
-const gameStore = useGameStore()
+const gameStore = useGameStore();
 const {
   currentPhotoIndex,
   currentQuestionIndex,
   questionsVisible,
   currentQuestion,
   totalPhotos,
-  totalQuestions
-} = storeToRefs(gameStore)
+  totalQuestions,
+} = storeToRefs(gameStore);
 </script>
 
 <style scoped>

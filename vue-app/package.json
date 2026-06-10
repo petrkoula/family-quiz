@@ -8,7 +8,10 @@
     "preview": "vite preview",
     "test:e2e": "node tests/presenter.test.js",
     "test:e2e:headless": "cross-env HEADLESS=true node tests/presenter.test.js",
-    "test:e2e:interactive": "cross-env HEADLESS=false node tests/presenter.test.js"
+    "test:e2e:interactive": "cross-env HEADLESS=false node tests/presenter.test.js",
+    "format": "prettier --write \"src/**/*.{js,vue,json,css}\"",
+    "format:check": "prettier --check \"src/**/*.{js,vue,json,css}\"",
+    "prepare": "simple-git-hooks"
   },
   "dependencies": {
     "pinia": "^2.1.7",
@@ -18,7 +21,16 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.0",
     "cross-env": "^10.1.0",
+    "nano-staged": "0.8.0",
+    "prettier": "3.4.2",
+    "simple-git-hooks": "2.12.1",
     "taiko": "^1.4.9",
     "vite": "^5.0.8"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx nano-staged"
+  },
+  "nano-staged": {
+    "*.{js,vue,json,css}": "prettier --write"
   }
 }
