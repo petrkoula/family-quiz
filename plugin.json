@@ -1,0 +1,7 @@
+{
+  "name": "family-quiz",
+  "description": "Vue.js photo quiz application with quality standards, Vue best practices, and workflow-first development for maintainable family quiz experiences.",
+  "version": "1.0.0",
+  "skills": ".agents/skills/",
+  "agents": ".github/agents/"
+}
