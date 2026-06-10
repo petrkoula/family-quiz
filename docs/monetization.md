@@ -212,6 +212,56 @@ Claude operates as the content, monetization, and trust engine behind the app.
 
 ---
 
+## 6-Month Income Estimate
+
+### Assumptions
+
+| Parameter | Value | Rationale |
+|---|---|---|
+| Free-to-paid conversion | 3% | Industry average 2–5% for freemium apps |
+| Monthly churn (B2C) | 6.5% | B2C subscription app average 5–12% |
+| 30-day free user retention | 30% | Typical casual mobile app retention |
+| Premium price | $4.99/mo (~110 CZK) | Per pricing structure above |
+| Premium Plus price | $9.99/mo (~220 CZK) | Per pricing structure above |
+| Premium : Premium Plus split | 70% : 30% | Assumed user distribution |
+| Add-on pack conversion | 2% of active free users × $1.99 | Seasonal one-time packs |
+| Monthly marketing budget | $220/mo (~5,000 CZK) | Fixed budget |
+
+### Monthly Forecast
+
+| Month | New Installs | Active Free Users | Paid Subscribers | Subscription $ | Add-on Packs $ | **Total Revenue $** | **Net After Marketing $** |
+|---|---|---|---|---|---|---|---|
+| M1 | 300 | 90 | 2 | $13 | $4 | **$17** | **–$203** |
+| M2 | +500 | 240 | 9 | $58 | $10 | **$68** | **–$152** |
+| M3 | +700 | 450 | 22 | $143 | $18 | **$161** | **–$59** |
+| M4 | +900 | 720 | 42 | $273 | $29 | **$301** | **+$81** ✅ |
+| M5 | +1,100 | 1,050 | 71 | $461 | $42 | **$503** | **+$283** |
+| M6 | +1,400 | 1,470 | 111 | $720 | $59 | **$779** | **+$559** |
+
+**6-month total revenue: ~$1,829 (~42,000 CZK)**
+**6-month net after marketing: ~$509 (~11,700 CZK)**
+**Break-even: Month 4**
+
+### Key Observations
+
+- **Months 1–3 are an investment phase.** Cumulative deficit is ~$414 (~9,500 CZK), covered within the monthly budget.
+- **Month 4 is break-even.** Subscription revenue crosses the $220 marketing cost with ~42 paid subscribers.
+- **Month 6 runway.** At 111 paid subscribers and $779/month revenue, the app is self-sustaining. Growth continuing at this rate projects 250–400 paid subscribers and $1,500–$3,000/month by end of year one.
+
+### Sensitivity
+
+The single biggest lever is free-to-paid conversion rate:
+
+| Conversion rate | M6 paid subscribers | M6 revenue |
+|---|---|---|
+| 2% (conservative) | ~74 | ~$530 |
+| **3% (baseline)** | **~111** | **~$779** |
+| 5% (optimistic) | ~185 | ~$1,280 |
+
+Pushing conversion from 3% to 5% — achievable with a strong Claude-powered "custom family quiz" paywall hook — nearly doubles M6 revenue.
+
+---
+
 ## Strategic Summary
 
 The monetization strategy is built on a clear transition from public entertainment to private family value.
