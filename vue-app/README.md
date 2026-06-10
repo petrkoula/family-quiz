@@ -198,6 +198,30 @@ const gameStore = useGameStore()
 </script>
 ```
 
+### E2E Testing
+
+Run end-to-end tests with Taiko:
+
+```bash
+# Start dev server first
+npm run dev
+
+# In another terminal, run tests
+npm run test:e2e
+
+# Or run with visible browser for debugging
+HEADLESS=false npm run test:e2e:headed
+```
+
+Tests cover the complete UX flow:
+- Photo display and navigation
+- Question toggling and cycling
+- Answer revealing
+- Keyboard controls
+- Complete presentation workflow
+
+See [tests/README.md](tests/README.md) for details.
+
 ## 🐛 Troubleshooting
 
 ### Images not loading
@@ -224,7 +248,7 @@ npm run build
 - **Vite** - Next generation build tool
 - **Pinia** - Vue state management
 - **Vue Router** - Official router
-- **Vite PWA** - PWA plugin
+- **Taiko** - E2E testing framework
 - **Firebase** - Backend platform (future)
 
 ## 🤝 Contributing
