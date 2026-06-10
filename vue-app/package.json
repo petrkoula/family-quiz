@@ -6,8 +6,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test:e2e": "taiko tests/presenter.test.js",
-    "test:e2e:headed": "taiko tests/presenter.test.js --observe"
+    "test:e2e": "node tests/presenter.test.js",
+    "test:e2e:headless": "cross-env HEADLESS=true node tests/presenter.test.js",
+    "test:e2e:interactive": "cross-env HEADLESS=false node tests/presenter.test.js"
   },
   "dependencies": {
     "pinia": "^2.1.7",
@@ -16,6 +17,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.0",
+    "cross-env": "^10.1.0",
     "taiko": "^1.4.9",
     "vite": "^5.0.8"
   }

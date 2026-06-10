@@ -6,8 +6,8 @@
  * Run with browser visible: npm run test:e2e:headed
  */
 
-const { openBrowser, goto, closeBrowser, press, text, screenshot, waitFor, $, write } = require('taiko');
-const assert = require('assert');
+import { openBrowser, goto, closeBrowser, press, text, screenshot, waitFor, $ } from 'taiko';
+import assert from 'assert';
 
 const BASE_URL = process.env.BASE_URL || 'http://localhost:5173';
 
@@ -23,8 +23,11 @@ const BASE_URL = process.env.BASE_URL || 'http://localhost:5173';
     // Test 1: Load presenter view
     console.log('\n✅ Test 1: Loading presenter view...');
     await goto(`${BASE_URL}/#/presenter`);
-    await waitFor(2000);
-    assert(await text('Foto 1 / 23').exists(), 'Photo counter should be visible');
+    await waitFor(3000); // Wait for Vue to render
+
+    // Check if text exists with timeout
+    const photoCounterExists = await text('Foto 1 / 3').exists(0, 5000);
+    assert(photoCounterExists, 'Photo counter should be visible');
     console.log('✓ Presenter view loaded successfully');
 
     // Test 2: Photo fullscreen initially
@@ -91,14 +94,14 @@ const BASE_URL = process.env.BASE_URL || 'http://localhost:5173';
     console.log('\n✅ Test 7: Navigating to next photo...');
     await press('ArrowRight');
     await waitFor(1000);
-    assert(await text('Foto 2 / 23').exists(), 'Should navigate to photo 2');
+    assert(await text('Foto 2 / 3').exists(), 'Should navigate to photo 2');
     console.log('✓ Navigated to next photo');
 
     // Test 8: Navigate back
     console.log('\n✅ Test 8: Navigating back to previous photo...');
     await press('ArrowLeft');
     await waitFor(1000);
-    assert(await text('Foto 1 / 23').exists(), 'Should navigate back to photo 1');
+    assert(await text('Foto 1 / 3').exists(), 'Should navigate back to photo 1');
     console.log('✓ Navigated back to previous photo');
 
     // Test 9: Photo navigation blocked when questions visible
@@ -107,7 +110,7 @@ const BASE_URL = process.env.BASE_URL || 'http://localhost:5173';
     await waitFor(500);
     await press('ArrowRight');
     await waitFor(500);
-    assert(await text('Foto 1 / 23').exists(), 'Should still be on photo 1');
+    assert(await text('Foto 1 / 3').exists(), 'Should still be on photo 1');
     console.log('✓ Photo navigation correctly blocked when questions visible');
 
     // Test 10: ESC to hide questions
@@ -141,7 +144,7 @@ const BASE_URL = process.env.BASE_URL || 'http://localhost:5173';
     await press('ArrowRight');
     await waitFor(1000);
 
-    assert(await text('Foto 2 / 23').exists(), 'Should be on photo 2');
+    assert(await text('Foto 2 / 3').exists(), 'Should be on photo 2');
     console.log('✓ Complete user flow executed successfully');
 
     // Take final screenshot

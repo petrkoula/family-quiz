@@ -9,29 +9,26 @@ End-to-end tests for the Family Quiz application using [Taiko](https://taiko.dev
 
 ## Running Tests
 
-### Headless Mode (CI/CD)
+### Headless Mode (Default, for CI/CD)
 
 ```bash
 # Make sure dev server is running
 yarn dev
 
-# In another terminal, run tests
+# In another terminal, run tests headless
 yarn test:e2e
+# or explicitly
+yarn test:e2e:headless
 ```
 
-### Headed Mode (Visual Debugging)
+### Interactive Mode (Visual Debugging)
 
 ```bash
-# Run tests with visible browser
-HEADLESS=false yarn test:e2e:headed
+# Run tests with visible browser for debugging
+yarn test:e2e:interactive
 ```
 
-Or on Windows:
-
-```bash
-set HEADLESS=false
-yarn test:e2e:headed
-```
+This works cross-platform (Windows, Mac, Linux) thanks to `cross-env`.
 
 ## Test Coverage
 
