@@ -25,6 +25,19 @@ Interactive photo quiz application built with Vue.js. Perfect for family gatheri
 - Smooth animations and transitions
 - Responsive design
 
+## 📸 Screenshots
+
+### Presenter View
+![Presenter with Questions](vue-app/tests/screenshots/presenter-questions.png)
+*Quiz presenter interface showing photo and questions side-by-side*
+
+### Key Features Showcase
+- **Fullscreen Photo Display** - Initial view with centered photo
+- **Question Panel** - Slides in from right with smooth animation
+- **Progress Dots** - Visual indicator of current question (1/3, 2/3, 3/3)
+- **Answer Reveal** - Highlighted correct answer with checkmark
+- **Keyboard Hints** - Context-aware control hints at bottom
+
 ## 🚀 Quick Start
 
 ### Option 1: Docker (Recommended)
@@ -196,6 +209,40 @@ import { useGameStore } from '@/stores/gameStore'
 
 const gameStore = useGameStore()
 </script>
+```
+
+## 🌐 Deployment
+
+### GitHub Pages (Automated)
+
+This project automatically deploys to GitHub Pages on every push to master.
+
+**Live Demo:** `https://yourusername.github.io/family-quiz/`
+
+**Setup:**
+1. Go to repository Settings → Pages
+2. Source: GitHub Actions
+3. Push to master - automatic deployment!
+
+The deploy workflow builds the Vue app and publishes to GitHub Pages.
+
+### Docker Deployment
+
+**Quick deploy anywhere:**
+```bash
+docker pull your-username/family-quiz:latest
+docker run -d -p 80:80 family-quiz:latest
+```
+
+See [DOCKER.md](DOCKER.md) for detailed deployment options.
+
+### Static Hosting
+
+Build and deploy to any static host:
+```bash
+cd vue-app
+npm run build
+# Upload dist/ folder to Netlify, Vercel, etc.
 ```
 
 ## 🚀 Future Features

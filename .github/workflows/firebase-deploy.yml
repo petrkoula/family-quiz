@@ -1,0 +1,89 @@
+name: Deploy to Firebase
+
+on:
+  push:
+    branches: [ development ]
+  workflow_dispatch:
+
+jobs:
+  deploy-hosting:
+    name: Deploy to Firebase Hosting (Serverless)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: vue-app/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./vue-app
+        run: npm ci
+
+      - name: Copy images to public
+        run: cp -r images/* vue-app/public/images/
+
+      - name: Build application
+        working-directory: ./vue-app
+        run: npm run build
+
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+          channelId: live
+          projectId: your-firebase-project-id
+          entryPoint: ./vue-app
+
+  deploy-cloud-run:
+    name: Deploy to Cloud Run (Containerized)
+    runs-on: ubuntu-latest
+    if: false  # Set to true to enable Cloud Run deployment
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          project_id: your-firebase-project-id
+          export_default_credentials: true
+
+      - name: Authenticate Docker with GCR
+        run: gcloud auth configure-docker
+
+      - name: Build Docker image
+        run: |
+          docker build -t gcr.io/your-firebase-project-id/family-quiz:${{ github.sha }} \
+                       -t gcr.io/your-firebase-project-id/family-quiz:latest \
+                       -f vue-app/Dockerfile \
+                       ./vue-app
+
+      - name: Push to Google Container Registry
+        run: |
+          docker push gcr.io/your-firebase-project-id/family-quiz:${{ github.sha }}
+          docker push gcr.io/your-firebase-project-id/family-quiz:latest
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy family-quiz \
+            --image gcr.io/your-firebase-project-id/family-quiz:latest \
+            --platform managed \
+            --region us-central1 \
+            --allow-unauthenticated \
+            --memory 512Mi \
+            --cpu 1 \
+            --min-instances 0 \
+            --max-instances 10
+
+      - name: Output URL
+        run: |
+          echo "Deployed to: $(gcloud run services describe family-quiz --platform managed --region us-central1 --format 'value(status.url)')"
