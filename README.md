@@ -1,119 +1,258 @@
-# Photo Quiz Presentation App
+# 🎯 Family Quiz
 
-A simple, interactive photo quiz application for presenting images with accompanying quiz questions to an audience.
+Interactive photo quiz application with real-time team participation. Perfect for family gatherings, parties, corporate events, or educational settings.
 
-## Features
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Node](https://img.shields.io/badge/node-%3E%3D14.0-brightgreen.svg)
 
-- Display 23 photos in sequence
-- 3 quiz questions per photo with multiple choice answers
-- Keyboard-controlled navigation
-- Toggle show/hide questions with spacebar
-- Reveal correct answers on demand
-- Clean, presentation-friendly design
+## ✨ Features
 
-## How to Use
+### 🖼️ Presentation Mode
+- **23 Vintage Family Photos** with custom Czech quiz questions
+- **Fullscreen Support** for projector/TV displays
+- **Smooth Navigation** with keyboard controls
+- **Question Cycling** - one question at a time with visual progress dots
+- **Answer Reveal** with beautiful animations
 
-### 1. Setup Your Questions
+### 📱 Team Participation (Server Mode)
+- **QR Code Access** - teams join instantly via phone
+- **Real-time Sync** - questions appear on all devices simultaneously
+- **Automatic Scoring** - points awarded for correct answers
+- **Live Leaderboard** - see team rankings update in real-time
+- **Admin Dashboard** - monitor all responses and export results
 
-Edit `quiz-data.json` to add your questions and answers for each photo:
+### 🎨 Design Highlights
+- Clean, minimalist interface
+- High-contrast colors for projector visibility
+- Large, readable fonts (optimized for distance viewing)
+- Touch-friendly mobile interface
+- Smooth animations and transitions
 
-```json
-{
-  "image": "IMG_4246_1.jpg",
-  "questions": [
-    {
-      "text": "Your question here?",
-      "options": ["Answer A", "Answer B", "Answer C", "Answer D"],
-      "correct": 0
-    }
-  ]
-}
+## 🚀 Quick Start
+
+### Standalone Mode (No Teams)
+
+Perfect for simple presentations without audience participation.
+
+```bash
+# Just open in browser
+open index.html
 ```
 
-- `text`: The question text
-- `options`: Array of answer choices (2-4 options)
-- `correct`: Index of the correct answer (0 = first option, 1 = second, etc.)
+### Server Mode (With Teams)
 
-### 2. Run the Application
+Enable real-time team participation via QR codes.
 
-Simply open `index.html` in a web browser:
-- Double-click `index.html`, or
-- Right-click and select "Open with" your preferred browser
+**Prerequisites:**
+- Node.js 14.0 or higher ([Download](https://nodejs.org/))
 
-### 3. Present to Your Audience
+**Setup:**
+```bash
+# 1. Install dependencies
+install.bat          # Windows
+# or
+npm install          # Mac/Linux
 
-**Keyboard Controls:**
-
-| Key | Action |
-|-----|--------|
-| **SPACE** | Toggle show/hide questions |
-| **→** (Right Arrow) | Next photo |
-| **←** (Left Arrow) | Previous photo |
-| **A** | Reveal correct answers (when questions are visible) |
-| **F** | Toggle fullscreen mode |
-| **ESC** | Hide questions or exit fullscreen |
-
-## Presentation Flow
-
-1. App opens showing first photo only
-2. Press **F** to enter fullscreen mode for better presentation
-3. Press **SPACE** to reveal questions for current photo
-4. Press **A** to highlight correct answers
-5. Press **SPACE** again to hide questions
-6. Press **→** to move to next photo (questions auto-hide)
-7. Repeat for all 23 photos
-8. Press **ESC** to exit fullscreen when done
-
-## File Structure
-
-```
-/quiz
-  /images/              # Your 23 photos
-  index.html           # Main application
-  styles.css           # Styling
-  app.js               # Application logic
-  quiz-data.json       # Questions and answers
-  README.md            # This file
+# 2. Start server
+start-server.bat     # Windows
+# or
+node server.js       # Mac/Linux
 ```
 
-## Customization
+**Access:**
+- 🎬 **Presenter**: http://localhost:3000/index.html
+- 📱 **Teams**: http://localhost:3000/team.html (or scan QR code)
+- 📊 **Admin**: http://localhost:3000/admin.html
 
-### Change Colors
-Edit `styles.css` and modify the gradient background:
-```css
-background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+## 🎮 Controls
+
+### Presenter Controls
+
+| Key | Action | When Available |
+|-----|--------|----------------|
+| **SPACE** | Show/hide questions | Always |
+| **← →** | Previous/next photo | Questions hidden |
+| **↑ ↓** | Previous/next question | Questions visible |
+| **A** | Reveal correct answer | Questions visible |
+| **F** | Toggle fullscreen | Always |
+| **ESC** | Exit fullscreen/hide questions | Context |
+
+### Mobile Team Interface
+
+- **Tap** to select answer
+- **Submit** button to send response
+- See your **score** update automatically
+- **Progress dots** show question number
+
+## 📖 How It Works
+
+### Presentation Flow
+
+```
+1. 🖼️  Show photo (fullscreen)
+2. ⌨️  Press SPACE → questions appear (photo 1/3, questions 2/3)
+3. 📱 Teams see question on phones
+4. ⏱️  Teams submit answers
+5. ⌨️  Press A → reveal correct answer
+6. ✅ Points auto-awarded
+7. ⌨️  Press ↓ → next question
+8. 🔁 Repeat for 3 questions
+9. ⌨️  Press SPACE → hide questions
+10. ⌨️ Press → → next photo
+```
+
+### Architecture
+
+```
+┌─────────────┐         ┌──────────────┐         ┌─────────────┐
+│  Presenter  │◄───────►│   Node.js    │◄───────►│    Teams    │
+│  (Browser)  │ Socket  │   Server     │ Socket  │  (Mobile)   │
+└─────────────┘         └──────────────┘         └─────────────┘
+                              ▲
+                              │ Socket.io
+                              ▼
+                        ┌──────────────┐
+                        │ Admin Panel  │
+                        └──────────────┘
+```
+
+## 🛠️ Configuration
+
+### Edit Questions
+
+Questions are embedded in `app.js`:
+
+```javascript
+const quizData = [
+  {
+    "image": "IMG_4246_1.jpg",
+    "questions": [
+      {
+        "text": "Your question in Czech?",
+        "options": ["A", "B", "C", "D"],
+        "correct": 0  // Index of correct answer
+      }
+      // ... 2 more questions
+    ]
+  }
+  // ... 22 more photos
+]
+```
+
+### Change Server Port
+
+Edit `server.js`:
+```javascript
+const PORT = 3000;  // Change to your preferred port
 ```
 
 ### Add More Photos
+
 1. Add images to `/images` folder
-2. Add corresponding entries to `quiz-data.json`
-3. The app will automatically adjust
+2. Add quiz entry in `app.js`
+3. Restart server
 
-## Tips
+## 📁 Project Structure
 
-- Press **F** to enter fullscreen mode for immersive presentation experience
-- Test your quiz before presenting to ensure all images load correctly
-- Keep questions concise for better readability from a distance
-- Use 2-4 answer options per question for optimal layout
-- Practice the keyboard controls before presenting to ensure smooth navigation
+```
+family-quiz/
+├── images/              # 23 vintage family photos
+├── index.html           # Presenter interface
+├── team.html            # Mobile team interface
+├── admin.html           # Admin dashboard
+├── app.js               # Presenter logic & quiz data
+├── styles.css           # Styling
+├── server.js            # Node.js WebSocket server
+├── package.json         # Dependencies
+├── install.bat          # Windows installer
+├── start-server.bat     # Windows server launcher
+├── README.md            # This file
+├── README-SERVER.md     # Detailed server setup
+└── PRD.md               # Product requirements doc
+```
 
-## Troubleshooting
+## 📊 Admin Panel Features
 
-**Photos not loading?**
-- Ensure all images are in the `/images` folder
-- Check that image filenames in `quiz-data.json` match exactly
+- **📈 Live Leaderboard** - Teams ranked by score
+- **📝 Response Monitor** - See who answered what
+- **📋 Full History** - All responses with timestamps
+- **💾 CSV Export** - Download results for analysis
 
-**Questions not showing?**
-- Open browser console (F12) to check for errors
-- Verify `quiz-data.json` is valid JSON format
+## 🌐 Network Setup
 
-**Layout issues?**
-- Try refreshing the page
-- Check browser zoom is at 100%
+### For Local Network (WiFi)
 
-## Browser Compatibility
+1. **Start server** with `start-server.bat`
+2. **Note the network IP** displayed in console:
+   ```
+   Network: http://192.168.1.105:3000
+   ```
+3. **Teams scan QR code** or visit that URL
+4. **Ensure same WiFi** - all devices on same network
+5. **Check firewall** - allow port 3000 if needed
 
-Works in all modern browsers:
-- Chrome/Edge (recommended)
-- Firefox
-- Safari
+### Finding Your IP
+
+**Windows:**
+```cmd
+ipconfig
+```
+Look for "IPv4 Address"
+
+**Mac/Linux:**
+```bash
+ifconfig | grep inet
+```
+
+## 🔧 Troubleshooting
+
+### Server won't start
+- ✅ Check Node.js installed: `node --version`
+- ✅ Run `install.bat` to install dependencies
+- ✅ Check port 3000 not already in use
+
+### Teams can't connect
+- ✅ Verify same WiFi network
+- ✅ Check Windows Firewall allows Node.js
+- ✅ Try disabling antivirus temporarily
+- ✅ Verify correct IP address
+
+### QR code not showing
+- ✅ Must use server mode (`start-server.bat`)
+- ✅ Check browser console (F12) for errors
+- ✅ Verify Socket.io loaded correctly
+
+## 📚 Documentation
+
+- **[README-SERVER.md](README-SERVER.md)** - Detailed server setup guide
+- **[PRD.md](PRD.md)** - Complete product requirements document
+- **In-app help** - Press `?` (future feature)
+
+## 🤝 Contributing
+
+This is a family project, but feel free to fork and adapt for your own use!
+
+## 📄 License
+
+MIT License - feel free to use and modify.
+
+## 🎉 Credits
+
+- **Questions**: AI-generated based on real family photos
+- **Photos**: Private family collection (23 vintage photos from 60s-80s)
+- **Technology**: Vanilla JS, Socket.io, Node.js
+- **Design**: Custom CSS with gradient backgrounds
+
+## 💡 Use Cases
+
+- 🏠 **Family Reunions** - Quiz about family history
+- 🎉 **Parties** - Interactive entertainment
+- 🏢 **Corporate Events** - Team building activity
+- 🎓 **Education** - Classroom engagement tool
+- 🎪 **Events** - Audience participation game
+
+---
+
+**Made with ❤️ for interactive family fun**
+
+For technical specifications and implementation in other technologies, see [PRD.md](PRD.md)
