@@ -2,9 +2,11 @@
 
 Interactive photo quiz application built with Vue.js. Perfect for family gatherings, parties, corporate events, or educational settings.
 
+![CI](https://github.com/petrkoula/family-quiz/workflows/CI/badge.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Vue](https://img.shields.io/badge/vue-3.4-brightgreen.svg)
 ![Vite](https://img.shields.io/badge/vite-5.0-blue.svg)
+![Docker](https://img.shields.io/badge/docker-ready-blue.svg)
 
 ## ✨ Features
 
