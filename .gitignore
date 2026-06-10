@@ -7,7 +7,6 @@ Thumbs.db
 nul
 dist/
 *.local
-yarn.lock
 package-lock.json
 vue-app/public/images/
 vue-app/tests/screenshots/

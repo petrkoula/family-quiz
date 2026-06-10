@@ -18,29 +18,37 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: vue-app/package-lock.json
+          node-version: '22'
+          cache: 'yarn'
+          cache-dependency-path: vue-app/yarn.lock
 
       - name: Install dependencies
         working-directory: ./vue-app
-        run: npm ci
+        run: yarn install --frozen-lockfile
+
+      - name: Run Prettier check
+        working-directory: ./vue-app
+        run: yarn format:check
 
       - name: Build application
         working-directory: ./vue-app
-        run: npm run build
+        run: yarn build
 
       - name: Start dev server
         working-directory: ./vue-app
         run: |
-          npm run dev &
+          yarn dev &
           echo $! > dev-server.pid
           # Wait for server to be ready
           npx wait-on http://localhost:5173 -t 30000
 
       - name: Run E2E tests
         working-directory: ./vue-app
-        run: npm run test:e2e
+        env:
+          CI: 'true'
+          SCREENSHOTS: 'true'
+          HEADLESS: 'true'
+        run: yarn test:e2e:headless
 
       - name: Stop dev server
         if: always()
