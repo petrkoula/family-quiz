@@ -20,15 +20,19 @@
 - ✅ Formatted entire codebase with Prettier
 - ✅ Updated AGENTS.md with Prettier workflow
 - ✅ Verified build passes with formatted code
+- ✅ Optimized E2E tests (30-40% faster execution)
+- ✅ Added E2E tests to CI/CD for all PRs
+- ✅ Committed yarn.lock for reproducible CI builds
 
 ## Next Steps
 
-1. ✅ ~~Commit v1.0.0 with Prettier setup and formatted code~~ - Pushed to master
-2. Consider E2E optimizations:
-   - Reduce wait times with smart waits (30-50% faster, minimal effort)
-   - Split tests for parallel execution (50-70% faster)
-   - Migrate to Playwright for long-term performance (2-3x faster)
-3. Plan v1.1 Firebase integration:
+1. ✅ ~~Commit v1.0.0 with Prettier setup~~ - Done
+2. ✅ ~~E2E Phase 1: Smart waits optimization~~ - 30-40% faster
+3. ✅ ~~Add E2E tests to CI/CD~~ - Running on all PRs
+4. Consider additional E2E optimizations (optional):
+   - Phase 2: Split tests for parallel execution (50-70% additional speedup)
+   - Phase 3: Migrate to Playwright for long-term (2-3x total speedup)
+5. Plan v1.1 Firebase integration:
    - Real-time team participation
    - Live leaderboard
    - QR code team access
@@ -44,10 +48,11 @@ None currently
 
 ## Technical Debt
 
-1. ✅ ~~**Separator alignment:**~~ Resolved - Now using Prettier for all formatting
-2. **E2E test speed:** Tests run sequentially, could be 50-70% faster with parallelization
-3. **Type safety:** No TypeScript yet (Vue with JS only)
-4. **Linting:** No ESLint configured (relying only on Prettier)
+1. ✅ ~~**Separator alignment:**~~ Resolved - Now using Prettier
+2. ✅ ~~**E2E test speed:**~~ Resolved - Optimized with smart waits (30-40% faster)
+3. **E2E parallelization:** Could gain additional 50-70% speedup (optional optimization)
+4. **Type safety:** No TypeScript yet (Vue with JS only)
+5. **Linting:** No ESLint configured (relying only on Prettier)
 
 ## Quality Gates Status
 
