@@ -1,9 +1,10 @@
 # 🎯 Family Quiz
 
-Interactive photo quiz application with real-time team participation. Perfect for family gatherings, parties, corporate events, or educational settings.
+Interactive photo quiz application built with Vue.js. Perfect for family gatherings, parties, corporate events, or educational settings.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Node](https://img.shields.io/badge/node-%3E%3D14.0-brightgreen.svg)
+![Vue](https://img.shields.io/badge/vue-3.4-brightgreen.svg)
+![Vite](https://img.shields.io/badge/vite-5.0-blue.svg)
 
 ## ✨ Features
 
@@ -13,56 +14,55 @@ Interactive photo quiz application with real-time team participation. Perfect fo
 - **Smooth Navigation** with keyboard controls
 - **Question Cycling** - one question at a time with visual progress dots
 - **Answer Reveal** with beautiful animations
-
-### 📱 Team Participation (Server Mode)
-- **QR Code Access** - teams join instantly via phone
-- **Real-time Sync** - questions appear on all devices simultaneously
-- **Automatic Scoring** - points awarded for correct answers
-- **Live Leaderboard** - see team rankings update in real-time
-- **Admin Dashboard** - monitor all responses and export results
+- **Local-First** - works offline, no server required
 
 ### 🎨 Design Highlights
-- Clean, minimalist interface
+- Clean, modern Vue.js interface
 - High-contrast colors for projector visibility
 - Large, readable fonts (optimized for distance viewing)
-- Touch-friendly mobile interface
 - Smooth animations and transitions
+- Responsive design
 
 ## 🚀 Quick Start
 
-### Standalone Mode (No Teams)
-
-Perfect for simple presentations without audience participation.
-
-```bash
-# Just open in browser
-open index.html
-```
-
-### Server Mode (With Teams)
-
-Enable real-time team participation via QR codes.
-
-**Prerequisites:**
+### Prerequisites
 - Node.js 14.0 or higher ([Download](https://nodejs.org/))
+- npm or yarn
 
-**Setup:**
+### Installation
+
 ```bash
-# 1. Install dependencies
-install.bat          # Windows
-# or
-npm install          # Mac/Linux
+# Navigate to the vue-app folder
+cd vue-app
 
-# 2. Start server
-start-server.bat     # Windows
+# Install dependencies
+yarn install
 # or
-node server.js       # Mac/Linux
+npm install
+
+# Start development server
+yarn dev
+# or
+npm run dev
 ```
 
-**Access:**
-- 🎬 **Presenter**: http://localhost:3000/index.html
-- 📱 **Teams**: http://localhost:3000/team.html (or scan QR code)
-- 📊 **Admin**: http://localhost:3000/admin.html
+**Access:** Open http://localhost:5173 in your browser
+
+### Build for Production
+
+```bash
+cd vue-app
+
+# Build
+yarn build
+# or
+npm run build
+
+# Preview build
+yarn preview
+# or
+npm run preview
+```
 
 ## 🎮 Controls
 
@@ -77,13 +77,6 @@ node server.js       # Mac/Linux
 | **F** | Toggle fullscreen | Always |
 | **ESC** | Exit fullscreen/hide questions | Context |
 
-### Mobile Team Interface
-
-- **Tap** to select answer
-- **Submit** button to send response
-- See your **score** update automatically
-- **Progress dots** show question number
-
 ## 📖 How It Works
 
 ### Presentation Flow
@@ -91,46 +84,35 @@ node server.js       # Mac/Linux
 ```
 1. 🖼️  Show photo (fullscreen)
 2. ⌨️  Press SPACE → questions appear (photo 1/3, questions 2/3)
-3. 📱 Teams see question on phones
-4. ⏱️  Teams submit answers
-5. ⌨️  Press A → reveal correct answer
-6. ✅ Points auto-awarded
-7. ⌨️  Press ↓ → next question
-8. 🔁 Repeat for 3 questions
-9. ⌨️  Press SPACE → hide questions
-10. ⌨️ Press → → next photo
+3. ⌨️  Press ↑↓ → navigate between questions
+4. ⌨️  Press A → reveal correct answer
+5. ⌨️  Press SPACE → hide questions
+6. ⌨️  Press → → next photo
 ```
 
 ### Architecture
 
-```
-┌─────────────┐         ┌──────────────┐         ┌─────────────┐
-│  Presenter  │◄───────►│   Node.js    │◄───────►│    Teams    │
-│  (Browser)  │ Socket  │   Server     │ Socket  │  (Mobile)   │
-└─────────────┘         └──────────────┘         └─────────────┘
-                              ▲
-                              │ Socket.io
-                              ▼
-                        ┌──────────────┐
-                        │ Admin Panel  │
-                        └──────────────┘
-```
+- **Vue 3** - Composition API for reactive state management
+- **Pinia** - State management store
+- **Vue Router** - Navigation between views
+- **Vite** - Fast build tool and dev server
+- **Local-First** - Quiz data embedded, works offline
 
 ## 🛠️ Configuration
 
 ### Edit Questions
 
-Questions are embedded in `app.js`:
+Questions are in `vue-app/src/data/quizData.js`:
 
 ```javascript
-const quizData = [
+export const quizData = [
   {
-    "image": "IMG_4246_1.jpg",
-    "questions": [
+    image: "IMG_4246_1.jpg",
+    questions: [
       {
-        "text": "Your question in Czech?",
-        "options": ["A", "B", "C", "D"],
-        "correct": 0  // Index of correct answer
+        text: "Your question in Czech?",
+        options: ["A", "B", "C", "D"],
+        correct: 0  // Index of correct answer
       }
       // ... 2 more questions
     ]
@@ -139,94 +121,80 @@ const quizData = [
 ]
 ```
 
-### Change Server Port
-
-Edit `server.js`:
-```javascript
-const PORT = 3000;  // Change to your preferred port
-```
-
 ### Add More Photos
 
 1. Add images to `/images` folder
-2. Add quiz entry in `app.js`
-3. Restart server
+2. Add quiz entry in `vue-app/src/data/quizData.js`
+3. Reload the app
 
 ## 📁 Project Structure
 
 ```
 family-quiz/
 ├── images/              # 23 vintage family photos
-├── index.html           # Presenter interface
-├── team.html            # Mobile team interface
-├── admin.html           # Admin dashboard
-├── app.js               # Presenter logic & quiz data
-├── styles.css           # Styling
-├── server.js            # Node.js WebSocket server
-├── package.json         # Dependencies
-├── install.bat          # Windows installer
-├── start-server.bat     # Windows server launcher
-├── README.md            # This file
-├── README-SERVER.md     # Detailed server setup
-└── PRD.md               # Product requirements doc
+├── vue-app/             # Vue.js application
+│   ├── src/
+│   │   ├── components/  # Vue components
+│   │   ├── views/       # Page views
+│   │   ├── stores/      # Pinia stores
+│   │   ├── data/        # Quiz data
+│   │   └── router/      # Vue Router config
+│   ├── package.json
+│   ├── vite.config.js
+│   └── README.md        # Detailed Vue.js docs
+├── PRD.md               # Product requirements doc
+├── FIREBASE-DEPLOYMENT.md  # Firebase deployment guide
+├── LICENSE              # MIT License
+└── README.md            # This file
 ```
 
-## 📊 Admin Panel Features
+## 🌐 Routes
 
-- **📈 Live Leaderboard** - Teams ranked by score
-- **📝 Response Monitor** - See who answered what
-- **📋 Full History** - All responses with timestamps
-- **💾 CSV Export** - Download results for analysis
+The Vue app has multiple routes for different use cases:
 
-## 🌐 Network Setup
+- `/presenter` - Main presentation view (recommended)
+- `/team` - Mobile team interface (future: Firebase integration)
+- `/admin` - Admin dashboard (future: Firebase integration)
 
-### For Local Network (WiFi)
+## 🔧 Development
 
-1. **Start server** with `start-server.bat`
-2. **Note the network IP** displayed in console:
-   ```
-   Network: http://192.168.1.105:3000
-   ```
-3. **Teams scan QR code** or visit that URL
-4. **Ensure same WiFi** - all devices on same network
-5. **Check firewall** - allow port 3000 if needed
+### Hot Module Replacement
 
-### Finding Your IP
+Vite provides instant updates during development:
 
-**Windows:**
-```cmd
-ipconfig
-```
-Look for "IPv4 Address"
-
-**Mac/Linux:**
 ```bash
-ifconfig | grep inet
+cd vue-app
+yarn dev
+# App auto-reloads on file changes at http://localhost:5173
 ```
 
-## 🔧 Troubleshooting
+### Component Development
 
-### Server won't start
-- ✅ Check Node.js installed: `node --version`
-- ✅ Run `install.bat` to install dependencies
-- ✅ Check port 3000 not already in use
+All components use Vue 3 Composition API:
 
-### Teams can't connect
-- ✅ Verify same WiFi network
-- ✅ Check Windows Firewall allows Node.js
-- ✅ Try disabling antivirus temporarily
-- ✅ Verify correct IP address
+```vue
+<script setup>
+import { ref, computed } from 'vue'
+import { useGameStore } from '@/stores/gameStore'
 
-### QR code not showing
-- ✅ Must use server mode (`start-server.bat`)
-- ✅ Check browser console (F12) for errors
-- ✅ Verify Socket.io loaded correctly
+const gameStore = useGameStore()
+</script>
+```
+
+## 🚀 Future Features
+
+- 🔜 **Firebase Integration** - Real-time team participation
+- 🔜 **Progressive Web App** - Installable, offline-first
+- 🔜 **QR Codes** - Easy team access
+- 🔜 **Leaderboard** - Live team scoring
+
+See [FIREBASE-DEPLOYMENT.md](FIREBASE-DEPLOYMENT.md) for planned Firebase integration.
 
 ## 📚 Documentation
 
-- **[README-SERVER.md](README-SERVER.md)** - Detailed server setup guide
+- **[vue-app/README.md](vue-app/README.md)** - Detailed Vue.js documentation
 - **[PRD.md](PRD.md)** - Complete product requirements document
-- **In-app help** - Press `?` (future feature)
+- **[FIREBASE-DEPLOYMENT.md](FIREBASE-DEPLOYMENT.md)** - Firebase deployment guide
 
 ## 🤝 Contributing
 
@@ -240,8 +208,8 @@ MIT License - feel free to use and modify.
 
 - **Questions**: AI-generated based on real family photos
 - **Photos**: Private family collection (23 vintage photos from 60s-80s)
-- **Technology**: Vanilla JS, Socket.io, Node.js
-- **Design**: Custom CSS with gradient backgrounds
+- **Technology**: Vue 3, Vite, Pinia, Vue Router
+- **Design**: Modern CSS with gradient backgrounds
 
 ## 💡 Use Cases
 
@@ -255,4 +223,4 @@ MIT License - feel free to use and modify.
 
 **Made with ❤️ for interactive family fun**
 
-For technical specifications and implementation in other technologies, see [PRD.md](PRD.md)
+For technical specifications and implementation details, see [PRD.md](PRD.md) and [vue-app/README.md](vue-app/README.md)

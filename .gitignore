@@ -3,3 +3,9 @@ node_modules/
 Thumbs.db
 *.log
 .env
+.claude/
+nul
+dist/
+*.local
+yarn.lock
+package-lock.json
