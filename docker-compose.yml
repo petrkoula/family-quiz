@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  # Development server with hot reload
+  dev:
+    build:
+      context: ./vue-app
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5173:5173"
+    volumes:
+      # Mount source code for hot reload
+      - ./vue-app/src:/app/src
+      - ./vue-app/public:/app/public
+      - ./images:/app/public/images
+      # Prevent node_modules from being overwritten
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    command: npm run dev -- --host 0.0.0.0
+
+  # Production build
+  prod:
+    build:
+      context: ./vue-app
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - ./images:/usr/share/nginx/html/images
+    profiles:
+      - production

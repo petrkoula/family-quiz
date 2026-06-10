@@ -1,0 +1,10 @@
+.git
+.gitignore
+.claude
+README.md
+PRD.md
+FIREBASE-DEPLOYMENT.md
+LICENSE
+*.md
+.DS_Store
+Thumbs.db

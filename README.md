@@ -25,11 +25,26 @@ Interactive photo quiz application built with Vue.js. Perfect for family gatheri
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### Option 1: Docker (Recommended)
+
+Easiest way to run the app locally:
+
+```bash
+# Start development server with hot reload
+docker-compose up dev
+
+# Access at http://localhost:5173
+```
+
+See [DOCKER.md](DOCKER.md) for full Docker documentation.
+
+### Option 2: Node.js
+
+**Prerequisites:**
 - Node.js 14.0 or higher ([Download](https://nodejs.org/))
 - npm or yarn
 
-### Installation
+**Installation:**
 
 ```bash
 # Navigate to the vue-app folder
