@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Quiz - Tým</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+
+        .status {
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .status.waiting {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status.ready {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status.submitted {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        button:hover:not(:disabled) {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+        }
+
+        .question-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 20px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-btn {
+            padding: 15px;
+            background: white;
+            border: 3px solid #cbd5e0;
+            color: #1a202c;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            border-color: #667eea;
+            background: #f7fafc;
+        }
+
+        .option-btn.selected {
+            background: #667eea;
+            color: white;
+            border-color: #5568d3;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-top: 10px;
+        }
+
+        #registrationForm {
+            display: block;
+        }
+
+        #quizInterface {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Registration -->
+        <div id="registrationForm">
+            <div class="card">
+                <h1>🎯 Photo Quiz</h1>
+                <p style="text-align: center; margin-bottom: 20px; color: #666;">Připojte se k quiz!</p>
+                <input type="text" id="teamName" placeholder="Jméno týmu" maxlength="30">
+                <button onclick="registerTeam()">Připojit se</button>
+            </div>
+        </div>
+
+        <!-- Quiz Interface -->
+        <div id="quizInterface">
+            <div class="card">
+                <h1>🎯 Photo Quiz</h1>
+                <div class="score">Skóre: <span id="teamScore">0</span></div>
+                <p style="text-align: center; margin-top: 10px; color: #666;">Tým: <strong id="displayTeamName"></strong></p>
+            </div>
+
+            <div class="card">
+                <div id="statusMessage" class="status waiting">
+                    Čekáme na další otázku...
+                </div>
+
+                <div id="questionContainer" style="display: none;">
+                    <div class="question-info">
+                        <small>Fotka <span id="photoNum">1</span> / 23</small>
+                    </div>
+
+                    <div id="questionDots" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;"></div>
+
+                    <div class="question-text" id="questionText"></div>
+
+                    <div class="options" id="optionsContainer"></div>
+
+                    <button id="submitBtn" onclick="submitAnswer()" style="margin-top: 20px;" disabled>
+                        Odeslat odpověď
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        let currentTeamName = '';
+        let currentGameState = null;
+        let selectedAnswer = null;
+
+        function registerTeam() {
+            const teamName = document.getElementById('teamName').value.trim();
+            if (!teamName) {
+                alert('Prosím zadejte jméno týmu');
+                return;
+            }
+
+            currentTeamName = teamName;
+            socket.emit('registerTeam', teamName);
+
+            document.getElementById('registrationForm').style.display = 'none';
+            document.getElementById('quizInterface').style.display = 'block';
+            document.getElementById('displayTeamName').textContent = teamName;
+        }
+
+        socket.on('gameState', (state) => {
+            currentGameState = state;
+            updateUI(state);
+        });
+
+        socket.on('teamsUpdate', (teams) => {
+            // Update team score
+            const myTeam = Object.values(teams).find(t => t.name === currentTeamName);
+            if (myTeam) {
+                document.getElementById('teamScore').textContent = myTeam.score;
+            }
+        });
+
+        function updateUI(state) {
+            const questionContainer = document.getElementById('questionContainer');
+            const statusMessage = document.getElementById('statusMessage');
+
+            if (state.questionsVisible && quizData[state.currentPhotoIndex]) {
+                const quiz = quizData[state.currentPhotoIndex];
+                const question = quiz.questions[state.currentQuestionIndex];
+
+                questionContainer.style.display = 'block';
+                statusMessage.className = 'status ready';
+                statusMessage.textContent = '✅ Odpovězte na otázku!';
+
+                document.getElementById('photoNum').textContent = state.currentPhotoIndex + 1;
+                document.getElementById('questionText').textContent = question.text;
+
+                // Render question dots
+                const dotsContainer = document.getElementById('questionDots');
+                dotsContainer.innerHTML = '';
+                for (let i = 0; i < quiz.questions.length; i++) {
+                    const dot = document.createElement('div');
+                    dot.style.width = '12px';
+                    dot.style.height = '12px';
+                    dot.style.borderRadius = '50%';
+                    dot.style.background = i === state.currentQuestionIndex ? '#667eea' : '#cbd5e0';
+                    dot.style.transition = 'all 0.3s ease';
+                    if (i === state.currentQuestionIndex) {
+                        dot.style.transform = 'scale(1.3)';
+                        dot.style.boxShadow = '0 0 10px rgba(102, 126, 234, 0.6)';
+                    }
+                    dotsContainer.appendChild(dot);
+                }
+
+                // Render options
+                const optionsContainer = document.getElementById('optionsContainer');
+                optionsContainer.innerHTML = '';
+                question.options.forEach((option, index) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.textContent = option;
+                    btn.onclick = () => selectOption(index, btn);
+                    optionsContainer.appendChild(btn);
+                });
+
+                selectedAnswer = null;
+                document.getElementById('submitBtn').disabled = true;
+            } else {
+                questionContainer.style.display = 'none';
+                statusMessage.className = 'status waiting';
+                statusMessage.textContent = '⏳ Čekáme na další otázku...';
+            }
+        }
+
+        function selectOption(index, btn) {
+            // Deselect all
+            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+
+            // Select clicked
+            btn.classList.add('selected');
+            selectedAnswer = index;
+            document.getElementById('submitBtn').disabled = false;
+        }
+
+        function submitAnswer() {
+            if (selectedAnswer === null || !currentGameState) return;
+
+            socket.emit('submitAnswer', {
+                photoIndex: currentGameState.currentPhotoIndex,
+                questionIndex: currentGameState.currentQuestionIndex,
+                answer: selectedAnswer
+            });
+
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('statusMessage').className = 'status submitted';
+            document.getElementById('statusMessage').textContent = '✓ Odpověď odeslána!';
+        }
+
+        // Load quiz data from main app
+        const quizData = window.parent.quizData || [];
+    </script>
+</body>
+</html>
