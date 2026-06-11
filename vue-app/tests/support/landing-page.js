@@ -22,6 +22,7 @@ function makeRouter() {
       { path: '/', name: 'landing', component: LandingView },
       { path: '/presenter', name: 'presenter', component: stub },
       { path: '/customize/:quizId', name: 'customize', component: stub },
+      { path: '/edit/:quizId', name: 'edit', component: stub },
     ],
   });
 }
@@ -81,6 +82,11 @@ class LandingPage {
 
   async customize(pack) {
     await fireEvent.click(this.card(pack).getByRole('button', { name: /Customize/i }));
+    await flushPromises();
+  }
+
+  async edit(pack) {
+    await fireEvent.click(this.card(pack).getByRole('button', { name: /Upravit/ }));
     await flushPromises();
   }
 }

@@ -7,7 +7,7 @@
  * Konvence: cílíme přes přístupný název (role img + alt) a `data-testid`,
  * nikdy přes CSS třídy ani regex na text.
  */
-import { render, fireEvent } from '@testing-library/vue';
+import { render, fireEvent, cleanup } from '@testing-library/vue';
 import { setActivePinia, createPinia } from 'pinia';
 import { useGameStore } from '@/stores/gameStore';
 import PresenterView from '@/views/PresenterView.vue';
@@ -19,6 +19,18 @@ import PresenterView from '@/views/PresenterView.vue';
 export function renderPresenter() {
   setActivePinia(createPinia());
   useGameStore().initializeQuizData();
+
+  const view = render(PresenterView);
+  return new PresenterPage(view);
+}
+
+/**
+ * Spustí prezentaci vybraného balíčku nad AKTIVNÍ Pinia (jako „Play Now").
+ * Předchozí obrazovky odmountuje, aby v DOMu nehrály dvě views najednou.
+ */
+export function startPresentationForPack(packId) {
+  cleanup();
+  useGameStore().selectQuizPack(packId);
 
   const view = render(PresenterView);
   return new PresenterPage(view);

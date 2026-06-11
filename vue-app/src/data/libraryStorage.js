@@ -5,6 +5,8 @@
 
 const STORAGE_KEY = 'quiz-library-v1';
 
+export const LIBRARY_STORAGE_KEY = STORAGE_KEY;
+
 export const browserLibraryStorage = {
   load() {
     try {

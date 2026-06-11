@@ -60,6 +60,7 @@
             <button @click.stop="customizeQuiz(pack.id)" class="btn btn-customize">
               ⚙ Customize
             </button>
+            <button @click.stop="editQuiz(pack.id)" class="btn btn-edit">✎ Upravit</button>
           </div>
           <button
             @click.stop="reloadPack(pack.id)"
@@ -160,6 +161,11 @@ function customizeQuiz(packId) {
   // Navigate to customization screen
   gameStore.selectQuizPack(packId);
   router.push(`/customize/${packId}`);
+}
+
+function editQuiz(packId) {
+  // Open the question editor for this pack
+  router.push(`/edit/${packId}`);
 }
 </script>
 
@@ -319,6 +325,7 @@ function customizeQuiz(packId) {
 
 .card-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   margin-top: 1.5rem;
 }
@@ -379,6 +386,18 @@ function customizeQuiz(packId) {
   background: #f8f9fa;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.btn-edit {
+  background: white;
+  color: #764ba2;
+  border: 2px solid #764ba2;
+}
+
+.btn-edit:hover {
+  background: #f8f9fa;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(118, 75, 162, 0.2);
 }
 
 /* Create Your Own Card */

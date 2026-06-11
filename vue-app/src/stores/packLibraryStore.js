@@ -1,19 +1,34 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { quizPacks, getQuizDataForPack } from '@/data/quizPacks';
 import { quizData } from '@/data/quizData';
 import { listPhotos, listPacks } from '@/data/photoCatalog';
 import { loadLibrary, saveLibrary } from '@/data/libraryStorage';
+import { getPackCatalog } from '@/data/packCatalog';
 
-const PLACEHOLDER_QUESTION_COUNT = 3;
+export const QUESTION_LIMITS = {
+  minQuestionsPerPhoto: 1,
+  maxQuestionsPerPhoto: 3,
+  minOptions: 2,
+  maxOptions: 4,
+};
+
+/** Platná otázka: neprázdný text, 2–4 neprázdné možnosti, správná v rozsahu. */
+export function isValidQuestion(question) {
+  if (!question || typeof question.text !== 'string' || question.text.trim() === '') return false;
+  const options = question.options;
+  if (!Array.isArray(options)) return false;
+  if (options.length < QUESTION_LIMITS.minOptions) return false;
+  if (options.length > QUESTION_LIMITS.maxOptions) return false;
+  if (options.some(option => typeof option !== 'string' || option.trim() === '')) return false;
+  if (!Number.isInteger(question.correct)) return false;
+  if (question.correct < 0 || question.correct >= options.length) return false;
+  return true;
+}
+
 const PACK_COLORS = ['#4a90e2', '#e67e22', '#27ae60', '#9b59b6', '#e74c3c', '#16a085'];
 
-/**
- * Placeholder questions for a freshly discovered photo: clearly marked as not
- * yet written, and with no option flagged as correct.
- */
 export function makePlaceholderQuestions() {
-  return Array.from({ length: PLACEHOLDER_QUESTION_COUNT }, () => ({
+  return Array.from({ length: 3 }, () => ({
     text: 'Doplň otázku',
     options: ['—', '—', '—', '—'],
     correct: null,
@@ -21,7 +36,6 @@ export function makePlaceholderQuestions() {
   }));
 }
 
-/** "family-vintage" → "Family Vintage" */
 export function humanizeTitle(folderName) {
   return folderName
     .split(/[-_]+/)
@@ -31,40 +45,34 @@ export function humanizeTitle(folderName) {
 }
 
 // Hand-written questions from the bundled data, keyed by photo filename.
-// Synced packs match their photos against this bank; only unknown photos
-// fall back to placeholders.
 const questionBank = new Map(quizData.map(item => [item.image, item.questions]));
 
-/** Bare filename of a photo path ("family-vintage/IMG_1.jpg" → "IMG_1.jpg"). */
 function filenameOf(imagePath) {
   return imagePath.split('/').pop();
 }
 
-/** Static seed shown until the first sync with the folder source. */
-function buildInitialPacks() {
-  return quizPacks.map(pack => ({
-    id: pack.id,
-    title: pack.title,
-    description: pack.description,
-    thumbnail: pack.thumbnail,
-    color: pack.color,
-    photos: getQuizDataForPack(pack.id).map(item => ({
-      image: item.image,
-      questions: item.questions,
-    })),
-  }));
+function cloneQuestion(question) {
+  const clone = { text: question.text, options: [...question.options], correct: question.correct };
+  if (question.placeholder) clone.placeholder = true;
+  return clone;
 }
 
-/**
- * Reactive library of quiz packs the landing page renders. State is remembered
- * between visits (libraryStorage) and changes only on explicit reloads, which
- * sync it with the photo-folder catalog (photoCatalog).
- */
+function buildPhoto(packId, file, existingPhotos) {
+  const existing = existingPhotos?.find(photo => filenameOf(photo.image) === file);
+  const handWritten =
+    existing && !existing.questions.every(q => q.placeholder) ? existing.questions : null;
+  return {
+    image: `${packId}/${file}`,
+    questions:
+      handWritten ?? questionBank.get(file) ?? existing?.questions ?? makePlaceholderQuestions(),
+  };
+}
+
 export const usePackLibraryStore = defineStore('packLibrary', () => {
   const remembered = loadLibrary();
-  const packs = ref(remembered?.packs ?? buildInitialPacks());
-  // With no remembered state the library still needs its first folder sync.
-  const initialized = ref(remembered != null);
+  const rememberedPacks = Array.isArray(remembered?.packs) ? remembered.packs : null;
+  const packs = ref(rememberedPacks ?? getPackCatalog());
+  const initialized = ref(rememberedPacks != null);
 
   function persist() {
     saveLibrary({ packs: packs.value });
@@ -74,7 +82,17 @@ export const usePackLibraryStore = defineStore('packLibrary', () => {
     return packs.value.find(p => p.id === packId) || null;
   }
 
-  function metadata(packId) {
+  /** Data balíčku pro prezentaci – kopie, ať běžící kvíz nesdílí objekty. */
+  function getQuizData(packId) {
+    const pack = getPack(packId);
+    if (!pack) return [];
+    return pack.photos.map(photo => ({
+      image: photo.image,
+      questions: photo.questions.map(cloneQuestion),
+    }));
+  }
+
+  function packMetadata(packId) {
     const pack = getPack(packId);
     if (!pack) return { photoCount: 0, questionCount: 0 };
     return {
@@ -83,28 +101,8 @@ export const usePackLibraryStore = defineStore('packLibrary', () => {
     };
   }
 
-  /**
-   * Photo entry for a catalog filename. Hand-written questions of an already
-   * known photo are never replaced; placeholder questions give way to the
-   * bank as soon as it has hand-written ones for the filename. The image path
-   * is always canonical `<packId>/<file>`.
-   */
-  function buildPhoto(packId, file, existingPhotos) {
-    const existing = existingPhotos?.find(photo => filenameOf(photo.image) === file);
-    const handWritten =
-      existing && !existing.questions.every(q => q.placeholder) ? existing.questions : null;
-    return {
-      image: `${packId}/${file}`,
-      questions:
-        handWritten ?? questionBank.get(file) ?? existing?.questions ?? makePlaceholderQuestions(),
-    };
-  }
+  // --- Reload ----------------------------------------------------------------
 
-  /**
-   * Sync one pack's photos with the catalog: add newly discovered photos,
-   * drop photos whose files are gone, keep existing questions.
-   * @returns {Promise<{added: number, removed: number}>}
-   */
   async function reloadPack(packId) {
     const pack = getPack(packId);
     if (!pack) return { added: 0, removed: 0 };
@@ -122,13 +120,6 @@ export const usePackLibraryStore = defineStore('packLibrary', () => {
     return { added, removed };
   }
 
-  /**
-   * Full sync of the whole library with the folder catalog: new folders become
-   * packs, packs whose folders are gone disappear, and every surviving pack's
-   * photos are synced (same per-photo rules as reloadPack).
-   * @returns {Promise<{addedPacks: number, removedPacks: number, updatedPacks: number} | null>}
-   *          null when the folder source is unreachable (library unchanged).
-   */
   async function reloadLibrary() {
     const catalog = await listPacks();
     if (!catalog) return null;
@@ -137,7 +128,7 @@ export const usePackLibraryStore = defineStore('packLibrary', () => {
     let updatedPacks = 0;
 
     packs.value = catalog
-      .filter(entry => entry.photos.length > 0) // empty folders are not packs
+      .filter(entry => entry.photos.length > 0)
       .map((entry, index) => {
         const existing = getPack(entry.id);
         if (existing) {
@@ -167,16 +158,78 @@ export const usePackLibraryStore = defineStore('packLibrary', () => {
     };
   }
 
-  /**
-   * First-visit hook: with no remembered state, populate the library from the
-   * current folders (when reachable). Never re-syncs an already remembered
-   * library — that only happens on explicit reload.
-   */
   async function ensureInitialized() {
     if (initialized.value) return;
     initialized.value = true;
-    await reloadLibrary(); // unreachable source → keep the static seed
+    await reloadLibrary();
   }
 
-  return { packs, getPack, metadata, reloadPack, reloadLibrary, ensureInitialized };
+  // --- Editace otázek --------------------------------------------------------
+
+  function authoredQuestion(question) {
+    return {
+      text: typeof question?.text === 'string' ? question.text.trim() : '',
+      options: Array.isArray(question?.options)
+        ? question.options.map(option => (typeof option === 'string' ? option.trim() : ''))
+        : [],
+      correct: question?.correct,
+    };
+  }
+
+  /** Uloží ruční úpravu otázky; zástupný štítek tím mizí. Vrací úspěch. */
+  function updateQuestion(packId, image, questionIndex, question) {
+    const pack = getPack(packId);
+    if (!pack) return false;
+    const photo = pack.photos.find(p => p.image === image);
+    if (!photo) return false;
+    if (questionIndex < 0 || questionIndex >= photo.questions.length) return false;
+    const authored = authoredQuestion(question);
+    if (!isValidQuestion(authored)) return false;
+    photo.questions = photo.questions.map((existing, index) =>
+      index === questionIndex ? authored : existing
+    );
+    persist();
+    return true;
+  }
+
+  /** Přidá autorskou otázku; max 3 otázky na fotku. Vrací úspěch. */
+  function addQuestion(packId, image, question) {
+    const pack = getPack(packId);
+    if (!pack) return false;
+    const photo = pack.photos.find(p => p.image === image);
+    if (!photo) return false;
+    if (photo.questions.length >= QUESTION_LIMITS.maxQuestionsPerPhoto) return false;
+    const authored = authoredQuestion(question);
+    if (!isValidQuestion(authored)) return false;
+    photo.questions = [...photo.questions, authored];
+    persist();
+    return true;
+  }
+
+  /** Smaže otázku; fotka si vždy nechá aspoň jednu. Vrací úspěch. */
+  function removeQuestion(packId, image, questionIndex) {
+    const pack = getPack(packId);
+    if (!pack) return false;
+    const photo = pack.photos.find(p => p.image === image);
+    if (!photo) return false;
+    if (photo.questions.length <= QUESTION_LIMITS.minQuestionsPerPhoto) return false;
+    if (questionIndex < 0 || questionIndex >= photo.questions.length) return false;
+    photo.questions = photo.questions.filter((_, index) => index !== questionIndex);
+    persist();
+    return true;
+  }
+
+  return {
+    packs,
+    getPack,
+    getQuizData,
+    packMetadata,
+    metadata: packMetadata, // backward-compat alias (CustomizationView)
+    updateQuestion,
+    addQuestion,
+    removeQuestion,
+    reloadPack,
+    reloadLibrary,
+    ensureInitialized,
+  };
 });
