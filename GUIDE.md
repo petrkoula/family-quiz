@@ -52,7 +52,7 @@ yarn dev
 
 - **Ulož, obnov stránku a klikni ↻ Reload na kartě** — placeholdery se nahradí
   tvými otázkami. Už ručně napsané otázky reload nikdy nepřepíše.
-- **Hrej** — Play Now na kartě (ovládání viz bod 5).
+- **Hrej** — Rychlý (Play Now) nebo Vlastní (Customize), viz bod 5.
 
 > Stav knihovny se pamatuje (localStorage) — další otevření appky je okamžité,
 > disk se znovu čte jen na kliknutí Reload / Obnovit knihovnu.
@@ -71,28 +71,12 @@ samo):
 „Obnovit knihovnu" je **plný sync** — srovná seznam kvízů i fotky uvnitř
 všech kvízů najednou.
 
-## 5. Hraní
+## 5. Hraj — Rychlý nebo Vlastní
 
-- **Play Now** na kartě = okamžitý start s výchozím nastavením.
-- **Customize** = časovač, počet otázek na fotku, zamíchání.
+- **Rychlý** (▶ Play Now na kartě) — prezentace startuje okamžitě s výchozím
+  nastavením: bez časovače, všechny 3 otázky na fotku, původní pořadí.
+- **Vlastní** (⚙ Customize na kartě) — před startem si nastavíš časovač,
+  počet otázek na fotku a zamíchání fotek/otázek; pak **Start Quiz**
+  (nebo **Skip** pro výchozí nastavení).
 - V prezentaci: `MEZERNÍK` otázky, `↑↓` přepínání otázek, `A` odhalení
   odpovědi, `←→` další/předchozí foto, `F` fullscreen, `ESC` zavřít.
-
-## Reset do čistého stavu
-
-Zapamatovanou knihovnu smažeš v DevTools konzoli:
-
-```js
-localStorage.removeItem('quiz-library-v1')
-```
-
-a obnov stránku — proběhne znovu „první návštěva" z aktuálních složek.
-
-## Testy
-
-```bash
-cd vue-app
-yarn test        # exit 0 = vše zelené; jinak čti test-results/<suite>.failures.txt
-```
-
-Detaily metodiky: [TESTING.md](TESTING.md). Specifikace chování: `specs/*.spec.md`.
