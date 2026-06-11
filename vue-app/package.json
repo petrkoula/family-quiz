@@ -6,9 +6,10 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest run",
+    "test": "node scripts/vitest-run-suite.mjs",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
+    "vitest-run-suite": "node scripts/vitest-run-suite.mjs",
     "format": "prettier --write \"src/**/*.{js,vue,json,css}\"",
     "format:check": "prettier --check \"src/**/*.{js,vue,json,css}\""
   },

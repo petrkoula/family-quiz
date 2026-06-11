@@ -40,6 +40,34 @@
 - **Reálné end-to-end** (navigace mezi route, responzivní viewporty, touch,
   „view se načte okamžitě") → **browser e2e** (Playwright), jen pár kritických.
 
+## Spouštění testů (jednotný kontrakt — nevymýšlet vlastní)
+
+Testy se spouští a čtou **vždy** přes připravený runner, ne ad-hoc kombinací
+vitest flagů, grepování terminálu nebo vlastních parserů:
+
+```bash
+cd vue-app
+
+# Jedna suite
+yarn test tests/quiz-card-reload.spec.js
+
+# Všechny suites najednou (paralelně) — rychlý regresní check
+yarn test
+```
+
+(`yarn vitest-run-suite` je alias téhož runneru.)
+
+Kontrakt výstupu:
+
+- **Exit 0** → vše prošlo. Vypíše jediný řádek `OK: N/N tests passed (M files)`.
+  Není co číst dál.
+- **Exit ≠ 0** → vypíše `FAILURES: test-results/<suite>.failures.txt`.
+  Ten soubor je zpracovaný report (padlé testy + assertion message + lokace) —
+  přečti **ten**, ne syrový terminálový výstup. Vedle leží i surový vitest JSON
+  (`test-results/<suite>.json`) pro hlubší dolování.
+
+Pro vývoj ve watch režimu zůstává `yarn test:unit:watch`.
+
 ## Pořadí kroků (shrnutí)
 
 ```

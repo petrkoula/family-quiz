@@ -33,10 +33,10 @@ yarn preview
 
 ### Testing
 ```bash
-# Run the acceptance/unit test suite (jsdom, no dev server needed)
-yarn test
-# or
-yarn test:unit
+# Unified runner (see TESTING.md): exit 0 = green; on failure read the
+# printed test-results/<suite>.failures.txt instead of parsing terminal output
+yarn test                                  # all suites (parallel)
+yarn test tests/quiz-card-reload.spec.js   # one suite
 
 # Watch mode while developing
 yarn test:unit:watch
@@ -155,8 +155,10 @@ editable `*.spec.js` test:
 - `tests/landing-page.spec.js` — quiz library cards, metadata, navigation
 - `tests/quick-start-quiz.spec.js` — Play Now / Customize from a card
 - `tests/customization.spec.js` — timer, questions-per-photo, summary, Start/Skip
+- `tests/quiz-card-reload.spec.js` — reload a pack from current photo files (placeholder questions for new photos)
 
-Run with `yarn test`.
+Run via the unified runner: `yarn test [tests/<suite>.spec.js]` —
+exit 0 = green; on failure read the printed `test-results/<suite>.failures.txt`.
 
 ## CI/CD
 
@@ -165,7 +167,7 @@ GitHub Actions workflows:
 **`.github/workflows/ci.yml`** (runs on PRs and pushes):
 1. Prettier format check
 2. Build application
-3. Run tests (`yarn test`, jsdom)
+3. Run tests (`yarn test:unit`, jsdom; dedicated CI report format planned)
 4. Build Docker images
 
 **`.github/workflows/deploy.yml`** (deploys to GitHub Pages):

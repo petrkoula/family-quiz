@@ -9,15 +9,23 @@ contract, hand-written editable tests, selector conventions).
 
 ## Running
 
+Use the unified runner — exit 0 means green; on failure it prints
+`FAILURES: test-results/<suite>.failures.txt`, a processed report to read
+(don't parse raw terminal output):
+
 ```bash
-# Run the whole suite once
+# One suite
+yarn test tests/quiz-card-reload.spec.js
+
+# All suites in parallel (quick regression check)
 yarn test
-# or
-yarn test:unit
 
 # Watch mode while developing
 yarn test:unit:watch
 ```
+
+(`yarn vitest-run-suite` is an alias of `yarn test`; `yarn test:unit` runs
+plain vitest output for humans.)
 
 ## Layout
 
