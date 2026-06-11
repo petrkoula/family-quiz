@@ -28,7 +28,6 @@ Interactive photo quiz application built with Vue.js. Perfect for family gatheri
 ## 📸 Screenshots
 
 ### Presenter View
-![Presenter with Questions](vue-app/tests/screenshots/presenter-questions.png)
 *Quiz presenter interface showing photo and questions side-by-side*
 
 ### Key Features Showcase
