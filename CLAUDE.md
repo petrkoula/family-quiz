@@ -145,7 +145,7 @@ Images are handled differently in development vs production:
 
 ## Testing
 
-> **Acceptance-test methodology:** see @TESTING.md — spec-first Gherkin as contract, hand-written editable Vitest tests (no codegen), selector conventions. Supersedes the generated-Taiko pipeline in ACCEPTANCE-TESTING.md.
+> **Acceptance-test methodology:** see @TESTING.md — spec-first Gherkin as contract, hand-written editable Vitest tests (no codegen), selector conventions. Replaces the previous generated-Taiko (DAE) codegen pipeline, now removed.
 
 E2E tests use Taiko (browser automation) and cover:
 - Photo display and navigation
