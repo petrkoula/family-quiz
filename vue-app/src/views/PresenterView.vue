@@ -200,7 +200,7 @@ onUnmounted(() => {
   flex-direction: column;
   height: 100vh;
   width: 100%;
-  background: #2a2018;
+  background: #221911;
   padding: 20px;
 }
 
@@ -226,7 +226,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #1f1812;
+  background: #130d08;
   border-radius: var(--radius-lg);
   overflow: hidden;
   transition: all 0.4s ease;

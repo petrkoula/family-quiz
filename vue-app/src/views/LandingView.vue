@@ -111,6 +111,19 @@
         <template #cover>
           <div class="thumb">
             <img :src="getImageUrl(pack.thumbnail)" :alt="pack.title" loading="lazy" />
+            <!-- Hlavní akce v levém spodním rohu fotky -->
+            <div class="card-cta">
+              <n-button
+                v-if="gameStore.isPackInProgress(pack.id)"
+                color="#e2f2dd"
+                text-color="#2c5e2e"
+                data-testid="resume-quiz"
+                @click="resumeQuiz()"
+              >
+                Pokračovat
+              </n-button>
+              <n-button v-else type="primary" @click="playNow(pack.id)">Play Now</n-button>
+            </div>
           </div>
         </template>
 
@@ -177,19 +190,6 @@
           <span>{{ pack.photos.length }} fotek</span>
           <span class="meta-dot">·</span>
           <span>{{ questionCount(pack) }} otázek</span>
-        </div>
-
-        <div class="card-actions">
-          <n-button
-            v-if="gameStore.isPackInProgress(pack.id)"
-            color="#e2f2dd"
-            text-color="#2c5e2e"
-            data-testid="resume-quiz"
-            @click="resumeQuiz()"
-          >
-            Pokračovat
-          </n-button>
-          <n-button v-else type="primary" @click="playNow(pack.id)">Play Now</n-button>
         </div>
 
         <p v-if="reloadResults[pack.id]" class="muted reload-result" data-testid="reload-result">
@@ -324,7 +324,7 @@ function editQuiz(packId) {
 <style scoped>
 .landing {
   min-height: 100vh;
-  background: var(--canvas);
+  /* Pozadí (textura) kreslí #app přes celý viewport — viz style.css. */
   padding: 2.5rem 2rem 4rem 3.5rem;
   max-width: 1280px;
   margin: 0 auto;
@@ -614,12 +614,25 @@ function editQuiz(packId) {
 
 /* Fotka přes celou šířku karty — bez polaroidového rámečku. */
 .thumb {
+  position: relative;
   height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   overflow: hidden;
+}
+
+/* Hlavní akce karty — levý spodní roh fotky */
+.card-cta {
+  position: absolute;
+  left: 0.75rem;
+  bottom: 0.75rem;
+  z-index: 2;
+}
+
+.card-cta :deep(.n-button) {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
 }
 
 .thumb img {
@@ -691,13 +704,6 @@ function editQuiz(packId) {
 
 .meta-dot {
   opacity: 0.6;
-}
-
-.card-actions {
-  margin-top: 1.25rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
 }
 
 .reload-result {
@@ -784,10 +790,6 @@ function editQuiz(packId) {
 
   .landing-title {
     font-size: 2.3rem;
-  }
-
-  .card-actions {
-    flex-direction: column;
   }
 }
 </style>
