@@ -32,17 +32,30 @@ yarn dev
 
 → otevři **http://localhost:5173**
 
-## 3. Co se stane
+## 3. Objeví se kvízy — doplň otázky a hrej
 
-- **První návštěva**: knihovna se sama naplní z aktuálních složek —
-  každá složka je karta s počtem fotek a otázek.
-- **Otázky**: fotka, ke které existují ruční otázky (banka v
-  `vue-app/src/data/quizData.js`, párováno podle jména souboru), je dostane;
-  ostatní fotky dostanou **placeholder „Doplň otázku"** — kvíz jde hrát hned,
-  jen je vidět, že otázky čekají na doplnění (žádná odpověď není označená
-  jako správná).
-- **Stav se zapamatuje** (localStorage) — další otevření appky ukáže knihovnu
-  okamžitě z cache, **disk se znovu nečte**.
+- **Kvízy se objeví samy**: každá složka = karta s počtem fotek a otázek.
+  Hrát jde okamžitě (Play Now) — fotky bez otázek zatím ukazují placeholder
+  **„Doplň otázku"** (žádná odpověď není označená jako správná).
+- **Doplň otázky** do banky `vue-app/src/data/quizData.js` — záznam se páruje
+  podle jména souboru:
+
+  ```js
+  {
+    image: 'party1.jpg',
+    questions: [
+      { text: 'Kdo to je?', options: ['Babička', 'Děda', 'Soused', 'Pes'], correct: 0 },
+      // ... celkem 3 otázky
+    ],
+  },
+  ```
+
+- **Ulož, obnov stránku a klikni ↻ Reload na kartě** — placeholdery se nahradí
+  tvými otázkami. Už ručně napsané otázky reload nikdy nepřepíše.
+- **Hrej** — Play Now na kartě (ovládání viz bod 5).
+
+> Stav knihovny se pamatuje (localStorage) — další otevření appky je okamžité,
+> disk se znovu čte jen na kliknutí Reload / Obnovit knihovnu.
 
 ## 4. Změny fotek za provozu
 

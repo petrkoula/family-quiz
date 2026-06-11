@@ -14,6 +14,7 @@ import {
   resetCatalog,
   quizPacks,
 } from './support/reload-page.js';
+import { makePlaceholderQuestions } from '@/stores/packLibraryStore';
 
 afterEach(() => resetCatalog());
 
@@ -108,6 +109,39 @@ describe('Reload quiz pack', () => {
 
     await play.revealAnswer();
     expect(play.revealedCorrectAnswer()).toBeNull();
+  });
+
+  // Scénář 9
+  it('placeholder otázky ustoupí nově doplněným ručním otázkám', async () => {
+    // Dříve synchronizovaný stav: fotka má zapamatované placeholdery,
+    // mezitím autor otázky doplnil (banka je pro IMG_4246_1.jpg má).
+    localStorage.setItem(
+      'quiz-library-v1',
+      JSON.stringify({
+        packs: [
+          {
+            id: 'retro-style',
+            title: 'Retro Styl',
+            description: '',
+            color: '#e67e22',
+            thumbnail: 'retro-style/IMG_4246_1.jpg',
+            photos: [
+              { image: 'retro-style/IMG_4246_1.jpg', questions: makePlaceholderQuestions() },
+            ],
+          },
+        ],
+      }),
+    );
+
+    const play = await playPackAfterReload('retro-style', {
+      catalog: (_packId, current) => current, // soubory na disku beze změny
+    });
+
+    await play.showQuestions();
+    expect(play.questionText()).not.toBe('Doplň otázku');
+
+    await play.revealAnswer();
+    expect(play.revealedCorrectAnswer()).not.toBeNull();
   });
 
   // Scénář 5

@@ -84,16 +84,19 @@ export const usePackLibraryStore = defineStore('packLibrary', () => {
   }
 
   /**
-   * Photo entry for a catalog filename: keeps the questions of an already
-   * known photo, otherwise takes hand-written questions from the bank by
-   * filename, otherwise placeholders. The image path is always canonical
-   * `<packId>/<file>`.
+   * Photo entry for a catalog filename. Hand-written questions of an already
+   * known photo are never replaced; placeholder questions give way to the
+   * bank as soon as it has hand-written ones for the filename. The image path
+   * is always canonical `<packId>/<file>`.
    */
   function buildPhoto(packId, file, existingPhotos) {
     const existing = existingPhotos?.find(photo => filenameOf(photo.image) === file);
+    const handWritten =
+      existing && !existing.questions.every(q => q.placeholder) ? existing.questions : null;
     return {
       image: `${packId}/${file}`,
-      questions: existing?.questions ?? questionBank.get(file) ?? makePlaceholderQuestions(),
+      questions:
+        handWritten ?? questionBank.get(file) ?? existing?.questions ?? makePlaceholderQuestions(),
     };
   }
 
