@@ -12,6 +12,7 @@
         v-for="pack in quizPacks"
         :key="pack.id"
         class="quiz-card"
+        data-testid="quiz-card"
         :style="{ borderColor: pack.color }"
       >
         <!-- Thumbnail -->

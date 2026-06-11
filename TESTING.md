@@ -9,16 +9,11 @@
    `Feature` / `Scenario` / `Given–When–Then` slouží jako čitelný kontrakt —
    popisuje, **co** má appka dělat, jazykem domény. Spec čte člověk i agent.
 
-2. **Spec NEGENERUJ na test kód.**
-   Pipeline `spec.json → generator → *.test.js (DO NOT EDIT)` (přístup z ATDDT
-   pluginu) se neosvědčil: generované testy mají těžkou nepřímost, nejdou
-   editovat a **selektory v nich nevyladíš**. Gherkin zůstává jen jako kontrakt.
-
-3. **Implementuj jeden Use-Case + jeden test, ručně, společně.**
+2. **Implementuj jeden Use-Case + jeden test, ručně, společně.**
    Vezmi jeden scénář ze specu. Naimplementuj k němu kus appky a **jeden
    skutečný, editovatelný test**. Test piš tak, jak ho vidí uživatel.
 
-4. **Vylaď selektory na reálném UI.**
+3. **Vylaď selektory na reálném UI.**
    Tohle je smysl kroku 3: než škálujeme na desítky testů, na jednom testu si
    ustálíme, jak se na věci v UI ptáme. Až je vzor stabilní, jede se dál
    **test po testu**, ne všechny najednou.

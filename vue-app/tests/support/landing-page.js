@@ -1,0 +1,84 @@
+/**
+ * Page-object pro LandingView (knihovna kvízů).
+ *
+ * Veškeré selektory landing page žijí JEN tady. Cílíme přes přístupný název
+ * (role heading / button / link), karty přes `data-testid="quiz-card"`.
+ * Viz TESTING.md.
+ */
+import { render, within, fireEvent } from '@testing-library/vue';
+import { flushPromises } from '@vue/test-utils';
+import { createPinia } from 'pinia';
+import { createRouter, createMemoryHistory } from 'vue-router';
+import { quizPacks } from '@/data/quizPacks';
+import LandingView from '@/views/LandingView.vue';
+
+/** Minimální router se stejnými cestami jako produkční, ale bez lazy importů. */
+function makeRouter() {
+  const stub = { template: '<div />' };
+  return createRouter({
+    history: createMemoryHistory(),
+    routes: [
+      { path: '/', name: 'landing', component: LandingView },
+      { path: '/presenter', name: 'presenter', component: stub },
+      { path: '/customize/:quizId', name: 'customize', component: stub },
+    ],
+  });
+}
+
+export async function renderLanding() {
+  const router = makeRouter();
+  const pinia = createPinia();
+
+  const view = render(LandingView, {
+    global: { plugins: [router, pinia] },
+  });
+
+  await router.isReady();
+  return new LandingPage(view, router);
+}
+
+class LandingPage {
+  constructor(view, router) {
+    this.view = view;
+    this.router = router;
+  }
+
+  // --- Co uživatel vidí ------------------------------------------------------
+
+  title() {
+    return this.view.getByRole('heading', { name: 'Knihovna Kvízů', level: 1 }).textContent;
+  }
+
+  /** Karty kvízů (bez „Vytvořte vlastní" karty). */
+  cards() {
+    return this.view.getAllByTestId('quiz-card');
+  }
+
+  /** Vrátí scoped queries pro kartu daného packId (přes jeho titulek). */
+  card(pack) {
+    const heading = this.view.getByRole('heading', { name: pack.title, level: 2 });
+    return within(heading.closest('[data-testid="quiz-card"]'));
+  }
+
+  hasCreateYourOwn() {
+    return this.view.queryByRole('heading', { name: 'Vytvořte vlastní' }) !== null;
+  }
+
+  currentPath() {
+    return this.router.currentRoute.value.fullPath;
+  }
+
+  // --- Co uživatel dělá ------------------------------------------------------
+
+  async playNow(pack) {
+    await fireEvent.click(this.card(pack).getByRole('button', { name: /Play Now/i }));
+    await flushPromises();
+  }
+
+  async customize(pack) {
+    await fireEvent.click(this.card(pack).getByRole('button', { name: /Customize/i }));
+    await flushPromises();
+  }
+}
+
+export { quizPacks };

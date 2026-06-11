@@ -6,11 +6,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test:e2e": "node tests/presenter.test.js && node tests/landing-page.test.js",
-    "test:e2e:headless": "cross-env HEADLESS=true node tests/presenter.test.js && cross-env HEADLESS=true node tests/landing-page.test.js",
-    "test:e2e:interactive": "cross-env HEADLESS=false node tests/presenter.test.js && cross-env HEADLESS=false node tests/landing-page.test.js",
-    "test:e2e:presenter": "node tests/presenter.test.js",
-    "test:e2e:landing": "node tests/landing-page.test.js",
+    "test": "vitest run",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
     "test:e2e:landing:interactive": "cross-env HEADLESS=false node tests/landing-page.test.js",
     "format": "prettier --write \"src/**/*.{js,vue,json,css}\"",
     "format:check": "prettier --check \"src/**/*.{js,vue,json,css}\""
@@ -21,10 +19,13 @@
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.4.8",
+    "@testing-library/vue": "^8.1.0",
     "@vitejs/plugin-vue": "^5.0.0",
-    "cross-env": "^10.1.0",
+    "@vue/test-utils": "^2.4.6",
+    "jsdom": "^25.0.1",
     "prettier": "3.4.2",
-    "taiko": "^1.4.9",
-    "vite": "^5.0.8"
+    "vite": "^5.0.8",
+    "vitest": "^2.1.8"
   }
 }

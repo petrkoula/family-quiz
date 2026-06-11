@@ -2,7 +2,9 @@
   <div class="presenter-container" :class="{ fullscreen: isFullscreen }">
     <!-- Progress Bar -->
     <div class="progress-bar">
-      <span class="progress-text">Foto {{ currentPhotoIndex + 1 }} / {{ totalPhotos }}</span>
+      <span class="progress-text" data-testid="photo-progress"
+        >Foto {{ currentPhotoIndex + 1 }} / {{ totalPhotos }}</span
+      >
     </div>
 
     <!-- Main Content Area -->
@@ -20,7 +22,7 @@
 
       <!-- Questions Container -->
       <transition name="slide">
-        <div v-if="questionsVisible" class="questions-container">
+        <div v-if="questionsVisible" class="questions-container" data-testid="questions-panel">
           <QuestionCard
             :question="currentQuestion"
             :questionIndex="currentQuestionIndex"
@@ -33,7 +35,7 @@
 
     <!-- Controls Hint -->
     <div class="controls-hint">
-      <span class="hint-text">{{ controlsHintText }}</span>
+      <span class="hint-text" data-testid="controls-hint">{{ controlsHintText }}</span>
       <span class="navigation-hint">← → Fotky | ↑ ↓ Otázky</span>
     </div>
   </div>

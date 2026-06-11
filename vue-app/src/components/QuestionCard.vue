@@ -12,7 +12,7 @@
 
     <!-- Question -->
     <div class="question">
-      <div class="question-text">{{ question.text }}</div>
+      <div class="question-text" data-testid="question-text">{{ question.text }}</div>
 
       <!-- Answer Options -->
       <div class="options">
@@ -21,6 +21,8 @@
           :key="index"
           class="option"
           :class="{ correct: answersRevealed && index === question.correct }"
+          data-testid="option"
+          :data-correct="answersRevealed && index === question.correct ? 'true' : 'false'"
         >
           {{ option }}
         </div>
