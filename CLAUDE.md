@@ -134,12 +134,27 @@ Navigation state is enforced in `gameStore.js` actions.
 - Smooth animations for question panel and answer reveals
 - Responsive design with viewport-relative units
 
-## Images
+## Images & Quiz Library
 
-Images are handled differently in development vs production:
-- **Development**: Loaded from parent `/images` folder
-- **Production**: Copied to `vue-app/public/images/` during build
-- **GitHub Pages deployment**: Images copied automatically in CI/CD workflow
+Photos live in the repo root as **one folder per quiz pack**: `images/<pack-id>/*.jpg`.
+The folder structure IS the library (see `specs/quiz-library-sync.spec.md` and
+`specs/quiz-pack-structure.spec.md`):
+
+- **Dev**: `scripts/photo-catalog-plugin.mjs` (wired in vite.config.js) serves
+  `/images/*` straight from the root folder and exposes `/__catalog` endpoints
+  that list folders **at request time** (docker fallback: `public/images` mount).
+- **Library state** is remembered in localStorage (`src/data/libraryStorage.js`)
+  and changes **only on explicit reload**: per-card ↻ Reload syncs one pack's
+  photos; „Obnovit knihovnu" full-syncs the pack list and all photos. First
+  visit (no remembered state) populates from current folders.
+- **Questions**: `quizData.js` acts as a question bank matched by photo
+  filename; photos without known questions get placeholder questions (no
+  correct answer) until an author fills them in.
+- **Swap point for a hosted store** (Google DB / Google Photos planned):
+  `setPhotoCatalogSource` / `setPackCatalogSource` in `src/data/photoCatalog.js`.
+- **Production**: images copied to `vue-app/public/images/` during deploy;
+  catalog endpoints don't exist there, so reloads report "no changes" until
+  the hosted store lands.
 
 ## Testing
 
@@ -156,6 +171,8 @@ editable `*.spec.js` test:
 - `tests/quick-start-quiz.spec.js` — Play Now / Customize from a card
 - `tests/customization.spec.js` — timer, questions-per-photo, summary, Start/Skip
 - `tests/quiz-card-reload.spec.js` — reload a pack from current photo files (placeholder questions for new photos)
+- `tests/quiz-library-sync.spec.js` — library from photo folders, localStorage cache, full sync
+- `tests/photo-catalog-plugin.spec.js` — folder→pack listing rules (node env)
 
 Run via the unified runner: `yarn test [tests/<suite>.spec.js]` —
 exit 0 = green; on failure read the printed `test-results/<suite>.failures.txt`.

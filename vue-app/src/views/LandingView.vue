@@ -4,6 +4,18 @@
     <header class="landing-header">
       <h1 class="landing-title">Knihovna Kvízů</h1>
       <p class="landing-subtitle">Vyberte si kvíz a zahrajte si s rodinou</p>
+      <div class="library-toolbar">
+        <button class="btn-reload-library" data-testid="reload-library" @click="reloadLibrary">
+          ⟳ Obnovit knihovnu
+        </button>
+        <p
+          v-if="libraryReloadResult"
+          class="library-reload-result"
+          data-testid="library-reload-result"
+        >
+          {{ libraryReloadResult }}
+        </p>
+      </div>
     </header>
 
     <!-- Quiz Library Grid -->
@@ -90,7 +102,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useGameStore } from '@/stores/gameStore';
 import { usePackLibraryStore } from '@/stores/packLibraryStore';
@@ -100,8 +112,13 @@ const router = useRouter();
 const gameStore = useGameStore();
 const library = usePackLibraryStore();
 
+// First visit only: populate the library from current folders (see store).
+onMounted(() => library.ensureInitialized());
+
 // Per-pack result summary shown after a reload.
 const reloadResults = ref({});
+// Summary shown after a whole-library refresh.
+const libraryReloadResult = ref(null);
 
 function questionCount(pack) {
   return pack.photos.reduce((sum, photo) => sum + photo.questions.length, 0);
@@ -115,6 +132,22 @@ function formatReloadResult({ added, removed }) {
 async function reloadPack(packId) {
   const result = await library.reloadPack(packId);
   reloadResults.value = { ...reloadResults.value, [packId]: formatReloadResult(result) };
+}
+
+function formatLibraryResult(result) {
+  if (!result) return 'Zdroj složek není dostupný';
+  const { addedPacks, removedPacks, updatedPacks } = result;
+  if (!addedPacks && !removedPacks && !updatedPacks) return 'Knihovna je aktuální';
+  const parts = [];
+  if (addedPacks) parts.push(`Přidáno kvízů: ${addedPacks}`);
+  if (removedPacks) parts.push(`Odebráno kvízů: ${removedPacks}`);
+  if (updatedPacks) parts.push(`Aktualizováno: ${updatedPacks}`);
+  return parts.join(', ');
+}
+
+async function reloadLibrary() {
+  const result = await library.reloadLibrary();
+  libraryReloadResult.value = formatLibraryResult(result);
 }
 
 function playNow(packId) {
@@ -152,6 +185,35 @@ function customizeQuiz(packId) {
 
 .landing-subtitle {
   font-size: 1.5rem;
+  opacity: 0.9;
+}
+
+.library-toolbar {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-reload-library {
+  padding: 0.6rem 1.4rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-reload-library:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.library-reload-result {
+  font-size: 1rem;
   opacity: 0.9;
 }
 

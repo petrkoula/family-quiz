@@ -118,11 +118,12 @@
 import { ref, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useGameStore } from '@/stores/gameStore';
-import { getPackMetadata } from '@/data/quizPacks';
+import { usePackLibraryStore } from '@/stores/packLibraryStore';
 
 const router = useRouter();
 const route = useRoute();
 const gameStore = useGameStore();
+const library = usePackLibraryStore();
 
 // Get quiz pack ID from route or use default
 const quizPackId = route.params.quizId || gameStore.selectedQuizPackId;
@@ -136,8 +137,8 @@ const settings = ref({
   randomizeQuestions: false,
 });
 
-// Get metadata for summary
-const metadata = computed(() => getPackMetadata(quizPackId));
+// Get metadata for summary (from the possibly synced/reloaded library)
+const metadata = computed(() => library.metadata(quizPackId));
 const totalPhotos = computed(() => metadata.value.photoCount);
 const totalQuestions = computed(() => totalPhotos.value * settings.value.questionsPerPhoto);
 

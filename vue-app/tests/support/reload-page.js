@@ -9,7 +9,11 @@ import { render, within, fireEvent } from '@testing-library/vue';
 import { flushPromises } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import { createRouter, createMemoryHistory } from 'vue-router';
-import { setPhotoCatalogSource, resetPhotoCatalogSource } from '@/data/photoCatalog';
+import {
+  setPhotoCatalogSource,
+  setPackCatalogSource,
+  resetPhotoCatalogSource,
+} from '@/data/photoCatalog';
 import { quizPacks } from '@/data/quizPacks';
 import { useGameStore } from '@/stores/gameStore';
 import { usePackLibraryStore } from '@/stores/packLibraryStore';
@@ -29,12 +33,18 @@ function makeRouter() {
 }
 
 /**
- * Render landing page se zadaným katalogem fotek.
- * @param {{catalog?: (packId: string, currentImages: string[]) => string[]}} [opts]
+ * Render landing page se zadaným katalogem fotek/složek.
+ * @param {{
+ *   catalog?: (packId: string, currentImages: string[]) => string[],
+ *   folders?: () => Array<{id: string, photos: string[]}> | null,
+ * }} [opts]
+ *   `catalog` = zdroj fotek jednoho packu (per-card reload),
+ *   `folders` = zdroj seznamu složek (refresh celé knihovny).
  */
-export async function renderLandingForReload({ catalog } = {}) {
+export async function renderLandingForReload({ catalog, folders } = {}) {
+  resetPhotoCatalogSource();
   if (catalog) setPhotoCatalogSource(catalog);
-  else resetPhotoCatalogSource();
+  if (folders) setPackCatalogSource(folders);
 
   const pinia = createPinia();
   setActivePinia(pinia);
@@ -42,11 +52,13 @@ export async function renderLandingForReload({ catalog } = {}) {
   const router = makeRouter();
   const view = render(LandingView, { global: { plugins: [router, pinia] } });
   await router.isReady();
+  await flushPromises(); // first-visit init (ensureInitialized) doběhne
   return new ReloadPage(view);
 }
 
 export function resetCatalog() {
   resetPhotoCatalogSource();
+  localStorage.clear(); // zapamatovaný stav knihovny nesmí prosakovat mezi testy
 }
 
 /**
@@ -142,6 +154,34 @@ class ReloadPage {
   reloadResult(title) {
     const el = this.card(title).queryByTestId('reload-result');
     return el ? el.textContent.trim() : null;
+  }
+
+  // --- Knihovna jako celek ---------------------------------------------------
+
+  /** Titulky všech karet kvízů (bez karty „Vytvořte vlastní"). */
+  cardTitles() {
+    return this.view
+      .getAllByTestId('quiz-card')
+      .map(card => within(card).getByRole('heading', { level: 2 }).textContent.trim());
+  }
+
+  hasLibraryReloadControl() {
+    return this.view.queryByTestId('reload-library') !== null;
+  }
+
+  async clickLibraryReload() {
+    await fireEvent.click(this.view.getByTestId('reload-library'));
+    await flushPromises();
+  }
+
+  libraryReloadResult() {
+    const el = this.view.queryByTestId('library-reload-result');
+    return el ? el.textContent.trim() : null;
+  }
+
+  /** „Zavření appky" — odmountuje view; další render simuluje novou návštěvu. */
+  unmount() {
+    this.view.unmount();
   }
 }
 
