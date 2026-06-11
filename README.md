@@ -188,6 +188,10 @@ The Vue app has multiple routes for different use cases:
 
 ## 🔧 Development
 
+### Required Plugins
+
+This project requires the [Disciplined Agentic Engineering](https://github.com/swingerman/disciplined-agentic-engineering) plugins for development. These plugins ensure best practices and consistent code quality.
+
 ### Hot Module Replacement
 
 Vite provides instant updates during development:
