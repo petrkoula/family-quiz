@@ -73,29 +73,25 @@ defineProps({
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: #cbd5e0;
+  background: var(--paper-deep);
   transition: all 0.3s ease;
 }
 
 .dot.active {
-  background: #667eea;
+  background: var(--accent);
   transform: scale(1.3);
-  box-shadow: 0 0 12px rgba(102, 126, 234, 0.6);
 }
 
 .question {
-  background: #f8f9fa;
   padding: 40px;
-  border-radius: 12px;
-  border-left: 8px solid #667eea;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .question-text {
+  font-family: var(--font-display);
   font-size: 2.4rem;
-  font-weight: 700;
+  font-weight: 600;
   margin-bottom: 30px;
-  color: #1a202c;
+  color: var(--ink);
   line-height: 1.3;
   text-align: center;
 }
@@ -108,12 +104,13 @@ defineProps({
 }
 
 .option {
-  background: white;
+  background: var(--surface);
   padding: 20px 30px;
-  border-radius: 10px;
-  border: 4px solid #cbd5e0;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
   font-size: 1.8rem;
   font-weight: 600;
+  color: var(--ink);
   transition: all 0.2s ease;
   text-align: center;
   min-height: 80px;
@@ -123,11 +120,10 @@ defineProps({
 }
 
 .option.correct {
-  background: #48bb78;
-  color: white;
-  border-color: #38a169;
+  background: var(--success);
+  color: #fff;
   font-size: 2rem;
-  box-shadow: 0 6px 20px rgba(72, 187, 120, 0.5);
+  box-shadow: 0 6px 20px rgba(77, 115, 64, 0.4);
   transform: scale(1.05);
 }
 

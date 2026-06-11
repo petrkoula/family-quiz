@@ -2,7 +2,7 @@
   <div class="team-container">
     <!-- Registration Form -->
     <div v-if="!isRegistered" class="registration-card card">
-      <h1>🎯 Family Quiz</h1>
+      <h1>Family Quiz</h1>
       <p class="subtitle">Připojte se k quiz!</p>
 
       <input
@@ -23,7 +23,7 @@
     <div v-else class="quiz-interface">
       <!-- Team Info Card -->
       <div class="card team-info">
-        <h1>🎯 Family Quiz</h1>
+        <h1>Family Quiz</h1>
         <div class="score">
           Skóre: <span>{{ teamScore }}</span>
         </div>
@@ -34,7 +34,7 @@
 
       <!-- Question Card -->
       <div class="card question-card">
-        <div v-if="!questionsVisible" class="status waiting">⏳ Čekáme na další otázku...</div>
+        <div v-if="!questionsVisible" class="status waiting">Čekáme na další otázku…</div>
 
         <div v-else class="question-content">
           <div class="photo-info">Fotka {{ currentPhotoIndex + 1 }} / {{ totalPhotos }}</div>
@@ -142,15 +142,15 @@ watch(questionsVisible, visible => {
 <style scoped>
 .team-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--canvas);
   padding: 20px;
 }
 
 .card {
-  background: white;
-  border-radius: 16px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
   padding: 30px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-soft);
   margin-bottom: 20px;
 }
 
@@ -161,30 +161,40 @@ watch(questionsVisible, visible => {
 }
 
 h1 {
-  color: #667eea;
+  font-family: var(--font-display);
+  color: var(--ink);
   margin-bottom: 10px;
   font-size: 2rem;
+  font-weight: 600;
 }
 
 .subtitle {
-  color: #666;
+  color: var(--ink-muted);
   margin-bottom: 20px;
 }
 
 .team-input {
   width: 100%;
   padding: 15px;
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
+  background: var(--field-fill);
+  border: 1px solid transparent;
+  border-radius: var(--radius);
   font-size: 1.1rem;
   margin-bottom: 15px;
+  color: var(--ink);
+}
+
+.team-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+  outline: none;
 }
 
 .button {
   width: 100%;
   padding: 15px;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius);
   font-size: 1.2rem;
   font-weight: 600;
   cursor: pointer;
@@ -192,17 +202,18 @@ h1 {
 }
 
 .button:disabled {
-  background: #cbd5e0 !important;
+  background: var(--paper-deep) !important;
+  color: var(--ink-muted) !important;
   cursor: not-allowed;
 }
 
 .button-primary {
-  background: #667eea;
-  color: white;
+  background: var(--accent);
+  color: #fff;
 }
 
 .button-primary:hover:not(:disabled) {
-  background: #5568d3;
+  background: var(--accent-hover);
   transform: translateY(-2px);
 }
 
@@ -217,13 +228,13 @@ h1 {
 
 .score {
   font-size: 1.5rem;
-  font-weight: 700;
-  color: #667eea;
+  font-weight: 600;
+  color: var(--accent);
   margin: 10px 0;
 }
 
 .team-name-display {
-  color: #666;
+  color: var(--ink-soft);
   margin-top: 10px;
 }
 
@@ -235,13 +246,13 @@ h1 {
   text-align: center;
   padding: 40px 20px;
   font-size: 1.2rem;
-  color: #666;
+  color: var(--ink-soft);
 }
 
 .status.waiting {
-  background: #fef3c7;
-  color: #92400e;
-  border-radius: 8px;
+  background: var(--warn-soft);
+  color: var(--warn-ink);
+  border-radius: var(--radius);
   font-weight: 600;
 }
 
@@ -254,7 +265,7 @@ h1 {
 .photo-info {
   text-align: center;
   font-size: 0.9rem;
-  color: #666;
+  color: var(--ink-muted);
 }
 
 .progress-dots {
@@ -267,20 +278,20 @@ h1 {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #cbd5e0;
+  background: var(--paper-deep);
   transition: all 0.3s ease;
 }
 
 .dot.active {
-  background: #667eea;
+  background: var(--accent);
   transform: scale(1.3);
-  box-shadow: 0 0 10px rgba(102, 126, 234, 0.6);
 }
 
 .question-text {
+  font-family: var(--font-display);
   font-size: 1.3rem;
   font-weight: 600;
-  color: #1a202c;
+  color: var(--ink);
   text-align: center;
   line-height: 1.4;
 }
@@ -293,10 +304,10 @@ h1 {
 
 .option-btn {
   padding: 15px;
-  background: white;
-  border: 3px solid #cbd5e0;
-  color: #1a202c;
-  border-radius: 8px;
+  background: var(--field-fill);
+  border: 1px solid transparent;
+  color: var(--ink);
+  border-radius: var(--radius);
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
@@ -305,14 +316,12 @@ h1 {
 }
 
 .option-btn:hover {
-  border-color: #667eea;
-  background: #f7fafc;
+  background: var(--paper-deep);
 }
 
 .option-btn.selected {
-  background: #667eea;
-  color: white;
-  border-color: #5568d3;
+  background: var(--accent);
+  color: #fff;
 }
 
 .submit-btn {

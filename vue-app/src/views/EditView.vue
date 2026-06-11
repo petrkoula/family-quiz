@@ -428,16 +428,16 @@ function removeOption(index) {
 <style scoped>
 .edit-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--canvas);
   padding: 2rem;
-  color: #2c3e50;
+  color: var(--ink);
 }
 
 .edit-header {
   max-width: 1000px;
   margin: 0 auto 2rem;
   text-align: center;
-  color: white;
+  color: var(--ink);
 }
 
 .edit-toolbar {
@@ -459,41 +459,38 @@ function removeOption(index) {
 
 .back-link {
   display: inline-block;
-  color: white;
+  color: var(--accent);
   text-decoration: none;
-  font-weight: bold;
-  opacity: 0.9;
+  font-weight: 600;
 }
 
 .back-link:hover {
-  opacity: 1;
   text-decoration: underline;
 }
 
 .btn-toolbar {
   padding: 0.5rem 1.25rem;
   font-size: 1rem;
-  font-weight: bold;
-  border: 2px solid rgba(255, 255, 255, 0.8);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.15);
-  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius);
+  background: rgba(82, 60, 39, 0.06);
+  color: var(--ink-soft);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .btn-toolbar:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(82, 60, 39, 0.11);
 }
 
 .btn-toolbar-primary {
-  background: white;
-  color: #5568d3;
-  border-color: white;
+  background: var(--accent);
+  color: #fff;
 }
 
 .btn-toolbar-primary:hover {
-  background: #f0f0ff;
+  background: var(--accent-hover);
 }
 
 .kebab {
@@ -503,14 +500,14 @@ function removeOption(index) {
   line-height: 1;
   border: none;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
-  color: white;
+  background: rgba(82, 60, 39, 0.06);
+  color: var(--ink-soft);
   cursor: pointer;
   transition: background 0.2s ease;
 }
 
 .kebab:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(82, 60, 39, 0.11);
 }
 
 .menu-backdrop {
@@ -525,9 +522,9 @@ function removeOption(index) {
   right: 0;
   z-index: 11;
   min-width: 180px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 24px rgba(82, 60, 39, 0.25);
   overflow: hidden;
   text-align: left;
 }
@@ -539,13 +536,13 @@ function removeOption(index) {
   font-size: 1rem;
   text-align: left;
   border: none;
-  background: white;
-  color: #2c3e50;
+  background: var(--surface);
+  color: var(--ink);
   cursor: pointer;
 }
 
 .menu-item:hover {
-  background: #f1f3f9;
+  background: var(--field-fill);
 }
 
 .reorder-list {
@@ -561,10 +558,10 @@ function removeOption(index) {
   display: flex;
   align-items: center;
   gap: 1rem;
-  background: white;
-  border-radius: 10px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
   padding: 0.75rem 1rem;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-soft);
   cursor: grab;
   user-select: none;
 }
@@ -576,39 +573,40 @@ function removeOption(index) {
 
 .drag-handle {
   font-size: 1.4rem;
-  color: #adb5bd;
+  color: var(--ink-muted);
   cursor: grab;
 }
 
 .reorder-thumb {
   width: 80px;
   height: 60px;
-  border-radius: 6px;
+  border-radius: 0;
   object-fit: cover;
-  background: #e9ecef;
+  background: var(--paper-deep);
+  filter: sepia(0.18) saturate(0.92);
 }
 
 .reorder-position {
   font-size: 1.15rem;
   font-weight: 600;
-  color: #495057;
+  color: var(--ink-soft);
 }
 
 .edit-title {
+  font-family: var(--font-display);
   font-size: 2.5rem;
-  font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  font-weight: 600;
 }
 
 .pack-name {
   font-size: 1.3rem;
-  opacity: 0.9;
+  color: var(--ink-muted);
   margin-top: 0.5rem;
 }
 
 .not-found {
   text-align: center;
-  color: white;
+  color: var(--ink-soft);
   font-size: 1.3rem;
 }
 
@@ -621,10 +619,10 @@ function removeOption(index) {
 }
 
 .photo-editor {
-  background: white;
-  border-radius: 12px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
   padding: 1.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-soft);
   display: grid;
   grid-template-columns: 220px 1fr;
   gap: 1.5rem;
@@ -634,18 +632,25 @@ function removeOption(index) {
   text-align: center;
 }
 
+/* Mini-polaroid (viz design/tokens.md) — bez natočení, editor je pracovní plocha */
 .photo-thumbnail {
   width: 100%;
-  border-radius: 8px;
+  border-radius: 0;
   object-fit: cover;
   aspect-ratio: 4 / 3;
-  background: #e9ecef;
+  padding: 8px 8px 22px;
+  background: #fff;
+  box-shadow:
+    0 1px 2px rgba(82, 60, 39, 0.12),
+    0 6px 16px rgba(82, 60, 39, 0.16);
+  filter: sepia(0.18) saturate(0.92);
 }
 
 .photo-heading {
+  font-family: var(--font-display);
   font-size: 1.2rem;
   margin-top: 0.75rem;
-  color: #495057;
+  color: var(--ink-soft);
 }
 
 .question-list {
@@ -656,9 +661,8 @@ function removeOption(index) {
 }
 
 .question-item {
-  background: #f8f9fa;
-  border: 2px solid #e9ecef;
-  border-radius: 10px;
+  background: var(--canvas);
+  border-radius: var(--radius-lg);
   padding: 1rem;
 }
 
@@ -673,10 +677,10 @@ function removeOption(index) {
   margin-left: 0.5rem;
   padding: 0.15rem 0.6rem;
   border-radius: 999px;
-  background: #ffe8a3;
-  color: #8a6d00;
+  background: var(--warn-soft);
+  color: var(--warn-ink);
   font-size: 0.85rem;
-  font-weight: bold;
+  font-weight: 600;
   vertical-align: middle;
 }
 
@@ -688,9 +692,8 @@ function removeOption(index) {
 }
 
 .option {
-  background: white;
-  border: 2px solid #dee2e6;
-  border-radius: 8px;
+  background: var(--surface);
+  border-radius: var(--radius);
   padding: 0.5rem 0.75rem;
   display: flex;
   justify-content: space-between;
@@ -699,13 +702,13 @@ function removeOption(index) {
 }
 
 .option.correct {
-  border-color: #38a169;
-  background: #f0fff4;
+  background: var(--success-soft);
+  color: var(--success-ink);
 }
 
 .check {
-  color: #38a169;
-  font-weight: bold;
+  color: var(--success);
+  font-weight: 600;
 }
 
 .question-actions {
@@ -718,17 +721,16 @@ function removeOption(index) {
   padding: 0.4rem 1rem;
   font-size: 0.95rem;
   font-weight: 600;
-  border: 2px solid #667eea;
-  border-radius: 6px;
-  background: white;
-  color: #667eea;
+  border: none;
+  border-radius: var(--radius);
+  background: rgba(82, 60, 39, 0.06);
+  color: var(--ink-soft);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .btn-small:hover:not(:disabled) {
-  background: #667eea;
-  color: white;
+  background: rgba(82, 60, 39, 0.11);
 }
 
 .btn-small:disabled {
@@ -737,12 +739,13 @@ function removeOption(index) {
 }
 
 .btn-save {
-  background: #667eea;
-  color: white;
+  background: var(--accent);
+  color: #fff;
 }
 
 .btn-save:hover:not(:disabled) {
-  background: #5568d3;
+  background: var(--accent-hover);
+  color: #fff;
 }
 
 .add-question-area {
@@ -750,20 +753,18 @@ function removeOption(index) {
 }
 
 .add-question-area .question-editor {
-  background: #f8f9fa;
-  border: 2px solid #e9ecef;
-  border-radius: 10px;
+  background: var(--canvas);
+  border-radius: var(--radius-lg);
   padding: 1rem;
 }
 
 .btn-delete {
-  border-color: #e53e3e;
-  color: #e53e3e;
+  color: #a32d2d;
 }
 
 .btn-delete:hover:not(:disabled) {
-  background: #e53e3e;
-  color: white;
+  background: #a32d2d;
+  color: #fff;
 }
 
 .question-editor {
@@ -774,25 +775,28 @@ function removeOption(index) {
 
 .field-label {
   font-weight: 600;
-  color: #495057;
+  color: var(--ink-soft);
 }
 
 .text-input {
   width: 100%;
   padding: 0.5rem 0.75rem;
   font-size: 1rem;
-  border: 2px solid #dee2e6;
-  border-radius: 6px;
+  background: var(--surface);
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  color: var(--ink);
 }
 
 .text-input:focus {
-  border-color: #667eea;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
   outline: none;
 }
 
 .options-fieldset {
-  border: 2px solid #e9ecef;
-  border-radius: 8px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
   padding: 0.75rem;
   display: flex;
   flex-direction: column;

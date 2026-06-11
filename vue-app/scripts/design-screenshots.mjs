@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Design screenshots — jednotná sada záběrů pro porovnávání designů.
 //
-//   yarn screenshots                      # -> screenshots/<git-branch>/
+//   yarn screenshots                      # -> screenshots/<themeName z src/theme.js>/
 //   yarn screenshots album-v2             # -> screenshots/album-v2/
 //   yarn screenshots album-v2 --url=http://localhost:5173
 //
@@ -13,30 +13,38 @@
 // ať všechny designové varianty sdílí stejné pojmenování i rozměry a dají se
 // porovnávat soubor proti souboru.
 
-import { execSync, spawn } from 'node:child_process';
+import { spawn } from 'node:child_process';
 import { existsSync, mkdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import puppeteer from 'puppeteer-core';
+import { themeName } from '../src/theme.js';
 
 const DESKTOP = { width: 1440, height: 1000 };
 const MOBILE = { width: 414, height: 896 };
 const CARD = { width: 560, height: 860 };
 
 /**
- * Spustí první kvíz z knihovny přes „Play Now" — presenter tak ukazuje
- * skutečný pack (přímý vstup na /presenter jede na legacy default data
- * s neexistujícími soubory fotek).
+ * Vstup do view přes tlačítko na první kartě knihovny — stejně jako uživatel.
+ * Přímé URL nestačí: /presenter bez výběru jede na legacy default data
+ * a /customize/<id> závisí na tom, co je zrovna v localStorage knihovně
+ * (záběry sdílí jeden prohlížeč, landing ji předtím přepíše ze složek).
  */
-async function playFirstPack(page) {
-  await page.waitForSelector('[data-testid="quiz-card"]', { timeout: 10000 });
-  await page.evaluate(() => {
-    const card = document.querySelector('[data-testid="quiz-card"]');
-    [...card.querySelectorAll('button')]
-      .find((button) => button.textContent.includes('Play Now'))
-      ?.click();
-  });
-  await page.waitForSelector('[data-testid="photo-progress"]', { timeout: 10000 });
+function enterFromFirstCard(buttonText, readySelector) {
+  return async page => {
+    await page.waitForSelector('[data-testid="quiz-card"]', { timeout: 10000 });
+    await page.evaluate(text => {
+      const card = document.querySelector('[data-testid="quiz-card"]');
+      [...card.querySelectorAll('button')]
+        .find(button => button.textContent.includes(text))
+        ?.click();
+    }, buttonText);
+    await page.waitForSelector(readySelector, { timeout: 10000 });
+  };
 }
+
+const playFirstPack = enterFromFirstCard('Play Now', '[data-testid="photo-progress"]');
+const customizeFirstPack = enterFromFirstCard('Customize', '[data-testid="questions-per-photo"]');
+const editFirstPack = enterFromFirstCard('Upravit', '[data-testid="edit-menu"]');
 
 /**
  * Jeden záběr: route, viewport, volitelný `setup` (akce po načtení routy,
@@ -48,7 +56,7 @@ const SHOT_LIST = [
   { name: 'landing-full', path: '/', viewport: DESKTOP, fullPage: true },
   { name: 'landing-mobile', path: '/', viewport: MOBILE, fullPage: true },
   { name: 'card-detail', path: '/', viewport: CARD },
-  { name: 'customization', path: '/customize/retro-style', viewport: DESKTOP },
+  { name: 'customization', path: '/', viewport: DESKTOP, setup: customizeFirstPack },
   { name: 'presenter-photo', path: '/', viewport: DESKTOP, setup: playFirstPack },
   { name: 'presenter-questions', path: '/', viewport: DESKTOP, setup: playFirstPack, keys: [' '] },
   {
@@ -58,22 +66,19 @@ const SHOT_LIST = [
     setup: playFirstPack,
     keys: [' ', 'a'],
   },
+  { name: 'edit', path: '/', viewport: DESKTOP, fullPage: true, setup: editFirstPack },
+  { name: 'admin', path: '/admin', viewport: DESKTOP },
+  { name: 'team', path: '/team', viewport: MOBILE },
 ];
 
 // Po stisku klávesy nech doběhnout slide-in/reveal animace.
 const ANIMATION_MS = 700;
 
 const args = process.argv.slice(2);
-const urlArg = args.find((a) => a.startsWith('--url='))?.slice('--url='.length);
-const label = args.find((a) => !a.startsWith('--')) ?? gitBranchLabel();
-
-function gitBranchLabel() {
-  try {
-    return execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8' }).trim();
-  } catch {
-    return 'snapshot';
-  }
-}
+const urlArg = args.find(a => a.startsWith('--url='))?.slice('--url='.length);
+// Výchozí složka = jméno designové varianty z tokenů (src/theme.js), takže
+// screenshots/<theme-name>/ vždy odpovídá designu, který je zrovna v kódu.
+const label = args.find(a => !a.startsWith('--')) ?? themeName;
 
 function findBrowser() {
   const candidates = [
@@ -86,7 +91,7 @@ function findBrowser() {
     '/usr/bin/chromium',
     '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
   ];
-  const found = candidates.find((p) => p && existsSync(p));
+  const found = candidates.find(p => p && existsSync(p));
   if (!found) {
     console.error('ERROR: Chrome/Edge nenalezen. Nastav cestu v env CHROME_PATH.');
     process.exit(1);
@@ -105,9 +110,7 @@ async function isUp(url) {
 
 /** Vrátí { baseUrl, stop } — najde běžící server, nebo spustí vlastní vite. */
 async function ensureServer() {
-  const candidates = urlArg
-    ? [urlArg]
-    : ['http://localhost:5173', 'http://localhost:5180'];
+  const candidates = urlArg ? [urlArg] : ['http://localhost:5173', 'http://localhost:5180'];
   for (const url of candidates) {
     if (await isUp(url)) return { baseUrl: url, stop: () => {} };
   }
@@ -124,7 +127,7 @@ async function ensureServer() {
   const url = 'http://localhost:5199';
   for (let i = 0; i < 60; i++) {
     if (await isUp(url)) return { baseUrl: url, stop: () => child.kill() };
-    await new Promise((r) => setTimeout(r, 500));
+    await new Promise(r => setTimeout(r, 500));
   }
   child.kill();
   console.error('ERROR: vlastní vite se do 30 s nerozběhl.');
@@ -136,29 +139,28 @@ async function settle(page) {
   // liší fallback fontem místo designem. Lazy obrázky pod foldem se samy
   // nenačtou (a fullPage záběr by měl prázdná místa) — přepni je na eager.
   // Celé čekání je ohraničené, ať jeden rozbitý obrázek nezasekne běh.
-  await page.evaluate(
-    () =>
-      Promise.race([
-        Promise.all([
-          document.fonts.ready,
-          ...[...document.images]
-            .map((img) => {
-              if (img.loading === 'lazy') img.loading = 'eager';
-              return img;
-            })
-            .filter((img) => !img.complete)
-            .map(
-              (img) =>
-                new Promise((done) => {
-                  img.addEventListener('load', done, { once: true });
-                  img.addEventListener('error', done, { once: true });
-                }),
-            ),
-        ]),
-        new Promise((r) => setTimeout(r, 8000)),
+  await page.evaluate(() =>
+    Promise.race([
+      Promise.all([
+        document.fonts.ready,
+        ...[...document.images]
+          .map(img => {
+            if (img.loading === 'lazy') img.loading = 'eager';
+            return img;
+          })
+          .filter(img => !img.complete)
+          .map(
+            img =>
+              new Promise(done => {
+                img.addEventListener('load', done, { once: true });
+                img.addEventListener('error', done, { once: true });
+              })
+          ),
       ]),
+      new Promise(r => setTimeout(r, 8000)),
+    ])
   );
-  await new Promise((r) => setTimeout(r, 250));
+  await new Promise(r => setTimeout(r, 250));
 }
 
 const { baseUrl, stop } = await ensureServer();
@@ -187,7 +189,7 @@ try {
 
     for (const key of shot.keys ?? []) {
       await page.keyboard.press(key);
-      await new Promise((r) => setTimeout(r, ANIMATION_MS));
+      await new Promise(r => setTimeout(r, ANIMATION_MS));
     }
 
     const file = join(outDir, `${shot.name}.png`);

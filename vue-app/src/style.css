@@ -13,6 +13,11 @@
   --surface: #fffdf8;
   --paper-deep: #f1e7d3;
   --field-fill: #f2e8d8;
+  --success: #4d7340;
+  --success-soft: #eaf1e2;
+  --success-ink: #2f4a22;
+  --warn-soft: #f6e7c1;
+  --warn-ink: #7a5b10;
   --hairline: rgba(82, 60, 39, 0.12);
   --radius: 8px;
   --radius-lg: 12px;

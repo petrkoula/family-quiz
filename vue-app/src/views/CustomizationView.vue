@@ -1,6 +1,6 @@
 <template>
   <div class="customize-page">
-    <n-card class="customize-card" :bordered="false">
+    <div class="customize-content">
       <header class="customize-header">
         <h1 class="title">Nastavení kvízu</h1>
         <p class="subtitle">Přizpůsobte si kvíz podle vašich potřeb</p>
@@ -107,14 +107,14 @@
         <n-button type="primary" size="large" @click="startQuiz">Start Quiz</n-button>
         <n-button quaternary size="large" @click="useDefaults">Skip</n-button>
       </div>
-    </n-card>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { NCard, NSwitch, NButton } from 'naive-ui';
+import { NSwitch, NButton } from 'naive-ui';
 import { useGameStore } from '@/stores/gameStore';
 import { usePackLibraryStore } from '@/stores/packLibraryStore';
 
@@ -154,23 +154,24 @@ function useDefaults() {
 </script>
 
 <style scoped>
+/* Editorial layout — obsah přímo na papíru, sekce odděluje whitespace,
+   žádná obalová karta ani dělicí čáry (viz design/taste.md). */
 .customize-page {
   min-height: 100vh;
   background: var(--canvas);
-  padding: 3rem 1.5rem;
+  padding: 4rem 1.5rem;
   display: flex;
   align-items: flex-start;
   justify-content: center;
 }
 
-.customize-card {
-  max-width: 720px;
+.customize-content {
+  max-width: 640px;
   width: 100%;
-  box-shadow: var(--shadow-soft);
 }
 
 .customize-header {
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
 }
 
 .title {
@@ -192,13 +193,7 @@ function useDefaults() {
 }
 
 .group {
-  padding: 1.4rem 0;
-  border-top: 1px solid var(--hairline);
-}
-
-.group:first-child {
-  border-top: none;
-  padding-top: 0;
+  padding: 0 0 2.5rem;
 }
 
 .group-title {
@@ -234,12 +229,12 @@ function useDefaults() {
   padding: 0.55rem 2.2rem 0.55rem 0.9rem;
   font-size: 1rem;
   color: var(--ink);
-  background-color: #f2e8d8;
+  background-color: var(--field-fill);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394826f' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   border: 1px solid transparent;
-  border-radius: 10px;
+  border-radius: var(--radius);
   cursor: pointer;
   transition:
     border-color 0.15s ease,

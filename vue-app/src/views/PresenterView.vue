@@ -187,19 +187,20 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* Projekce: teplá tma, ať vyniknou fotky; panel otázek je papír (tokens). */
 .presenter-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
   width: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #2a2018;
   padding: 20px;
 }
 
 .progress-bar {
   text-align: right;
   padding: 10px 20px;
-  color: white;
+  color: #e8ddcc;
   font-size: 1.2rem;
   font-weight: 600;
 }
@@ -218,9 +219,8 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  background: #1f1812;
+  border-radius: var(--radius-lg);
   overflow: hidden;
   transition: all 0.4s ease;
 }
@@ -237,10 +237,9 @@ onUnmounted(() => {
 
 .questions-container {
   flex: 0 0 66.67%;
-  background: white;
-  border-radius: 12px;
+  background: var(--canvas);
+  border-radius: var(--radius-lg);
   padding: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -249,7 +248,7 @@ onUnmounted(() => {
 .controls-hint {
   text-align: center;
   padding: 15px;
-  color: white;
+  color: #e8ddcc;
   font-size: 1.1rem;
   display: flex;
   justify-content: space-between;
@@ -258,9 +257,9 @@ onUnmounted(() => {
 
 .hint-text {
   font-weight: 600;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(232, 221, 204, 0.14);
   padding: 8px 16px;
-  border-radius: 6px;
+  border-radius: var(--radius);
 }
 
 .navigation-hint {
@@ -280,9 +279,9 @@ onUnmounted(() => {
 }
 
 .help-card {
-  background: white;
-  color: #1a202c;
-  border-radius: 16px;
+  background: var(--surface);
+  color: var(--ink);
+  border-radius: var(--radius-lg);
   padding: 2.5rem 3rem;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
   min-width: 420px;
@@ -290,9 +289,10 @@ onUnmounted(() => {
 
 .help-title {
   text-align: center;
+  font-family: var(--font-display);
   font-size: 1.8rem;
   margin-bottom: 1.5rem;
-  color: #2c3e50;
+  color: var(--ink);
 }
 
 .help-list {
@@ -310,11 +310,10 @@ onUnmounted(() => {
 
 .help-row dt {
   flex: 0 0 7.5rem;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 1.2rem;
-  background: #f0f2f7;
-  border: 2px solid #cbd5e0;
-  border-radius: 8px;
+  background: var(--field-fill);
+  border-radius: var(--radius);
   padding: 0.3rem 0.7rem;
   text-align: center;
 }

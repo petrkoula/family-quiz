@@ -59,7 +59,7 @@
         <template #cover>
           <div class="thumb create-thumb">
             <div class="polaroid polaroid-empty">
-              <span class="create-icon">✨</span>
+              <span class="create-icon">+</span>
             </div>
           </div>
         </template>
@@ -219,7 +219,7 @@ function editQuiz(packId) {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f1e7d3;
+  background: var(--paper-deep);
   overflow: hidden;
 }
 
@@ -298,9 +298,8 @@ function editQuiz(packId) {
   text-align: center;
 }
 
-/* Create-your-own card */
+/* Create-your-own card — prázdné místo v albu, žádný rámeček navíc */
 .create-card {
-  border: 1px dashed var(--hairline) !important;
   background: transparent;
   box-shadow: none;
 }
@@ -321,7 +320,9 @@ function editQuiz(packId) {
 }
 
 .create-icon {
-  font-size: 2.8rem;
+  font-family: var(--font-display);
+  font-size: 2.6rem;
+  color: var(--ink-muted);
 }
 
 .create-link {

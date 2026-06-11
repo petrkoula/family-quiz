@@ -1,14 +1,14 @@
 <template>
   <div class="admin-container">
     <header>
-      <h1>🎯 Photo Quiz - Admin Panel</h1>
+      <h1>Admin panel</h1>
     </header>
 
     <div class="admin-content">
       <!-- Current Question Info -->
       <div class="card current-question">
         <div class="status-badge" :class="questionsVisible ? 'active' : 'waiting'">
-          {{ questionsVisible ? '✅ Otázka aktivní' : 'Čeká se na otázku' }}
+          {{ questionsVisible ? 'Otázka aktivní' : 'Čeká se na otázku' }}
         </div>
         <h3>{{ currentQuestion?.text || '-' }}</h3>
         <p>
@@ -19,13 +19,13 @@
 
       <!-- Teams Leaderboard (Placeholder) -->
       <div class="card">
-        <h2>🏆 Žebříček týmů</h2>
+        <h2>Žebříček týmů</h2>
         <div class="no-data">Připojení týmů se zobrazí po integraci s Firebase</div>
       </div>
 
       <!-- Current Responses (Placeholder) -->
       <div class="card">
-        <h2>📝 Odpovědi na aktuální otázku</h2>
+        <h2>Odpovědi na aktuální otázku</h2>
         <div class="no-data">Odpovědi týmů se zobrazí po integraci s Firebase</div>
       </div>
     </div>
@@ -50,7 +50,7 @@ const {
 <style scoped>
 .admin-container {
   min-height: 100vh;
-  background: #f7fafc;
+  background: var(--canvas);
   padding: 20px;
 }
 
@@ -60,8 +60,10 @@ header {
 }
 
 h1 {
-  color: #1a202c;
+  font-family: var(--font-display);
+  color: var(--ink);
   font-size: 2rem;
+  font-weight: 600;
 }
 
 .admin-content {
@@ -73,21 +75,23 @@ h1 {
 }
 
 .card {
-  background: white;
-  border-radius: 12px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
   padding: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-soft);
 }
 
 .card h2 {
-  color: #667eea;
+  font-family: var(--font-display);
+  color: var(--ink);
   margin-bottom: 15px;
   font-size: 1.3rem;
+  font-weight: 600;
 }
 
 .current-question {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--accent);
+  color: #fff;
 }
 
 .current-question h3 {
@@ -105,19 +109,19 @@ h1 {
 }
 
 .status-badge.active {
-  background: #d1fae5;
-  color: #065f46;
+  background: var(--success-soft);
+  color: var(--success-ink);
 }
 
 .status-badge.waiting {
-  background: #fef3c7;
-  color: #92400e;
+  background: var(--warn-soft);
+  color: var(--warn-ink);
 }
 
 .no-data {
   text-align: center;
   padding: 30px;
-  color: #a0aec0;
+  color: var(--ink-muted);
   font-style: italic;
 }
 

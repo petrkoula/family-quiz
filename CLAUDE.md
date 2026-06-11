@@ -129,7 +129,14 @@ Navigation state is enforced in `gameStore.js` actions.
 
 ### Styling
 
-- High-contrast colors for projector visibility
+- **Design system "rodinné album"**: token spec in `design/tokens.md`, binding
+  do/don't rules in `design/taste.md` — read both before touching any UI.
+  Tokens live in code as CSS vars (`src/style.css`) + Naive UI overrides
+  (`src/theme.js`, exports `themeName`). All views are on album tokens;
+  Presenter keeps its bespoke fullscreen layout (dark stage), token colors only.
+- Design screenshots: `yarn screenshots [label]` → `screenshots/<themeName>/`
+  (flat, fixed shot names) for file-against-file design comparison.
+- High-contrast colors for projector visibility (presenter)
 - Large fonts (2.4rem questions, 1.8rem options) for distance viewing
 - Smooth animations for question panel and answer reveals
 - Responsive design with viewport-relative units
