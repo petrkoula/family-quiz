@@ -1,0 +1,16 @@
+{
+  "name": "quiz-acceptance-tests",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Acceptance test infrastructure for Family Quiz",
+  "scripts": {
+    "test:acceptance": "node specs/001-quiz-customization/run-acceptance-tests.js",
+    "test:acceptance:headed": "node specs/001-quiz-customization/run-acceptance-tests.js --headed",
+    "generate:ir": "node dae_gherkin.js specs/quiz-customization.spec.md specs/001-quiz-customization/.build/spec.json",
+    "generate:tests": "node acceptance/generator.js specs/001-quiz-customization/.build/spec.json specs/001-quiz-customization/.build/generated",
+    "generate:pipeline": "npm run generate:ir && npm run generate:tests"
+  },
+  "devDependencies": {
+    "taiko": "^1.4.9"
+  }
+}
