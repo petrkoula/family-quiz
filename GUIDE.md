@@ -65,5 +65,3 @@ všech kvízů najednou.
 - **Vlastní** (⚙ Customize na kartě) — před startem si nastavíš časovač,
   počet otázek na fotku a zamíchání fotek/otázek; pak **Start Quiz**
   (nebo **Skip** pro výchozí nastavení).
-- V prezentaci: `MEZERNÍK` otázky, `↑↓` přepínání otázek, `A` odhalení
-  odpovědi, `←→` další/předchozí foto, `F` fullscreen, `ESC` zavřít.
