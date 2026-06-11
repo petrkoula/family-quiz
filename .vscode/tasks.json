@@ -1,0 +1,69 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Dev: vue-app",
+      "type": "shell",
+      "command": "yarn",
+      "args": ["dev"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/vue-app"
+      }
+    },
+    {
+      "label": "Build: vue-app",
+      "type": "shell",
+      "command": "yarn",
+      "args": ["build"],
+      "presentation": {"reveal": "always"},
+      "problemMatcher": [],
+      "group": "build",
+      "options": {"cwd": "${workspaceFolder}/vue-app"}
+    },
+    {
+      "label": "Preview: vue-app",
+      "type": "shell",
+      "command": "yarn",
+      "args": ["preview"],
+      "presentation": {"reveal": "always"},
+      "problemMatcher": [],
+      "options": {"cwd": "${workspaceFolder}/vue-app"}
+    },
+    {
+      "label": "Test: vue-app (unit)",
+      "type": "shell",
+      "command": "yarn",
+      "args": ["test:unit"],
+      "presentation": {"reveal": "always"},
+      "problemMatcher": [],
+      "options": {"cwd": "${workspaceFolder}/vue-app"}
+    },
+    {
+      "label": "Format: vue-app",
+      "type": "shell",
+      "command": "yarn",
+      "args": ["format"],
+      "presentation": {"reveal": "always"},
+      "problemMatcher": [],
+      "options": {"cwd": "${workspaceFolder}/vue-app"}
+    },
+    {
+      "label": "Format:check: vue-app",
+      "type": "shell",
+      "command": "yarn",
+      "args": ["format:check"],
+      "presentation": {"reveal": "always"},
+      "problemMatcher": [],
+      "options": {"cwd": "${workspaceFolder}/vue-app"}
+    }
+  ]
+}
