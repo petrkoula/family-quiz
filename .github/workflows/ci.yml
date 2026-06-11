@@ -30,41 +30,13 @@ jobs:
         working-directory: ./vue-app
         run: yarn format:check
 
+      - name: Run tests
+        working-directory: ./vue-app
+        run: yarn test
+
       - name: Build application
         working-directory: ./vue-app
         run: yarn build
-
-      - name: Start dev server
-        working-directory: ./vue-app
-        run: |
-          yarn dev &
-          echo $! > dev-server.pid
-          # Wait for server to be ready
-          npx wait-on http://localhost:5173 -t 30000
-
-      - name: Run E2E tests
-        working-directory: ./vue-app
-        env:
-          CI: 'true'
-          SCREENSHOTS: 'true'
-          HEADLESS: 'true'
-        run: yarn test:e2e:headless
-
-      - name: Stop dev server
-        if: always()
-        working-directory: ./vue-app
-        run: |
-          if [ -f dev-server.pid ]; then
-            kill $(cat dev-server.pid) || true
-          fi
-
-      - name: Upload screenshots on failure
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-screenshots
-          path: vue-app/tests/screenshots/
-          retention-days: 7
 
   docker:
     name: Docker Build

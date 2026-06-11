@@ -44,16 +44,8 @@
 
           <!-- Action Buttons -->
           <div class="card-actions">
-            <button
-              @click.stop="playNow(pack.id)"
-              class="btn btn-play-now"
-            >
-              ▶ Play Now
-            </button>
-            <button
-              @click.stop="customizeQuiz(pack.id)"
-              class="btn btn-customize"
-            >
+            <button @click.stop="playNow(pack.id)" class="btn btn-play-now">▶ Play Now</button>
+            <button @click.stop="customizeQuiz(pack.id)" class="btn btn-customize">
               ⚙ Customize
             </button>
           </div>
@@ -67,9 +59,7 @@
         </div>
         <div class="card-content">
           <h2 class="card-title">Vytvořte vlastní</h2>
-          <p class="card-description">
-            Nahrajte své fotky a vytvořte si vlastní rodinný kvíz
-          </p>
+          <p class="card-description">Nahrajte své fotky a vytvořte si vlastní rodinný kvíz</p>
           <a
             href="https://github.com/petrkoula/family-quiz"
             target="_blank"
@@ -153,7 +143,9 @@ function customizeQuiz(packId) {
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border: 3px solid transparent;
 }
@@ -305,8 +297,15 @@ function customizeQuiz(packId) {
 }
 
 @keyframes sparkle {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.7; transform: scale(1.1); }
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
 }
 
 .create-link {

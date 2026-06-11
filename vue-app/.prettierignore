@@ -18,6 +18,3 @@ coverage
 
 # Logs
 *.log
-
-# Test screenshots
-tests/screenshots

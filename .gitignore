@@ -9,8 +9,6 @@ dist/
 *.local
 package-lock.json
 vue-app/public/images/
-vue-app/tests/screenshots/
-.taiko/
 
 # Workflow artifacts (keep structure, ignore temp files)
 .ub-workflows/tmp/

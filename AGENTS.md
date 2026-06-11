@@ -20,7 +20,7 @@ The repository enforces these version and tool preferences:
 | Vue.js          | Latest stable  | v3.4+   | —        |
 | Vite            | Latest stable  | v5.0+   | —        |
 | Pinia           | Latest stable  | v2.1+   | —        |
-| Taiko (testing) | Latest stable  | v1.4+   | —        |
+| Vitest (testing)| Latest stable  | v2.1+   | —        |
 
 ## Distribution Boundaries
 
@@ -60,12 +60,12 @@ Documentation drift is a defect when skills lack docs, docs reference removed pa
 - Components: `vue-app/src/components/`
 - Views: `vue-app/src/views/`
 - Stores: `vue-app/src/stores/`
-- E2E tests: `vue-app/tests/`
+- Tests: `vue-app/tests/` (Vitest + @testing-library/vue, jsdom)
 - Images: `images/` (root) → copied to `vue-app/public/images/`
 
 ### Development Workflow
 - Development server: `cd vue-app && npm run dev`
-- E2E tests: `cd vue-app && npm run test:e2e`
+- Tests: `cd vue-app && npm test`
 - Build: `cd vue-app && npm run build`
 - Docker dev: `docker-compose up dev`
 
@@ -78,7 +78,7 @@ Before substantial work: consult `.ub-workflows/status.md` for current work stat
 All code changes must:
 1. Be formatted with Prettier (runs automatically on commit via git hooks)
 2. Use Vue 3 Composition API with `<script setup>`
-3. Pass E2E tests (`yarn test:e2e`)
+3. Pass tests (`yarn test`)
 4. Build successfully (`yarn build`)
 
 **Formatting Workflow:**
@@ -88,7 +88,7 @@ All code changes must:
 
 ## Version Policy
 
-- **Current**: Vue 3.4, Vite 5.0, Pinia 2.1, Taiko 1.4
+- **Current**: Vue 3.4, Vite 5.0, Pinia 2.1, Vitest 2.1
 - **Target**: Latest stable releases
 - **Detection**: Extract from `vue-app/package.json` and lockfiles
 - **Gaps**: Trigger upgrade recommendations when version lags by minor release

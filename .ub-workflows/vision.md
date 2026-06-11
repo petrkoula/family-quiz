@@ -37,7 +37,7 @@ Local-first photo quiz that works offline with beautiful presentation optimized 
 - ✅ 23 vintage family photos with Czech questions
 - ✅ Vue 3 with Composition API
 - ✅ Keyboard navigation
-- ✅ E2E test suite with Taiko
+- ✅ Acceptance test suite (Vitest + @testing-library/vue)
 - ✅ Docker support (dev and production)
 - ✅ CI/CD with GitHub Actions
 - ✅ Firebase deployment ready

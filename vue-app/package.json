@@ -9,7 +9,6 @@
     "test": "vitest run",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
-    "test:e2e:landing:interactive": "cross-env HEADLESS=false node tests/landing-page.test.js",
     "format": "prettier --write \"src/**/*.{js,vue,json,css}\"",
     "format:check": "prettier --check \"src/**/*.{js,vue,json,css}\""
   },

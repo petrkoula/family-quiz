@@ -42,7 +42,7 @@ export const quizPacks = [
  * @returns {object|null} Quiz pack object or null if not found
  */
 export function getQuizPackById(packId) {
-  return quizPacks.find((pack) => pack.id === packId) || null;
+  return quizPacks.find(pack => pack.id === packId) || null;
 }
 
 /**
@@ -54,7 +54,7 @@ export function getQuizDataForPack(packId) {
   const pack = getQuizPackById(packId);
   if (!pack) return [];
 
-  return pack.photoIndices.map((index) => quizData[index]).filter(Boolean);
+  return pack.photoIndices.map(index => quizData[index]).filter(Boolean);
 }
 
 /**

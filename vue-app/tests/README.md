@@ -1,99 +1,58 @@
-# E2E Tests
+# Tests
 
-End-to-end tests for the Family Quiz application using [Taiko](https://taiko.dev/).
+Acceptance/unit tests for the Family Quiz app, run on
+[Vitest](https://vitest.dev/) + [@testing-library/vue](https://testing-library.com/docs/vue-testing-library/intro/)
+in **jsdom**. No browser and no dev server are required.
 
-## Prerequisites
+See [../../TESTING.md](../../TESTING.md) for the methodology (spec-first Gherkin as
+contract, hand-written editable tests, selector conventions).
 
-- Dev server must be running on http://localhost:5173
-- Taiko will automatically download Chromium on first run
-
-## Running Tests
-
-### Headless Mode (Default, for CI/CD)
+## Running
 
 ```bash
-# Make sure dev server is running
-yarn dev
+# Run the whole suite once
+yarn test
+# or
+yarn test:unit
 
-# In another terminal, run tests headless
-yarn test:e2e
-# or explicitly
-yarn test:e2e:headless
+# Watch mode while developing
+yarn test:unit:watch
 ```
 
-### Interactive Mode (Visual Debugging)
+## Layout
 
-```bash
-# Run tests with visible browser for debugging
-yarn test:e2e:interactive
+```
+tests/
+  setup.js                 # jest-dom matchers + cleanup
+  support/                 # page-object layer — ALL selectors live here
+    presenter-page.js
+    landing-page.js
+    customization-page.js
+  *.spec.js                # editable acceptance tests, one per spec scenario set
 ```
 
-This works cross-platform (Windows, Mac, Linux) thanks to `cross-env`.
+Specs in `../../specs/*.spec.md` are the contracts. Each implemented scenario maps
+to a readable `it()` block:
 
-## Test Coverage
+- `presenter.spec.js` — photo/question navigation, answer reveal, navigation blocking
+- `landing-page.spec.js` — quiz library cards, metadata, navigation
+- `quick-start-quiz.spec.js` — Play Now / Customize from a card
+- `customization.spec.js` — timer, questions-per-photo, live summary, Start / Skip
 
-The E2E tests cover the complete UX flow:
+## Conventions
 
-1. ✅ Loading presenter view
-2. ✅ Initial fullscreen photo display
-3. ✅ Toggling questions with spacebar
-4. ✅ Navigating between questions with arrow keys
-5. ✅ Revealing correct answers
-6. ✅ Hiding questions
-7. ✅ Navigating between photos
-8. ✅ Navigation blocking when questions are visible
-9. ✅ ESC key to hide questions
-10. ✅ Complete user flow simulation
+- **Selectors target accessible role + name** (`getByRole('button', { name: 'Start Quiz' })`).
+  Where role isn't enough, add a `data-testid` to the component and use
+  `getByTestId(...)`. Never CSS classes (`.btn`) or text regex.
+- **All selectors live in `support/` page objects**, not scattered across tests.
+  When the UI moves, you tune one place.
+- Component behaviour (toggles, conditional rendering, summaries) → these jsdom
+  tests. Only a few genuinely end-to-end concerns (route navigation across real
+  views, responsive viewports, touch) would warrant a browser e2e tool later.
 
-## Screenshots
+## Writing a new test
 
-Test screenshots are saved to `tests/screenshots/`:
-
-- `presenter-initial.png` - Initial state
-- `presenter-questions.png` - Questions visible
-- `presenter-answer.png` - Answer revealed
-- `error.png` - Screenshot on test failure
-
-## Test Environment
-
-Set custom base URL:
-
-```bash
-BASE_URL=http://localhost:3000 yarn test:e2e
-```
-
-## CI/CD Integration
-
-For GitHub Actions or other CI systems:
-
-```yaml
-- name: Install dependencies
-  run: yarn install
-
-- name: Start dev server
-  run: yarn dev &
-
-- name: Wait for server
-  run: sleep 5
-
-- name: Run E2E tests
-  run: yarn test:e2e
-```
-
-## Writing New Tests
-
-Tests use Taiko's simple API:
-
-```javascript
-const { openBrowser, goto, press, text, screenshot } = require('taiko');
-
-(async () => {
-  await openBrowser();
-  await goto('http://localhost:5173/#/presenter');
-  await press('Space');
-  assert(await text('Your text').exists());
-  await closeBrowser();
-})();
-```
-
-See [Taiko documentation](https://docs.taiko.dev/) for more details.
+1. Pick one scenario from a `specs/*.spec.md` contract.
+2. Add/extend a page object in `support/` exposing what the user sees and does.
+3. Add an `it()` that reads like the user's flow. Tune selectors on the real
+   rendered UI, then move on — test by test, not all at once.

@@ -6,7 +6,5 @@ README.md
 .env
 .DS_Store
 *.log
-tests/screenshots
-.taiko
 yarn-error.log
 package-lock.json

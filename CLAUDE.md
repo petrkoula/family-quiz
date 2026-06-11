@@ -11,7 +11,7 @@ Family Quiz is an interactive photo quiz application built with Vue 3. The app d
 - Pinia (state management)
 - Vue Router
 - Vite (build tool)
-- Taiko (E2E testing)
+- Vitest + @testing-library/vue (jsdom testing)
 
 ## Development Commands
 
@@ -33,15 +33,13 @@ yarn preview
 
 ### Testing
 ```bash
-# Run E2E tests (headless, for CI/CD)
-yarn test:e2e
-# or explicitly:
-yarn test:e2e:headless
+# Run the acceptance/unit test suite (jsdom, no dev server needed)
+yarn test
+# or
+yarn test:unit
 
-# Run E2E tests with visible browser (for debugging)
-yarn test:e2e:interactive
-
-# Note: Dev server must be running on http://localhost:5173 before running tests
+# Watch mode while developing
+yarn test:unit:watch
 ```
 
 ### Code Formatting
@@ -145,21 +143,20 @@ Images are handled differently in development vs production:
 
 ## Testing
 
-> **Acceptance-test methodology:** see @TESTING.md — spec-first Gherkin as contract, hand-written editable Vitest tests (no codegen), selector conventions. Replaces the previous generated-Taiko (DAE) codegen pipeline, now removed.
+> **Acceptance-test methodology:** see @TESTING.md — spec-first Gherkin as contract, hand-written editable tests (no codegen), selector conventions.
 
-E2E tests use Taiko (browser automation) and cover:
-- Photo display and navigation
-- Question panel toggling
-- Question cycling
-- Answer reveal functionality
-- Keyboard control validation
-- Navigation blocking when questions visible
+Tests run on **Vitest + @testing-library/vue in jsdom** (no browser, no dev server).
+Selectors live in a page-object layer under `vue-app/tests/support/` and target
+accessible role/name or `data-testid` — never CSS classes or text regex.
 
-Screenshots saved to `vue-app/tests/screenshots/`:
-- `presenter-initial.png`
-- `presenter-questions.png`
-- `presenter-answer.png`
-- `error.png` (on failure)
+Specs in `specs/*.spec.md` are the contracts; each implemented scenario maps to an
+editable `*.spec.js` test:
+- `tests/presenter.spec.js` — photo/question navigation, reveal, navigation blocking
+- `tests/landing-page.spec.js` — quiz library cards, metadata, navigation
+- `tests/quick-start-quiz.spec.js` — Play Now / Customize from a card
+- `tests/customization.spec.js` — timer, questions-per-photo, summary, Start/Skip
+
+Run with `yarn test`.
 
 ## CI/CD
 
@@ -168,7 +165,7 @@ GitHub Actions workflows:
 **`.github/workflows/ci.yml`** (runs on PRs and pushes):
 1. Prettier format check
 2. Build application
-3. Run E2E tests (headless)
+3. Run tests (`yarn test`, jsdom)
 4. Build Docker images
 
 **`.github/workflows/deploy.yml`** (deploys to GitHub Pages):

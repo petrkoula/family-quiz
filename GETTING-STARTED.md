@@ -209,17 +209,17 @@ Edit `vue-app/src/style.css`:
 
 ## Running Tests
 
-### E2E Tests with Taiko
+### Tests (Vitest + @testing-library/vue, jsdom)
 
-**Run all tests:**
+**Run all tests** — no dev server or browser needed:
 ```bash
 cd vue-app
 
-# Headless (CI/CD)
-npm run test:e2e
+# Run once
+npm test
 
-# Interactive (see browser)
-npm run test:e2e:interactive
+# Watch mode
+npm run test:unit:watch
 ```
 
 **What's tested:**
@@ -228,20 +228,24 @@ npm run test:e2e:interactive
 - Question cycling (arrow keys)
 - Answer reveal (A key)
 - Navigation blocking when questions visible
-- Complete user workflow
+- Landing library, quick start, and customization flows
 
 **Add your own tests:**
 
-Edit `vue-app/tests/presenter.test.js`:
+Pick a scenario from `specs/*.spec.md`, extend a page object under
+`vue-app/tests/support/`, then add an editable `it()` in the matching
+`vue-app/tests/*.spec.js`:
 
 ```javascript
-// Add new test
-console.log('\n✅ Test 12: Your custom test...');
-await goto(`${BASE_URL}/#/presenter`);
-// Your test logic here
-assert(await text('Expected text').exists());
-console.log('✓ Custom test passed');
+it('does the thing the user expects', async () => {
+  const page = renderPresenter();
+  await page.toggleQuestions();
+  expect(page.isQuestionsVisible()).toBe(true);
+});
 ```
+
+See [vue-app/tests/README.md](vue-app/tests/README.md) and
+[TESTING.md](TESTING.md) for conventions.
 
 ## Deployment
 
@@ -344,26 +348,25 @@ npm run dev -- --port 3000
 
 ### Tests failing
 
-**Problem:** E2E tests timeout or fail
+**Problem:** tests fail
 
 **Solutions:**
 
-1. **Make sure dev server is running:**
+1. **Reinstall dependencies** (tests run in jsdom, no dev server needed):
    ```bash
-   npm run dev
-   # In another terminal:
-   npm run test:e2e
+   cd vue-app
+   yarn install
+   npm test
    ```
 
-2. **Check BASE_URL:**
+2. **Run a single file while debugging:**
    ```bash
-   BASE_URL=http://localhost:5173 npm run test:e2e
+   npx vitest run tests/presenter.spec.js
    ```
 
-3. **Increase timeout:**
-   Edit `tests/presenter.test.js`:
-   ```javascript
-   await waitFor(5000);  // Increase from 2000
+3. **Watch mode** for fast feedback:
+   ```bash
+   npm run test:unit:watch
    ```
 
 ### Docker issues

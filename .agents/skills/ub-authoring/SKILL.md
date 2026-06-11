@@ -48,7 +48,7 @@ Prefer specific examples to abstract recommendations.
 
 **Example:**
 ```markdown
-✓ "Run tests: cd vue-app && npm run test:e2e"
+✓ "Run tests: cd vue-app && npm test"
 ✗ "Execute the testing commands in the appropriate directory"
 ```
 

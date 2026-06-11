@@ -198,19 +198,16 @@ const gameStore = useGameStore()
 </script>
 ```
 
-### E2E Testing
+### Testing
 
-Run end-to-end tests with Taiko:
+Tests run on Vitest + @testing-library/vue in jsdom — no browser, no dev server:
 
 ```bash
-# Start dev server first
-npm run dev
+# Run once
+npm test
 
-# In another terminal, run tests
-npm run test:e2e
-
-# Or run with visible browser for debugging
-HEADLESS=false npm run test:e2e:headed
+# Watch mode
+npm run test:unit:watch
 ```
 
 Tests cover the complete UX flow:
@@ -218,7 +215,7 @@ Tests cover the complete UX flow:
 - Question toggling and cycling
 - Answer revealing
 - Keyboard controls
-- Complete presentation workflow
+- Landing library, quick start, and customization flows
 
 See [tests/README.md](tests/README.md) for details.
 
@@ -248,7 +245,7 @@ npm run build
 - **Vite** - Next generation build tool
 - **Pinia** - Vue state management
 - **Vue Router** - Official router
-- **Taiko** - E2E testing framework
+- **Vitest + @testing-library/vue** - jsdom testing
 - **Firebase** - Backend platform (future)
 
 ## 🤝 Contributing

@@ -7,8 +7,9 @@
  */
 import { render, within, fireEvent } from '@testing-library/vue';
 import { flushPromises } from '@vue/test-utils';
-import { createPinia } from 'pinia';
+import { createPinia, setActivePinia } from 'pinia';
 import { createRouter, createMemoryHistory } from 'vue-router';
+import { useGameStore } from '@/stores/gameStore';
 import { quizPacks } from '@/data/quizPacks';
 import LandingView from '@/views/LandingView.vue';
 
@@ -28,19 +29,22 @@ function makeRouter() {
 export async function renderLanding() {
   const router = makeRouter();
   const pinia = createPinia();
+  setActivePinia(pinia);
+  const store = useGameStore();
 
   const view = render(LandingView, {
     global: { plugins: [router, pinia] },
   });
 
   await router.isReady();
-  return new LandingPage(view, router);
+  return new LandingPage(view, router, store);
 }
 
 class LandingPage {
-  constructor(view, router) {
+  constructor(view, router, store) {
     this.view = view;
     this.router = router;
+    this.store = store;
   }
 
   // --- Co uživatel vidí ------------------------------------------------------

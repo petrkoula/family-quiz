@@ -12,17 +12,17 @@
           <h2 class="section-title">⏱️ Question Timer / Časovač otázek</h2>
           <div class="setting-control">
             <label class="checkbox-label">
-              <input
-                type="checkbox"
-                v-model="settings.timerEnabled"
-                class="checkbox"
-              />
+              <input type="checkbox" v-model="settings.timerEnabled" class="checkbox" />
               <span>Enable Timer / Povolit časovač</span>
             </label>
           </div>
           <div v-if="settings.timerEnabled" class="setting-control">
             <label class="label">Timer Duration / Délka časovače:</label>
-            <select v-model.number="settings.timerDuration" class="select">
+            <select
+              v-model.number="settings.timerDuration"
+              class="select"
+              data-testid="timer-duration"
+            >
               <option :value="30">30 sekund</option>
               <option :value="45">45 sekund</option>
               <option :value="60">60 sekund</option>
@@ -40,7 +40,11 @@
           <h2 class="section-title">❓ Questions Per Photo / Počet otázek na fotku</h2>
           <div class="setting-control">
             <label class="label">Questions per photo / Otázek na fotku:</label>
-            <select v-model.number="settings.questionsPerPhoto" class="select">
+            <select
+              v-model.number="settings.questionsPerPhoto"
+              class="select"
+              data-testid="questions-per-photo"
+            >
               <option :value="1">1 otázka</option>
               <option :value="2">2 otázky</option>
               <option :value="3">Všechny otázky (3) / All questions</option>
@@ -53,21 +57,13 @@
           <h2 class="section-title">🔀 Order Settings / Náhodné pořadí</h2>
           <div class="setting-control">
             <label class="checkbox-label">
-              <input
-                type="checkbox"
-                v-model="settings.randomizePhotos"
-                class="checkbox"
-              />
+              <input type="checkbox" v-model="settings.randomizePhotos" class="checkbox" />
               <span>Randomize photo order / Zamíchat pořadí fotek</span>
             </label>
           </div>
           <div class="setting-control">
             <label class="checkbox-label">
-              <input
-                type="checkbox"
-                v-model="settings.randomizeQuestions"
-                class="checkbox"
-              />
+              <input type="checkbox" v-model="settings.randomizeQuestions" class="checkbox" />
               <span>Randomize question order / Zamíchat pořadí otázek</span>
             </label>
           </div>
@@ -79,7 +75,7 @@
           <div class="summary-content">
             <div class="summary-item">
               <span class="summary-label">Časovač:</span>
-              <span class="summary-value">
+              <span class="summary-value" data-testid="summary-timer">
                 {{ settings.timerEnabled ? `${settings.timerDuration}s` : 'Vypnuto' }}
               </span>
             </div>
@@ -101,7 +97,9 @@
             </div>
             <div class="summary-item">
               <span class="summary-label">Celkem otázek:</span>
-              <span class="summary-value">{{ totalQuestions }}</span>
+              <span class="summary-value" data-testid="summary-total-questions">{{
+                totalQuestions
+              }}</span>
             </div>
           </div>
         </section>
@@ -109,12 +107,8 @@
 
       <!-- Action Buttons -->
       <div class="actions">
-        <button @click="startQuiz" class="btn btn-primary">
-          Start Quiz
-        </button>
-        <button @click="useDefaults" class="btn btn-secondary">
-          Skip
-        </button>
+        <button @click="startQuiz" class="btn btn-primary">Start Quiz</button>
+        <button @click="useDefaults" class="btn btn-secondary">Skip</button>
       </div>
     </div>
   </div>

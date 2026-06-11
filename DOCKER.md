@@ -193,7 +193,7 @@ jobs:
         run: docker-compose --profile production build prod
 
       - name: Run tests
-        run: docker-compose up -d dev && docker-compose exec dev yarn test:e2e
+        run: docker-compose run --rm dev yarn test
 ```
 
 ## Production Deployment
