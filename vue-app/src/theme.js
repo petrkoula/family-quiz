@@ -1,23 +1,31 @@
 /**
  * Sdílené design tokeny + Naive UI theme overrides.
  *
- * Cíl: čistý, světlý, minimalistický vzhled — minimum borderů, jeden akcentní
- * odstín, jemné stíny místo rámečků. Hodnoty drž v souladu s CSS proměnnými
- * v style.css (stejná paleta pro Naive komponenty i ručně psané scoped CSS).
+ * Směr „rodinné album": teplý papírový podklad, terakotový akcent, serifové
+ * nadpisy (--font-display), fotky jako polaroidy. Minimum borderů — sekce
+ * odděluje whitespace, ne čáry. Hodnoty drž v souladu s CSS proměnnými
+ * v style.css a se specifikací v design/tokens.md (viz design/taste.md
+ * pro závazná „don't" pravidla).
  */
 
+// Jméno designové varianty — yarn screenshots ho používá jako výchozí
+// název složky (screenshots/<themeName>/), ať se varianty dají porovnávat.
+export const themeName = 'album';
+
 export const tokens = {
-  accent: '#6366f1',
-  accentHover: '#818cf8',
-  accentPressed: '#4f46e5',
-  ink: '#1e293b',
-  inkSoft: '#475569',
-  inkMuted: '#94a3b8',
-  canvas: '#f6f7f9',
-  surface: '#ffffff',
-  hairline: 'rgba(15, 23, 42, 0.07)',
-  radius: '14px',
-  radiusLarge: '20px',
+  accent: '#c2512c',
+  accentHover: '#d86a41',
+  accentPressed: '#993c1d',
+  ink: '#3b2f26',
+  inkSoft: '#6b5b4d',
+  inkMuted: '#94826f',
+  canvas: '#faf5ec',
+  surface: '#fffdf8',
+  paperDeep: '#f1e7d3',
+  fieldFill: '#f2e8d8',
+  hairline: 'rgba(82, 60, 39, 0.12)',
+  radius: '8px',
+  radiusLarge: '12px',
 };
 
 export const themeOverrides = {
@@ -28,7 +36,7 @@ export const themeOverrides = {
     primaryColorSuppl: tokens.accent,
     infoColor: tokens.accent,
     borderRadius: tokens.radius,
-    borderRadiusSmall: '10px',
+    borderRadiusSmall: '6px',
     borderColor: tokens.hairline,
     textColorBase: tokens.ink,
     textColor1: tokens.ink,
@@ -50,6 +58,10 @@ export const themeOverrides = {
     borderRadiusLarge: tokens.radius,
     heightLarge: '48px',
     heightMedium: '40px',
+    // tichá tlačítka na teplém papíru, ne studená šedá
+    colorTertiary: 'rgba(82, 60, 39, 0.06)',
+    colorTertiaryHover: 'rgba(82, 60, 39, 0.11)',
+    textColorTertiary: tokens.inkSoft,
   },
   Switch: {
     railColorActive: tokens.accent,

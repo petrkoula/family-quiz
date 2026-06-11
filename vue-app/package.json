@@ -10,6 +10,7 @@
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
     "vitest-run-suite": "node scripts/vitest-run-suite.mjs",
+    "screenshots": "node scripts/design-screenshots.mjs",
     "format": "prettier --write \"src/**/*.{js,vue,json,css}\"",
     "format:check": "prettier --check \"src/**/*.{js,vue,json,css}\""
   },
@@ -26,6 +27,7 @@
     "@vue/test-utils": "^2.4.6",
     "jsdom": "^25.0.1",
     "prettier": "3.4.2",
+    "puppeteer-core": "^23.11.1",
     "vite": "^5.0.8",
     "vitest": "^2.1.8"
   }

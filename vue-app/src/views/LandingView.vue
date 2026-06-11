@@ -6,7 +6,7 @@
       <p class="landing-subtitle">Vyberte si kvíz a zahrajte si s rodinou</p>
       <div class="toolbar">
         <n-button tertiary round data-testid="reload-library" @click="reloadLibrary">
-          ⟳ Obnovit knihovnu
+          Obnovit knihovnu
         </n-button>
         <p v-if="libraryReloadResult" class="muted" data-testid="library-reload-result">
           {{ libraryReloadResult }}
@@ -25,7 +25,9 @@
       >
         <template #cover>
           <div class="thumb">
-            <img :src="getImageUrl(pack.thumbnail)" :alt="pack.title" loading="lazy" />
+            <div class="polaroid">
+              <img :src="getImageUrl(pack.thumbnail)" :alt="pack.title" loading="lazy" />
+            </div>
           </div>
         </template>
 
@@ -39,13 +41,13 @@
         </div>
 
         <div class="card-actions">
-          <n-button type="primary" @click="playNow(pack.id)">▶ Play Now</n-button>
+          <n-button type="primary" @click="playNow(pack.id)">Play Now</n-button>
           <n-button tertiary @click="customizeQuiz(pack.id)">Customize</n-button>
           <n-button tertiary @click="editQuiz(pack.id)">Upravit</n-button>
         </div>
 
         <n-button text class="reload-link" data-testid="reload-pack" @click="reloadPack(pack.id)">
-          ↻ Reload
+          Reload
         </n-button>
         <p v-if="reloadResults[pack.id]" class="muted reload-result" data-testid="reload-result">
           {{ reloadResults[pack.id] }}
@@ -56,7 +58,9 @@
       <n-card class="quiz-card create-card" :bordered="false">
         <template #cover>
           <div class="thumb create-thumb">
-            <span class="create-icon">✨</span>
+            <div class="polaroid polaroid-empty">
+              <span class="create-icon">✨</span>
+            </div>
           </div>
         </template>
         <h2 class="card-title">Vytvořte vlastní</h2>
@@ -160,9 +164,10 @@ function editQuiz(packId) {
 }
 
 .landing-title {
-  font-size: 2.6rem;
-  font-weight: 700;
-  letter-spacing: -0.03em;
+  font-family: var(--font-display);
+  font-size: 2.8rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   color: var(--ink);
 }
 
@@ -208,28 +213,48 @@ function editQuiz(packId) {
     0 18px 40px rgba(15, 23, 42, 0.1);
 }
 
+/* Fotky jako polaroidy ve starém albu — podpisový prvek designu. */
 .thumb {
-  height: 200px;
+  height: 230px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1e7d3;
   overflow: hidden;
 }
 
-.thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.4s ease;
+.polaroid {
+  width: 72%;
+  background: #fff;
+  padding: 10px 10px 30px;
+  box-shadow:
+    0 1px 2px rgba(82, 60, 39, 0.12),
+    0 10px 24px rgba(82, 60, 39, 0.18);
+  transform: rotate(-2deg);
+  transition: transform 0.35s ease;
 }
 
-.quiz-card:hover .thumb img {
-  transform: scale(1.05);
+.quiz-card:nth-child(even) .polaroid {
+  transform: rotate(1.6deg);
+}
+
+.polaroid img {
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+  display: block;
+  filter: sepia(0.18) saturate(0.92);
+}
+
+.quiz-card:hover .polaroid {
+  transform: rotate(0deg) scale(1.03);
 }
 
 .card-title {
-  font-size: 1.35rem;
-  font-weight: 650;
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 600;
   color: var(--ink);
-  letter-spacing: -0.01em;
 }
 
 .card-desc {
@@ -277,17 +302,26 @@ function editQuiz(packId) {
 .create-card {
   border: 1px dashed var(--hairline) !important;
   background: transparent;
+  box-shadow: none;
 }
 
 .create-thumb {
-  background: var(--accent-soft);
+  background: transparent;
+}
+
+.polaroid-empty {
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 160px;
+  padding: 10px;
+  border: 1.5px dashed var(--hairline);
+  background: var(--surface);
+  box-shadow: none;
 }
 
 .create-icon {
-  font-size: 3.5rem;
+  font-size: 2.8rem;
 }
 
 .create-link {

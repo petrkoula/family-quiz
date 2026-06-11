@@ -174,10 +174,10 @@ function useDefaults() {
 }
 
 .title {
-  font-size: 1.9rem;
+  font-family: var(--font-display);
+  font-size: 2.1rem;
   font-weight: 600;
   color: var(--ink);
-  letter-spacing: -0.02em;
 }
 
 .subtitle {
@@ -234,8 +234,8 @@ function useDefaults() {
   padding: 0.55rem 2.2rem 0.55rem 0.9rem;
   font-size: 1rem;
   color: var(--ink);
-  background-color: #f1f3f6;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-color: #f2e8d8;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394826f' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   border: 1px solid transparent;
@@ -247,7 +247,7 @@ function useDefaults() {
 }
 
 .field-select:hover {
-  background-color: #eceff3;
+  background-color: #ecdfc9;
 }
 
 .field-select:focus {
