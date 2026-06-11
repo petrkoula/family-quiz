@@ -65,7 +65,7 @@ class EditPage {
   }
 
   photoCount() {
-    return this.view.getAllByTestId('photo-editor').length;
+    return this.view.queryAllByTestId('photo-editor').length;
   }
 
   photo(index) {
@@ -78,6 +78,66 @@ class EditPage {
 
   hasBackToLibrary() {
     return this.view.queryByRole('link', { name: /Zpět na knihovnu/ }) !== null;
+  }
+
+  // --- Menu + reorder pořadí fotek -------------------------------------------
+
+  async openMenu() {
+    await fireEvent.click(this.view.getByTestId('edit-menu'));
+  }
+
+  hasMenu() {
+    return this.view.queryByTestId('edit-menu') !== null;
+  }
+
+  canReorder() {
+    return this.view.queryByTestId('reorder-photos') !== null;
+  }
+
+  /** Otevře menu a zvolí „Upravit pořadí". */
+  async startReorder() {
+    await this.openMenu();
+    await fireEvent.click(this.view.getByTestId('reorder-photos'));
+  }
+
+  isReorderMode() {
+    return this.view.queryByTestId('reorder-list') !== null;
+  }
+
+  hasSaveOrder() {
+    return this.view.queryByTestId('save-order') !== null;
+  }
+
+  reorderItemCount() {
+    return this.view.queryAllByTestId('reorder-item').length;
+  }
+
+  /** Pořadí fotek v reorder seznamu (podle jmen souborů). */
+  reorderOrder() {
+    return this.view.getAllByTestId('reorder-item').map(el => el.getAttribute('data-image'));
+  }
+
+  /** Pořadí fotek v normálním (rozbaleném) seznamu boxů (podle jmen souborů). */
+  photoOrder() {
+    return this.view.getAllByTestId('photo-editor').map(el => el.getAttribute('data-image'));
+  }
+
+  /** Přetáhne fotku z pozice `from` (0-based) na pozici `to`. */
+  async dragPhoto(from, to) {
+    const items = this.view.getAllByTestId('reorder-item');
+    await fireEvent.dragStart(items[from]);
+    await fireEvent.dragOver(items[to]);
+    await fireEvent.drop(items[to]);
+    await fireEvent.dragEnd(items[from]);
+  }
+
+  async saveOrder() {
+    await fireEvent.click(this.view.getByTestId('save-order'));
+    await flushPromises();
+  }
+
+  async cancelReorder() {
+    await fireEvent.click(this.view.getByTestId('cancel-order'));
   }
 
   // --- Simulace restartu aplikace -------------------------------------------

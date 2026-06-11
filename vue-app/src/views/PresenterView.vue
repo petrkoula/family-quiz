@@ -15,6 +15,8 @@
           v-if="currentQuiz"
           :src="getImageUrl(currentQuiz.image)"
           :alt="`Photo ${currentPhotoIndex + 1}`"
+          :data-image="currentQuiz.image"
+          data-testid="photo-image"
           class="photo"
           loading="lazy"
         />

@@ -48,6 +48,11 @@ class PresenterPage {
     return this.view.getByTestId('photo-progress').textContent.trim();
   }
 
+  /** Jméno souboru aktuálně zobrazené fotky (pro ověření pořadí přehrávání). */
+  currentPhotoImage() {
+    return this.view.getByTestId('photo-image').getAttribute('data-image');
+  }
+
   /** Je panel s otázkami zobrazený? */
   isQuestionsVisible() {
     return this.view.queryByTestId('questions-panel') !== null;

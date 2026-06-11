@@ -219,6 +219,30 @@ export const usePackLibraryStore = defineStore('packLibrary', () => {
     return true;
   }
 
+  /**
+   * Přeskládá fotky balíčku do zadaného pořadí (podle jmen souborů). Pořadí
+   * pole `photos` JE pořadím přehrávání. `imagesInOrder` musí být permutací
+   * současných fotek balíčku; jinak se nic nezmění. Vrací úspěch.
+   */
+  function setPhotoOrder(packId, imagesInOrder) {
+    const pack = getPack(packId);
+    if (!pack) return false;
+    if (!Array.isArray(imagesInOrder)) return false;
+    if (imagesInOrder.length !== pack.photos.length) return false;
+
+    const byImage = new Map(pack.photos.map(photo => [photo.image, photo]));
+    const reordered = [];
+    for (const image of imagesInOrder) {
+      const photo = byImage.get(image);
+      if (!photo || !byImage.delete(image)) return false; // unknown or duplicate
+      reordered.push(photo);
+    }
+
+    pack.photos = reordered;
+    persist();
+    return true;
+  }
+
   return {
     packs,
     getPack,
@@ -228,6 +252,7 @@ export const usePackLibraryStore = defineStore('packLibrary', () => {
     updateQuestion,
     addQuestion,
     removeQuestion,
+    setPhotoOrder,
     reloadPack,
     reloadLibrary,
     ensureInitialized,

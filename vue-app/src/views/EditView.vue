@@ -1,12 +1,85 @@
 <template>
   <div class="edit-container">
     <header class="edit-header">
-      <RouterLink to="/" class="back-link">← Zpět na knihovnu</RouterLink>
+      <div class="edit-toolbar">
+        <div class="toolbar-left">
+          <RouterLink v-if="!reorderMode" to="/" class="back-link">← Zpět na knihovnu</RouterLink>
+          <template v-else>
+            <button
+              type="button"
+              class="btn-toolbar btn-toolbar-primary"
+              data-testid="save-order"
+              @click="saveOrder"
+            >
+              Uložit
+            </button>
+            <button
+              type="button"
+              class="btn-toolbar"
+              data-testid="cancel-order"
+              @click="cancelReorder"
+            >
+              Zrušit
+            </button>
+          </template>
+        </div>
+        <div v-if="pack && !reorderMode" class="toolbar-right">
+          <button
+            type="button"
+            class="kebab"
+            aria-label="Menu"
+            aria-haspopup="true"
+            :aria-expanded="menuOpen"
+            data-testid="edit-menu"
+            @click="toggleMenu"
+          >
+            ⋮
+          </button>
+          <div v-if="menuOpen" class="menu-backdrop" @click="menuOpen = false"></div>
+          <div v-if="menuOpen" class="menu" role="menu">
+            <button
+              type="button"
+              class="menu-item"
+              role="menuitem"
+              data-testid="reorder-photos"
+              @click="startReorder"
+            >
+              Upravit pořadí
+            </button>
+          </div>
+        </div>
+      </div>
       <h1 class="edit-title">Úprava kvízu</h1>
       <p v-if="pack" class="pack-name">{{ pack.title }}</p>
     </header>
 
     <p v-if="!pack" class="not-found">Kvíz nenalezen.</p>
+
+    <ul v-else-if="reorderMode" class="reorder-list" data-testid="reorder-list">
+      <li
+        v-for="(photo, index) in workingOrder"
+        :key="photo.image"
+        class="reorder-item"
+        :class="{ dragging: draggingIndex === index }"
+        data-testid="reorder-item"
+        :data-image="photo.image"
+        draggable="true"
+        :aria-label="`Fotka ${index + 1}`"
+        @dragstart="onDragStart(index)"
+        @dragover.prevent="onDragOver(index)"
+        @drop="onDrop(index)"
+        @dragend="onDragEnd"
+      >
+        <span class="drag-handle" aria-hidden="true">⠿</span>
+        <img
+          :src="getImageUrl(photo.image)"
+          :alt="`Fotka ${index + 1}`"
+          loading="lazy"
+          class="reorder-thumb"
+        />
+        <span class="reorder-position" data-testid="reorder-position">Fotka {{ index + 1 }}</span>
+      </li>
+    </ul>
 
     <main v-else class="photo-list">
       <section
@@ -14,6 +87,7 @@
         :key="photo.image"
         class="photo-editor"
         data-testid="photo-editor"
+        :data-image="photo.image"
       >
         <div class="photo-preview">
           <img
@@ -234,6 +308,62 @@ const pack = computed(() => library.getPack(route.params.quizId));
 const editing = ref(null); // { image, questionIndex } | null
 const draft = ref(null); // { text, options: [], correct } | null
 
+// --- Menu + reorder pořadí fotek -------------------------------------------
+const menuOpen = ref(false);
+const reorderMode = ref(false);
+// Pracovní kopie pořadí během tažení; uloží se až na „Uložit".
+const workingOrder = ref([]);
+const draggingIndex = ref(null);
+
+function toggleMenu() {
+  menuOpen.value = !menuOpen.value;
+}
+
+function startReorder() {
+  cancelEdit(); // zavři případnou rozpracovanou otázku
+  workingOrder.value = [...pack.value.photos];
+  reorderMode.value = true;
+  menuOpen.value = false;
+}
+
+function onDragStart(index) {
+  draggingIndex.value = index;
+}
+
+function onDragOver() {
+  // @dragover.prevent jen povolí drop; přeskládá se až v onDrop.
+}
+
+function onDrop(targetIndex) {
+  const from = draggingIndex.value;
+  if (from === null || from === targetIndex) return;
+  const next = [...workingOrder.value];
+  const [moved] = next.splice(from, 1);
+  next.splice(targetIndex, 0, moved);
+  workingOrder.value = next;
+  draggingIndex.value = null;
+}
+
+function onDragEnd() {
+  draggingIndex.value = null;
+}
+
+function saveOrder() {
+  library.setPhotoOrder(
+    pack.value.id,
+    workingOrder.value.map(photo => photo.image)
+  );
+  reorderMode.value = false;
+  workingOrder.value = [];
+  draggingIndex.value = null;
+}
+
+function cancelReorder() {
+  reorderMode.value = false;
+  workingOrder.value = [];
+  draggingIndex.value = null;
+}
+
 const draftValid = computed(() => draft.value !== null && isValidQuestion(draft.value));
 
 function isEditing(image, questionIndex) {
@@ -310,9 +440,25 @@ function removeOption(index) {
   color: white;
 }
 
+.edit-toolbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  min-height: 2.4rem;
+}
+
+.toolbar-left {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.toolbar-right {
+  position: relative;
+}
+
 .back-link {
   display: inline-block;
-  margin-bottom: 1rem;
   color: white;
   text-decoration: none;
   font-weight: bold;
@@ -322,6 +468,130 @@ function removeOption(index) {
 .back-link:hover {
   opacity: 1;
   text-decoration: underline;
+}
+
+.btn-toolbar {
+  padding: 0.5rem 1.25rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-toolbar:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.btn-toolbar-primary {
+  background: white;
+  color: #5568d3;
+  border-color: white;
+}
+
+.btn-toolbar-primary:hover {
+  background: #f0f0ff;
+}
+
+.kebab {
+  width: 2.4rem;
+  height: 2.4rem;
+  font-size: 1.5rem;
+  line-height: 1;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.kebab:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+}
+
+.menu {
+  position: absolute;
+  top: 2.8rem;
+  right: 0;
+  z-index: 11;
+  min-width: 180px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  text-align: left;
+}
+
+.menu-item {
+  display: block;
+  width: 100%;
+  padding: 0.85rem 1.2rem;
+  font-size: 1rem;
+  text-align: left;
+  border: none;
+  background: white;
+  color: #2c3e50;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background: #f1f3f9;
+}
+
+.reorder-list {
+  max-width: 1000px;
+  margin: 0 auto;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.reorder-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: white;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  cursor: grab;
+  user-select: none;
+}
+
+.reorder-item.dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+.drag-handle {
+  font-size: 1.4rem;
+  color: #adb5bd;
+  cursor: grab;
+}
+
+.reorder-thumb {
+  width: 80px;
+  height: 60px;
+  border-radius: 6px;
+  object-fit: cover;
+  background: #e9ecef;
+}
+
+.reorder-position {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #495057;
 }
 
 .edit-title {
