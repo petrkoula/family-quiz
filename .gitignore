@@ -15,3 +15,4 @@ vue-app/test-results/
 .ub-workflows/tmp/
 .ub-workflows/.cache/
 images
+.review-images-flat

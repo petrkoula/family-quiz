@@ -68,6 +68,7 @@ jobs:
           context: ./vue-app
           file: ./vue-app/Dockerfile
           push: false
+          load: true
           tags: family-quiz:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
