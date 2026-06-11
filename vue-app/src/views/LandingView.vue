@@ -9,7 +9,7 @@
     <!-- Quiz Library Grid -->
     <div class="quiz-library">
       <div
-        v-for="pack in quizPacks"
+        v-for="pack in library.packs"
         :key="pack.id"
         class="quiz-card"
         data-testid="quiz-card"
@@ -34,11 +34,11 @@
           <div class="card-metadata">
             <span class="metadata-item">
               <span class="icon">🖼️</span>
-              {{ getMetadata(pack.id).photoCount }} fotek
+              {{ pack.photos.length }} fotek
             </span>
             <span class="metadata-item">
               <span class="icon">❓</span>
-              {{ getMetadata(pack.id).questionCount }} otázek
+              {{ questionCount(pack) }} otázek
             </span>
           </div>
 
@@ -49,6 +49,16 @@
               ⚙ Customize
             </button>
           </div>
+          <button
+            @click.stop="reloadPack(pack.id)"
+            class="btn btn-reload"
+            data-testid="reload-pack"
+          >
+            ↻ Reload
+          </button>
+          <p v-if="reloadResults[pack.id]" class="reload-result" data-testid="reload-result">
+            {{ reloadResults[pack.id] }}
+          </p>
         </div>
       </div>
 
@@ -80,16 +90,31 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useGameStore } from '@/stores/gameStore';
-import { quizPacks, getPackMetadata } from '@/data/quizPacks';
+import { usePackLibraryStore } from '@/stores/packLibraryStore';
 import { getImageUrl } from '@/data/quizData';
 
 const router = useRouter();
 const gameStore = useGameStore();
+const library = usePackLibraryStore();
 
-function getMetadata(packId) {
-  return getPackMetadata(packId);
+// Per-pack result summary shown after a reload.
+const reloadResults = ref({});
+
+function questionCount(pack) {
+  return pack.photos.reduce((sum, photo) => sum + photo.questions.length, 0);
+}
+
+function formatReloadResult({ added, removed }) {
+  if (!added && !removed) return 'Pack je aktuální';
+  return `Přidáno: ${added}, Odebráno: ${removed}`;
+}
+
+async function reloadPack(packId) {
+  const result = await library.reloadPack(packId);
+  reloadResults.value = { ...reloadResults.value, [packId]: formatReloadResult(result) };
 }
 
 function playNow(packId) {
@@ -249,6 +274,26 @@ function customizeQuiz(packId) {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+}
+
+.btn-reload {
+  width: 100%;
+  margin-top: 0.75rem;
+  background: white;
+  color: #555;
+  border: 2px solid #cbd5e0;
+}
+
+.btn-reload:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.reload-result {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  color: #555;
+  text-align: center;
 }
 
 .btn-play-now {

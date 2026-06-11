@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { quizData } from '@/data/quizData';
 import { getQuizDataForPack } from '@/data/quizPacks';
+import { usePackLibraryStore } from '@/stores/packLibraryStore';
 
 export const useGameStore = defineStore('game', () => {
   // State
@@ -92,8 +93,13 @@ export const useGameStore = defineStore('game', () => {
     currentPackId.value = packId;
     quizSettings.value = settings;
 
-    // Load quiz data
-    let quizData = getQuizDataForPack(packId);
+    // Load quiz data from the (possibly reloaded) pack library, falling back to
+    // the static pack data when the library has no entry for this pack.
+    const library = usePackLibraryStore();
+    const pack = library.getPack(packId);
+    let quizData = pack
+      ? pack.photos.map(photo => ({ image: photo.image, questions: photo.questions }))
+      : getQuizDataForPack(packId);
 
     // Apply settings if provided
     if (settings) {
