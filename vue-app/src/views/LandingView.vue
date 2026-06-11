@@ -1,18 +1,60 @@
 <template>
   <div class="landing">
-    <!-- Header -->
-    <header class="landing-header">
-      <h1 class="landing-title">Knihovna Kvízů</h1>
-      <p class="landing-subtitle">Vyberte si kvíz a zahrajte si s rodinou</p>
-      <div class="toolbar">
-        <n-button tertiary round data-testid="reload-library" @click="reloadLibrary">
-          Obnovit knihovnu
-        </n-button>
-        <p v-if="libraryReloadResult" class="muted" data-testid="library-reload-result">
-          {{ libraryReloadResult }}
+    <!-- Hero — sluníčkový panel jako pozvánka na herní večer -->
+    <header class="hero">
+      <div class="hero-text">
+        <p class="kicker">Rodinný herní večer</p>
+        <h1 class="landing-title">Knihovna Kvízů</h1>
+        <p class="landing-subtitle">
+          Vyberte si kvíz a zahrajte si s rodinou — žádná příprava, samá zábava.
         </p>
+        <div class="toolbar">
+          <n-button
+            round
+            size="large"
+            color="#fffdfb"
+            text-color="#6e574b"
+            data-testid="reload-library"
+            @click="reloadLibrary"
+          >
+            Obnovit knihovnu
+          </n-button>
+          <p v-if="libraryReloadResult" class="hero-note" data-testid="library-reload-result">
+            {{ libraryReloadResult }}
+          </p>
+        </div>
+      </div>
+      <div v-if="collage.length" class="hero-collage" aria-hidden="true">
+        <div v-for="item in collage" :key="item.id" class="hero-polaroid">
+          <img :src="item.src" :alt="''" loading="lazy" />
+        </div>
       </div>
     </header>
+
+    <!-- Statistiky knihovny — barevné chipy jako v dětské hře -->
+    <div class="stats">
+      <div class="stat-card">
+        <span class="stat-icon icon-sun">📚</span>
+        <div class="stat-info">
+          <strong>{{ stats.packs }}</strong>
+          <span>Kvízy v knihovně</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon icon-coral">📸</span>
+        <div class="stat-info">
+          <strong>{{ stats.photos }}</strong>
+          <span>Rodinné fotky</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon icon-mint">❓</span>
+        <div class="stat-info">
+          <strong>{{ stats.questions }}</strong>
+          <span>Záludné otázky</span>
+        </div>
+      </div>
+    </div>
 
     <!-- Quiz Library Grid -->
     <div class="grid">
@@ -35,9 +77,8 @@
         <p class="card-desc">{{ pack.description }}</p>
 
         <div class="meta">
-          <span>{{ pack.photos.length }} fotek</span>
-          <span class="meta-dot">·</span>
-          <span>{{ questionCount(pack) }} otázek</span>
+          <span class="meta-chip chip-sun">{{ pack.photos.length }} fotek</span>
+          <span class="meta-chip chip-mint">{{ questionCount(pack) }} otázek</span>
         </div>
 
         <div class="card-actions">
@@ -84,7 +125,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { NCard, NButton } from 'naive-ui';
 import { useGameStore } from '@/stores/gameStore';
@@ -106,6 +147,17 @@ const libraryReloadResult = ref(null);
 function questionCount(pack) {
   return pack.photos.reduce((sum, photo) => sum + photo.questions.length, 0);
 }
+
+// Hromádka polaroidů v hero — náhledy prvních tří kvízů.
+const collage = computed(() =>
+  library.packs.slice(0, 3).map(pack => ({ id: pack.id, src: getImageUrl(pack.thumbnail) }))
+);
+
+const stats = computed(() => ({
+  packs: library.packs.length,
+  photos: library.packs.reduce((sum, pack) => sum + pack.photos.length, 0),
+  questions: library.packs.reduce((sum, pack) => sum + questionCount(pack), 0),
+}));
 
 function formatReloadResult({ added, removed }) {
   if (!added && !removed) return 'Pack je aktuální';
@@ -155,47 +207,168 @@ function editQuiz(packId) {
 .landing {
   min-height: 100vh;
   background: var(--canvas);
-  padding: 3.5rem 2rem 4rem;
+  padding: 2.5rem 2rem 4rem;
+  max-width: 1280px;
+  margin: 0 auto;
 }
 
-.landing-header {
-  text-align: center;
-  margin-bottom: 3rem;
+/* Hero — velký žlutý panel, první věc kterou oko potká */
+.hero {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  align-items: center;
+  gap: 2rem;
+  background: var(--sun);
+  border-radius: calc(var(--radius-lg) + 6px);
+  padding: 3rem 3.25rem;
+  margin-bottom: 2rem;
+}
+
+.kicker {
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink);
+  opacity: 0.75;
 }
 
 .landing-title {
   font-family: var(--font-display);
-  font-size: 2.8rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-size: 3.1rem;
+  font-weight: 800;
+  line-height: 1.1;
   color: var(--ink);
+  margin-top: 0.35rem;
 }
 
 .landing-subtitle {
-  margin-top: 0.6rem;
-  font-size: 1.15rem;
-  color: var(--ink-muted);
+  margin-top: 0.7rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--ink);
+  opacity: 0.85;
+  max-width: 34rem;
 }
 
 .toolbar {
-  margin-top: 1.5rem;
+  margin-top: 1.6rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.hero-note {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* Hromádka polaroidů — fotky vykukují ze žlutého panelu */
+.hero-collage {
+  position: relative;
+  height: 240px;
+}
+
+.hero-polaroid {
+  position: absolute;
+  width: 56%;
+  background: #fff;
+  padding: 8px 8px 26px;
+  border-radius: 4px;
+  box-shadow: 0 3px 8px rgba(86, 56, 35, 0.18);
+  transform: rotate(-7deg);
+}
+
+.hero-polaroid:nth-child(2) {
+  left: 30%;
+  top: 12%;
+  transform: rotate(5deg);
+}
+
+.hero-polaroid:nth-child(3) {
+  left: 12%;
+  top: 36%;
+  transform: rotate(-2deg);
+}
+
+.hero-polaroid img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  display: block;
+  filter: saturate(1.08);
+}
+
+/* Statistiky — bílé kartičky s barevnými chipy */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 1.1rem 1.4rem;
+  box-shadow: var(--shadow-soft);
+}
+
+.stat-icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+}
+
+.icon-sun {
+  background: var(--sun-soft);
+}
+
+.icon-coral {
+  background: var(--accent-soft);
+}
+
+.icon-mint {
+  background: var(--success-soft);
+}
+
+.stat-info {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
+}
+
+.stat-info strong {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--ink);
+}
+
+.stat-info span {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink-muted);
 }
 
 .muted {
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: var(--ink-muted);
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1.75rem;
-  max-width: 1280px;
-  margin: 0 auto;
+  gap: 2rem;
 }
 
 .quiz-card {
@@ -207,29 +380,39 @@ function editQuiz(packId) {
 }
 
 .quiz-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-4px) rotate(-0.4deg);
   box-shadow:
-    0 4px 10px rgba(15, 23, 42, 0.06),
-    0 18px 40px rgba(15, 23, 42, 0.1);
+    0 4px 10px rgba(86, 56, 35, 0.08),
+    0 18px 40px rgba(86, 56, 35, 0.12);
 }
 
-/* Fotky jako polaroidy ve starém albu — podpisový prvek designu. */
+/* Fotky jako polaroidy — podpisový prvek; pruhy pod nimi se střídají
+   ve veselých pastelech, ať je knihovna barevná jako dětská hra. */
 .thumb {
   height: 230px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--paper-deep);
+  background: var(--sun-soft);
   overflow: hidden;
+}
+
+.grid > .quiz-card:nth-child(3n + 2) .thumb {
+  background: #fde0d6;
+}
+
+.grid > .quiz-card:nth-child(3n) .thumb {
+  background: var(--success-soft);
 }
 
 .polaroid {
   width: 72%;
   background: #fff;
   padding: 10px 10px 30px;
+  border-radius: 4px;
   box-shadow:
-    0 1px 2px rgba(82, 60, 39, 0.12),
-    0 10px 24px rgba(82, 60, 39, 0.18);
+    0 1px 2px rgba(86, 56, 35, 0.12),
+    0 10px 24px rgba(86, 56, 35, 0.18);
   transform: rotate(-2deg);
   transition: transform 0.35s ease;
 }
@@ -243,38 +426,50 @@ function editQuiz(packId) {
   height: 130px;
   object-fit: cover;
   display: block;
-  filter: sepia(0.18) saturate(0.92);
+  filter: saturate(1.08);
 }
 
 .quiz-card:hover .polaroid {
-  transform: rotate(0deg) scale(1.03);
+  transform: rotate(0deg) scale(1.05);
 }
 
 .card-title {
   font-family: var(--font-display);
-  font-size: 1.45rem;
-  font-weight: 600;
+  font-size: 1.55rem;
+  font-weight: 800;
+  line-height: 1.2;
   color: var(--ink);
 }
 
 .card-desc {
   margin-top: 0.4rem;
-  font-size: 1rem;
-  line-height: 1.5;
+  font-size: 1.05rem;
+  line-height: 1.55;
   color: var(--ink-soft);
 }
 
 .meta {
-  margin-top: 0.9rem;
+  margin-top: 1rem;
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 0.5rem;
-  font-size: 0.95rem;
-  color: var(--ink-muted);
 }
 
-.meta-dot {
-  opacity: 0.6;
+.meta-chip {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--ink);
+  padding: 0.3rem 0.85rem;
+  border-radius: 999px;
+}
+
+.chip-sun {
+  background: var(--sun-soft);
+}
+
+.chip-mint {
+  background: var(--success-soft);
 }
 
 .card-actions {
@@ -290,7 +485,7 @@ function editQuiz(packId) {
 
 .reload-link {
   margin-top: 0.9rem;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
 }
 
 .reload-result {
@@ -304,7 +499,13 @@ function editQuiz(packId) {
   box-shadow: none;
 }
 
-.create-thumb {
+.create-card:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.create-thumb,
+.grid > .quiz-card.create-card .thumb {
   background: transparent;
 }
 
@@ -314,22 +515,24 @@ function editQuiz(packId) {
   justify-content: center;
   height: 160px;
   padding: 10px;
-  border: 1.5px dashed var(--hairline);
+  border: 2px dashed rgba(245, 106, 71, 0.45);
   background: var(--surface);
   box-shadow: none;
 }
 
 .create-icon {
   font-family: var(--font-display);
-  font-size: 2.6rem;
-  color: var(--ink-muted);
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: var(--accent);
 }
 
 .create-link {
   display: inline-block;
   margin-top: 1.1rem;
+  font-size: 1.05rem;
   color: var(--accent);
-  font-weight: 600;
+  font-weight: 800;
   text-decoration: none;
 }
 
@@ -341,16 +544,28 @@ function editQuiz(packId) {
   text-align: center;
   margin-top: 3.5rem;
   color: var(--ink-muted);
-  font-size: 0.95rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+@media (max-width: 860px) {
+  .hero {
+    grid-template-columns: 1fr;
+    padding: 2.25rem 1.75rem;
+  }
+
+  .hero-collage {
+    display: none;
+  }
 }
 
 @media (max-width: 560px) {
   .landing {
-    padding: 2rem 1rem 3rem;
+    padding: 1.5rem 1rem 3rem;
   }
 
   .landing-title {
-    font-size: 2rem;
+    font-size: 2.3rem;
   }
 
   .card-actions {

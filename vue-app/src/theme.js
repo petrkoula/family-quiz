@@ -1,37 +1,43 @@
 /**
  * Sdílené design tokeny + Naive UI theme overrides.
  *
- * Směr „rodinné album": teplý papírový podklad, terakotový akcent, serifové
- * nadpisy (--font-display), fotky jako polaroidy. Minimum borderů — sekce
- * odděluje whitespace, ne čáry. Hodnoty drž v souladu s CSS proměnnými
- * v style.css a se specifikací v design/tokens.md (viz design/taste.md
- * pro závazná „don't" pravidla).
+ * Směr „giggle": hravý, živý a trochu dětský — korálový akcent, sluníčková
+ * žlutá, krémový papír, hodně zaoblené rohy a kulaté písmo (Baloo 2 na
+ * nadpisy, Nunito na text). Inspirace: FamilyQuiz AI (Bubble prototyp).
+ * Hodnoty drž v souladu s CSS proměnnými v style.css.
  */
 
 // Jméno designové varianty — yarn screenshots ho používá jako výchozí
 // název složky (screenshots/<themeName>/), ať se varianty dají porovnávat.
-export const themeName = 'album';
+export const themeName = 'giggle';
 
 export const tokens = {
-  accent: '#c2512c',
-  accentHover: '#d86a41',
-  accentPressed: '#993c1d',
-  ink: '#3b2f26',
-  inkSoft: '#6b5b4d',
-  inkMuted: '#94826f',
-  canvas: '#faf5ec',
-  surface: '#fffdf8',
-  paperDeep: '#f1e7d3',
-  fieldFill: '#f2e8d8',
-  success: '#4d7340',
-  successSoft: '#eaf1e2',
-  hairline: 'rgba(82, 60, 39, 0.12)',
-  radius: '8px',
-  radiusLarge: '12px',
+  accent: '#f56a47',
+  accentHover: '#f8825f',
+  accentPressed: '#d8552f',
+  sun: '#fbbd2d',
+  sunSoft: '#fdeec6',
+  ink: '#362117',
+  inkSoft: '#6e574b',
+  inkMuted: '#8d7468',
+  canvas: '#fcf8f3',
+  surface: '#fffdfb',
+  paperDeep: '#f3eae2',
+  fieldFill: '#f5ebe0',
+  success: '#4f9d52',
+  successSoft: '#e2f2dd',
+  hairline: 'rgba(86, 56, 35, 0.14)',
+  radius: '14px',
+  radiusLarge: '22px',
+  fontBody: "'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
 };
 
 export const themeOverrides = {
   common: {
+    fontFamily: tokens.fontBody,
+    fontSize: '16px',
+    fontSizeMedium: '16px',
+    fontSizeLarge: '17px',
     primaryColor: tokens.accent,
     primaryColorHover: tokens.accentHover,
     primaryColorPressed: tokens.accentPressed,
@@ -39,7 +45,7 @@ export const themeOverrides = {
     infoColor: tokens.accent,
     successColor: tokens.success,
     borderRadius: tokens.radius,
-    borderRadiusSmall: '6px',
+    borderRadiusSmall: '10px',
     borderColor: tokens.hairline,
     textColorBase: tokens.ink,
     textColor1: tokens.ink,
@@ -47,7 +53,7 @@ export const themeOverrides = {
     textColor3: tokens.inkMuted,
     bodyColor: tokens.canvas,
     cardColor: tokens.surface,
-    fontWeightStrong: '600',
+    fontWeightStrong: '800',
   },
   Card: {
     borderRadius: tokens.radiusLarge,
@@ -55,15 +61,18 @@ export const themeOverrides = {
     paddingMedium: '24px',
   },
   Button: {
-    fontWeight: '500',
-    fontWeightStrong: '600',
-    borderRadiusMedium: tokens.radius,
-    borderRadiusLarge: tokens.radius,
-    heightLarge: '48px',
-    heightMedium: '40px',
+    fontWeight: '700',
+    fontWeightStrong: '800',
+    fontSizeMedium: '16px',
+    fontSizeLarge: '17px',
+    // pilulky — kulaté tlačítko je podpisový dětský tvar téhle varianty
+    borderRadiusMedium: '999px',
+    borderRadiusLarge: '999px',
+    heightLarge: '52px',
+    heightMedium: '44px',
     // tichá tlačítka na teplém papíru, ne studená šedá
-    colorTertiary: 'rgba(82, 60, 39, 0.06)',
-    colorTertiaryHover: 'rgba(82, 60, 39, 0.11)',
+    colorTertiary: 'rgba(86, 56, 35, 0.07)',
+    colorTertiaryHover: 'rgba(86, 56, 35, 0.12)',
     textColorTertiary: tokens.inkSoft,
   },
   Switch: {

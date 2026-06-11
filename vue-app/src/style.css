@@ -1,28 +1,32 @@
 /* Design tokeny – sdílené s src/theme.js (Naive UI theme overrides).
-   Směr „rodinné album": teplý papír, terakotový akcent, serifové nadpisy.
-   Specifikace: design/tokens.md; závazná „don't" pravidla: design/taste.md. */
+   Směr „giggle": hravý a trochu dětský — korálový akcent, sluníčková žlutá,
+   krémový papír, zaoblené rohy a kulaté písmo Baloo 2 / Nunito.
+   (Předchozí varianta „album" je popsaná v design/tokens.md.) */
 :root {
-  --accent: #c2512c;
-  --accent-hover: #d86a41;
-  --accent-pressed: #993c1d;
-  --accent-soft: rgba(194, 81, 44, 0.12);
-  --ink: #3b2f26;
-  --ink-soft: #6b5b4d;
-  --ink-muted: #94826f;
-  --canvas: #faf5ec;
-  --surface: #fffdf8;
-  --paper-deep: #f1e7d3;
-  --field-fill: #f2e8d8;
-  --success: #4d7340;
-  --success-soft: #eaf1e2;
-  --success-ink: #2f4a22;
-  --warn-soft: #f6e7c1;
-  --warn-ink: #7a5b10;
-  --hairline: rgba(82, 60, 39, 0.12);
-  --radius: 8px;
-  --radius-lg: 12px;
-  --shadow-soft: 0 1px 2px rgba(82, 60, 39, 0.05), 0 10px 30px rgba(82, 60, 39, 0.08);
-  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --accent: #f56a47;
+  --accent-hover: #f8825f;
+  --accent-pressed: #d8552f;
+  --accent-soft: rgba(245, 106, 71, 0.14);
+  --sun: #fbbd2d;
+  --sun-soft: #fdeec6;
+  --ink: #362117;
+  --ink-soft: #6e574b;
+  --ink-muted: #8d7468;
+  --canvas: #fcf8f3;
+  --surface: #fffdfb;
+  --paper-deep: #f3eae2;
+  --field-fill: #f5ebe0;
+  --success: #4f9d52;
+  --success-soft: #e2f2dd;
+  --success-ink: #2c5e2e;
+  --warn-soft: #fdeec6;
+  --warn-ink: #8a6307;
+  --hairline: rgba(86, 56, 35, 0.14);
+  --radius: 14px;
+  --radius-lg: 22px;
+  --shadow-soft: 0 1px 2px rgba(86, 56, 35, 0.05), 0 10px 30px rgba(86, 56, 35, 0.08);
+  --font-display: 'Baloo 2', 'Trebuchet MS', system-ui, sans-serif;
+  --font-body: 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
 * {
@@ -31,15 +35,13 @@
   box-sizing: border-box;
 }
 
+/* Větší základ písma — všechny rem hodnoty v appce tím povyrostou. */
+html {
+  font-size: 112.5%;
+}
+
 body {
-  font-family:
-    system-ui,
-    -apple-system,
-    'Segoe UI',
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif;
+  font-family: var(--font-body);
   color: var(--ink);
   background: var(--canvas);
   -webkit-font-smoothing: antialiased;
