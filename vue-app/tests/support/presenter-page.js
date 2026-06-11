@@ -59,6 +59,23 @@ class PresenterPage {
     return correct ? correct.textContent.trim() : null;
   }
 
+  /** Nápověda v liště, že existuje klávesová nápověda. */
+  helpHint() {
+    const el = this.view.queryByTestId('help-hint');
+    return el ? el.textContent.trim() : null;
+  }
+
+  /** Je overlay s klávesovými zkratkami zobrazený? */
+  isHelpVisible() {
+    return this.view.queryByTestId('help-overlay') !== null;
+  }
+
+  /** Celý text overlay nápovědy (pro ověření, že vyjmenovává ovládání). */
+  helpOverlayText() {
+    const el = this.view.queryByTestId('help-overlay');
+    return el ? el.textContent : '';
+  }
+
   // --- Co uživatel dělá (klávesnice) ----------------------------------------
 
   toggleQuestions() {
@@ -87,6 +104,10 @@ class PresenterPage {
 
   revealAnswer() {
     return this._key('a');
+  }
+
+  toggleHelp() {
+    return this._key('?');
   }
 
   _key(key) {

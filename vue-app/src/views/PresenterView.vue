@@ -36,8 +36,54 @@
     <!-- Controls Hint -->
     <div class="controls-hint">
       <span class="hint-text" data-testid="controls-hint">{{ controlsHintText }}</span>
-      <span class="navigation-hint">← → Fotky | ↑ ↓ Otázky</span>
+      <span class="navigation-hint">
+        ← → Fotky | ↑ ↓ Otázky | <span data-testid="help-hint">? Nápověda</span>
+      </span>
     </div>
+
+    <!-- Keyboard Help Overlay -->
+    <transition name="fade">
+      <div
+        v-if="helpVisible"
+        class="help-overlay"
+        data-testid="help-overlay"
+        @click="helpVisible = false"
+      >
+        <div class="help-card">
+          <h2 class="help-title">Klávesové zkratky</h2>
+          <dl class="help-list">
+            <div class="help-row">
+              <dt>Mezerník</dt>
+              <dd>Zobrazit / skrýt otázky</dd>
+            </div>
+            <div class="help-row">
+              <dt>← →</dt>
+              <dd>Předchozí / další foto</dd>
+            </div>
+            <div class="help-row">
+              <dt>↑ ↓</dt>
+              <dd>Předchozí / další otázka</dd>
+            </div>
+            <div class="help-row">
+              <dt>A</dt>
+              <dd>Odhalit správnou odpověď</dd>
+            </div>
+            <div class="help-row">
+              <dt>F</dt>
+              <dd>Celá obrazovka</dd>
+            </div>
+            <div class="help-row">
+              <dt>ESC</dt>
+              <dd>Skrýt otázky / zavřít nápovědu</dd>
+            </div>
+            <div class="help-row">
+              <dt>?</dt>
+              <dd>Tato nápověda</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -61,6 +107,7 @@ const {
 } = storeToRefs(gameStore);
 
 const isFullscreen = ref(false);
+const helpVisible = ref(false);
 
 const controlsHintText = computed(() => {
   if (questionsVisible.value) {
@@ -102,8 +149,14 @@ function handleKeyPress(e) {
       e.preventDefault();
       toggleFullscreen();
       break;
+    case '?':
+      e.preventDefault();
+      helpVisible.value = !helpVisible.value;
+      break;
     case 'Escape':
-      if (questionsVisible.value) {
+      if (helpVisible.value) {
+        helpVisible.value = false; // help closes first, nothing else changes
+      } else if (questionsVisible.value) {
         gameStore.hideQuestions();
       } else if (document.fullscreenElement) {
         document.exitFullscreen();
@@ -210,6 +263,73 @@ onUnmounted(() => {
 
 .navigation-hint {
   font-weight: 500;
+}
+
+/* Keyboard Help Overlay */
+.help-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  cursor: pointer;
+}
+
+.help-card {
+  background: white;
+  color: #1a202c;
+  border-radius: 16px;
+  padding: 2.5rem 3rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  min-width: 420px;
+}
+
+.help-title {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #2c3e50;
+}
+
+.help-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.help-row {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+}
+
+.help-row dt {
+  flex: 0 0 7.5rem;
+  font-weight: 700;
+  font-size: 1.2rem;
+  background: #f0f2f7;
+  border: 2px solid #cbd5e0;
+  border-radius: 8px;
+  padding: 0.3rem 0.7rem;
+  text-align: center;
+}
+
+.help-row dd {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
 /* Transitions */
