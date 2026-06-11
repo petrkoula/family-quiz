@@ -114,7 +114,7 @@ class PlayingPack {
   revealedCorrectAnswer() {
     const correct = this.view
       .getAllByTestId('option')
-      .find((el) => el.getAttribute('data-correct') === 'true');
+      .find(el => el.getAttribute('data-correct') === 'true');
     return correct ? correct.textContent.trim() : null;
   }
 }
@@ -130,8 +130,14 @@ class ReloadPage {
     return within(heading.closest('[data-testid="quiz-card"]'));
   }
 
-  reloadButtons() {
-    return this.view.getAllByTestId('reload-pack');
+  /** Svislá menu (⋮) všech karet — Reload každé karty žije uvnitř. */
+  cardMenus() {
+    return this.view.getAllByTestId('card-menu');
+  }
+
+  /** Otevře svislé menu (⋮) na kartě daného titulku. */
+  async openCardMenu(title) {
+    await fireEvent.click(this.card(title).getByTestId('card-menu'));
   }
 
   /** Počet fotek z textu „N fotek" na kartě. */
@@ -147,7 +153,8 @@ class ReloadPage {
   }
 
   async clickReload(title) {
-    await fireEvent.click(this.card(title).getByRole('button', { name: /Reload/i }));
+    await this.openCardMenu(title);
+    await fireEvent.click(this.card(title).getByRole('menuitem', { name: /Reload/i }));
     await flushPromises();
   }
 
@@ -165,11 +172,13 @@ class ReloadPage {
       .map(card => within(card).getByRole('heading', { level: 2 }).textContent.trim());
   }
 
+  /** Obnovení knihovny žije v menu knihovny (☰) nad kartami. */
   hasLibraryReloadControl() {
-    return this.view.queryByTestId('reload-library') !== null;
+    return this.view.queryByTestId('library-menu') !== null;
   }
 
   async clickLibraryReload() {
+    await fireEvent.click(this.view.getByTestId('library-menu'));
     await fireEvent.click(this.view.getByTestId('reload-library'));
     await flushPromises();
   }

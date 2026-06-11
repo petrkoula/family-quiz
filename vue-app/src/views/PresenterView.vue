@@ -76,7 +76,7 @@
             </div>
             <div class="help-row">
               <dt>ESC</dt>
-              <dd>Skrýt otázky / zavřít nápovědu</dd>
+              <dd>Skrýt otázky / zavřít nápovědu / zpět do knihovny</dd>
             </div>
             <div class="help-row">
               <dt>?</dt>
@@ -92,10 +92,13 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
 import { useGameStore } from '@/stores/gameStore';
 import { getImageUrl } from '@/data/quizData';
 import QuestionCard from '@/components/QuestionCard.vue';
 
+// Volitelně — část jsdom testů renderuje presenter bez routeru.
+const router = useRouter();
 const gameStore = useGameStore();
 const {
   currentPhotoIndex,
@@ -162,6 +165,10 @@ function handleKeyPress(e) {
         gameStore.hideQuestions();
       } else if (document.fullscreenElement) {
         document.exitFullscreen();
+      } else {
+        // Odchod do knihovny — kvíz zůstane rozehraný (karta nabídne Pokračovat).
+        gameStore.pauseQuiz();
+        router?.push('/');
       }
       break;
   }

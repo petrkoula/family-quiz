@@ -80,13 +80,20 @@ class LandingPage {
     await flushPromises();
   }
 
+  /** Otevře svislé menu (⋮) na kartě — Nastavení kvízu / Upravit / Reload žijí v něm. */
+  async openCardMenu(pack) {
+    await fireEvent.click(this.card(pack).getByTestId('card-menu'));
+  }
+
   async customize(pack) {
-    await fireEvent.click(this.card(pack).getByRole('button', { name: /Customize/i }));
+    await this.openCardMenu(pack);
+    await fireEvent.click(this.card(pack).getByRole('menuitem', { name: /Nastavení kvízu/i }));
     await flushPromises();
   }
 
   async edit(pack) {
-    await fireEvent.click(this.card(pack).getByRole('button', { name: /Upravit/ }));
+    await this.openCardMenu(pack);
+    await fireEvent.click(this.card(pack).getByRole('menuitem', { name: /Upravit/ }));
     await flushPromises();
   }
 }

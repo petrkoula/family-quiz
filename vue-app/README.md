@@ -46,9 +46,10 @@ vue-app/
 │   ├── components/      # Reusable components
 │   │   └── QuestionCard.vue
 │   ├── views/           # Page components
-│   │   ├── PresenterView.vue
-│   │   ├── TeamView.vue
-│   │   └── AdminView.vue
+│   │   ├── LandingView.vue
+│   │   ├── CustomizationView.vue
+│   │   ├── EditView.vue
+│   │   └── PresenterView.vue
 │   ├── stores/          # Pinia stores
 │   │   └── gameStore.js
 │   ├── data/            # Quiz data
@@ -65,9 +66,10 @@ vue-app/
 
 ## 🎮 Routes
 
+- `/` - Quiz library (landing)
+- `/customize/:quizId` - Quiz settings
+- `/edit/:quizId` - Question editor
 - `/presenter` - Main presentation view
-- `/team` - Mobile team interface
-- `/admin` - Admin dashboard
 
 ## 🔧 Configuration
 

@@ -14,7 +14,7 @@ do not yet have any.
 
 ### Scenario 1: Reload control is available on a quiz card
 **Given** I am on the landing page viewing a quiz pack card
-**When** I look at the card's actions
+**When** I open the card's menu
 **Then** I should see a "Reload" control for that card
 
 ### Scenario 2: Reload picks up newly added photos

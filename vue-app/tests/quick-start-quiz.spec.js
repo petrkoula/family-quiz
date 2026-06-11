@@ -3,7 +3,7 @@
  *
  * Kontrakt: specs/quick-start-quiz.spec.md – z karty jde kvíz spustit hned
  * tlačítkem „Play Now" s výchozím nastavením (bez časovače, všechny 3 otázky,
- * původní pořadí), nebo otevřít „Customize".
+ * původní pořadí), nebo otevřít „Nastavení kvízu" z menu karty.
  *
  * Vrstva: jsdom (komponenta + Pinia + vue-router), selektory v
  * tests/support/landing-page.js. Viz TESTING.md.
@@ -12,12 +12,13 @@ import { describe, it, expect } from 'vitest';
 import { renderLanding, quizPacks } from './support/landing-page.js';
 
 describe('Quick start quiz', () => {
-  it('na kartě nabízí výrazné „Play Now" i „Customize"', async () => {
+  it('na kartě nabízí výrazné „Play Now" i „Nastavení kvízu" v menu', async () => {
     const page = await renderLanding();
     const card = page.card(quizPacks[0]);
 
     expect(card.getByRole('button', { name: /Play Now/i })).toBeInTheDocument();
-    expect(card.getByRole('button', { name: /Customize/i })).toBeInTheDocument();
+    await page.openCardMenu(quizPacks[0]);
+    expect(card.getByRole('menuitem', { name: /Nastavení kvízu/i })).toBeInTheDocument();
   });
 
   it('Play Now spustí kvíz okamžitě s výchozím nastavením', async () => {
@@ -40,7 +41,7 @@ describe('Quick start quiz', () => {
     expect(page.store.currentPackId).toBe(quizPacks[1].id);
   });
 
-  it('Customize otevře konfiguraci místo okamžitého startu', async () => {
+  it('Nastavení kvízu otevře konfiguraci místo okamžitého startu', async () => {
     const page = await renderLanding();
 
     await page.customize(quizPacks[0]);

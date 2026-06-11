@@ -23,16 +23,6 @@ const router = createRouter({
       name: 'presenter',
       component: () => import('@/views/PresenterView.vue'),
     },
-    {
-      path: '/team',
-      name: 'team',
-      component: () => import('@/views/TeamView.vue'),
-    },
-    {
-      path: '/admin',
-      name: 'admin',
-      component: () => import('@/views/AdminView.vue'),
-    },
   ],
 });
 

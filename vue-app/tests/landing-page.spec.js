@@ -3,7 +3,7 @@
  *
  * Kontrakt: specs/landing-page.spec.md – stránka ukáže knihovnu karet kvízů
  * s metadaty, „Vytvořte vlastní" sekcí, a z karty jde kvíz spustit (Play Now)
- * nebo přizpůsobit (Customize).
+ * nebo přizpůsobit („Nastavení kvízu" v menu karty).
  *
  * Vrstva: jsdom (chování komponenty + Pinia + vue-router), selektory v
  * tests/support/landing-page.js. Viz TESTING.md.
@@ -33,13 +33,15 @@ describe('Landing page', () => {
     }
   });
 
-  it('na každé kartě nabídne Play Now i Customize', async () => {
+  it('na každé kartě nabídne Play Now i menu s Nastavením kvízu', async () => {
     const page = await renderLanding();
 
     for (const pack of quizPacks) {
       const card = page.card(pack);
       expect(card.getByRole('button', { name: /Play Now/i })).toBeInTheDocument();
-      expect(card.getByRole('button', { name: /Customize/i })).toBeInTheDocument();
+      await page.openCardMenu(pack);
+      expect(card.getByRole('menuitem', { name: /Nastavení kvízu/i })).toBeInTheDocument();
+      expect(card.getByRole('menuitem', { name: /Upravit/ })).toBeInTheDocument();
     }
   });
 

@@ -175,7 +175,8 @@ Specs in `specs/*.spec.md` are the contracts; each implemented scenario maps to 
 editable `*.spec.js` test:
 - `tests/presenter.spec.js` — photo/question navigation, reveal, navigation blocking
 - `tests/landing-page.spec.js` — quiz library cards, metadata, navigation
-- `tests/quick-start-quiz.spec.js` — Play Now / Customize from a card
+- `tests/quick-start-quiz.spec.js` — Play Now / „Nastavení kvízu" (card menu) from a card
+- `tests/resume-quiz.spec.js` — Esc leaves a running quiz to the library, „Pokračovat" resumes it
 - `tests/customization.spec.js` — timer, questions-per-photo, summary, Start/Skip
 - `tests/quiz-card-reload.spec.js` — reload a pack from current photo files (placeholder questions for new photos)
 - `tests/quiz-library-sync.spec.js` — library from photo folders, localStorage cache, full sync

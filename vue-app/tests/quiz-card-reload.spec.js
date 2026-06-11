@@ -20,11 +20,12 @@ afterEach(() => resetCatalog());
 
 describe('Reload quiz pack', () => {
   // Scénář 1
-  it('na každé kartě nabízí Reload ovládání', async () => {
+  it('na každé kartě nabízí Reload ovládání (v menu karty)', async () => {
     const page = await renderLandingForReload();
 
-    expect(page.reloadButtons()).toHaveLength(quizPacks.length);
-    expect(page.card('Retro Styl').getByRole('button', { name: /Reload/i })).toBeInTheDocument();
+    expect(page.cardMenus()).toHaveLength(quizPacks.length);
+    await page.openCardMenu('Retro Styl');
+    expect(page.card('Retro Styl').getByRole('menuitem', { name: /Reload/i })).toBeInTheDocument();
   });
 
   // Scénář 2
@@ -130,7 +131,7 @@ describe('Reload quiz pack', () => {
             ],
           },
         ],
-      }),
+      })
     );
 
     const play = await playPackAfterReload('retro-style', {

@@ -22,7 +22,6 @@ zkonkretizovaných pro tento projekt.
    prázdný polaroid jako affordance „sem patří fotka".
 6. **Žádná modrá / indigo / fialová mimo tokeny.** Akcent je terakota;
    `#6366f1` a spol. jsou zakázané (vyhlíží „AI default").
-7. **Radius nejvýš 12 px** (karty); ovládací prvky 8 px. Fotky/polaroidy mají
    **vždy ostré rohy** — zaoblená fotka v albu neexistuje.
 8. **Žádný glassmorphism, blur, neon, glow.** Stíny jen teplé a měkké
    (hnědý základ), nikdy černé/modré, nikdy spolu s borderem.

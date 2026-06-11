@@ -1,5 +1,13 @@
 <template>
   <div class="landing">
+    <!-- Logo — svislá tmavá záložka přilehlá k levému okraji, invertovaný text -->
+    <div class="brand-ribbon">
+      <svg class="brand-star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" />
+      </svg>
+      <span class="brand-name">FamilyQuiz</span>
+    </div>
+
     <!-- Hero — sluníčkový panel jako pozvánka na herní večer -->
     <header class="hero">
       <div class="hero-text">
@@ -10,18 +18,21 @@
         </p>
         <div class="toolbar">
           <n-button
+            type="primary"
             round
             size="large"
-            color="#fffdfb"
-            text-color="#6e574b"
-            data-testid="reload-library"
-            @click="reloadLibrary"
+            tag="a"
+            href="https://github.com/petrkoula/family-quiz"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            Obnovit knihovnu
+            <template #icon>
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" />
+              </svg>
+            </template>
+            Založit nový kvíz
           </n-button>
-          <p v-if="libraryReloadResult" class="hero-note" data-testid="library-reload-result">
-            {{ libraryReloadResult }}
-          </p>
         </div>
       </div>
       <div v-if="collage.length" class="hero-collage" aria-hidden="true">
@@ -56,6 +67,38 @@
       </div>
     </div>
 
+    <!-- Lišta nad kartami — menu knihovny po stylu Edit (kebab + vlastní menu) -->
+    <div class="grid-toolbar">
+      <p v-if="libraryReloadResult" class="muted" data-testid="library-reload-result">
+        {{ libraryReloadResult }}
+      </p>
+      <div class="library-menu-wrap">
+        <button
+          type="button"
+          class="kebab"
+          aria-label="Menu knihovny"
+          aria-haspopup="true"
+          :aria-expanded="menuOpen"
+          data-testid="library-menu"
+          @click="menuOpen = !menuOpen"
+        >
+          ☰
+        </button>
+        <div v-if="menuOpen" class="menu-backdrop" @click="menuOpen = false"></div>
+        <div v-if="menuOpen" class="menu" role="menu">
+          <button
+            type="button"
+            class="menu-item"
+            role="menuitem"
+            data-testid="reload-library"
+            @click="reloadLibrary"
+          >
+            Přegenerovat ze souborů
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Quiz Library Grid -->
     <div class="grid">
       <n-card
@@ -67,29 +110,88 @@
       >
         <template #cover>
           <div class="thumb">
-            <div class="polaroid">
-              <img :src="getImageUrl(pack.thumbnail)" :alt="pack.title" loading="lazy" />
-            </div>
+            <img :src="getImageUrl(pack.thumbnail)" :alt="pack.title" loading="lazy" />
           </div>
         </template>
 
-        <h2 class="card-title">{{ pack.title }}</h2>
+        <div class="card-head">
+          <div>
+            <p class="card-kicker">Rodinný fotokvíz</p>
+            <h2 class="card-title">{{ pack.title }}</h2>
+          </div>
+          <div class="card-menu-wrap">
+            <button
+              type="button"
+              class="kebab kebab-card"
+              aria-label="Menu kvízu"
+              aria-haspopup="true"
+              :aria-expanded="openCardMenu === pack.id"
+              data-testid="card-menu"
+              @click="toggleCardMenu(pack.id)"
+            >
+              ⋮
+            </button>
+            <div
+              v-if="openCardMenu === pack.id"
+              class="menu-backdrop"
+              @click="openCardMenu = null"
+            ></div>
+            <div v-if="openCardMenu === pack.id" class="menu" role="menu">
+              <button
+                type="button"
+                class="menu-item"
+                role="menuitem"
+                @click="customizeQuiz(pack.id)"
+              >
+                <svg class="menu-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path
+                    d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"
+                  />
+                </svg>
+                Nastavení kvízu
+              </button>
+              <button type="button" class="menu-item" role="menuitem" @click="editQuiz(pack.id)">
+                <svg class="menu-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path
+                    d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"
+                  />
+                </svg>
+                Upravit
+              </button>
+              <button
+                type="button"
+                class="menu-item"
+                role="menuitem"
+                data-testid="reload-pack"
+                @click="reloadPack(pack.id)"
+              >
+                <span class="menu-icon" aria-hidden="true"></span>
+                Reload
+              </button>
+            </div>
+          </div>
+        </div>
         <p class="card-desc">{{ pack.description }}</p>
 
         <div class="meta">
-          <span class="meta-chip chip-sun">{{ pack.photos.length }} fotek</span>
-          <span class="meta-chip chip-mint">{{ questionCount(pack) }} otázek</span>
+          <span>{{ pack.photos.length }} fotek</span>
+          <span class="meta-dot">·</span>
+          <span>{{ questionCount(pack) }} otázek</span>
         </div>
 
         <div class="card-actions">
-          <n-button type="primary" @click="playNow(pack.id)">Play Now</n-button>
-          <n-button tertiary @click="customizeQuiz(pack.id)">Customize</n-button>
-          <n-button tertiary @click="editQuiz(pack.id)">Upravit</n-button>
+          <n-button
+            v-if="gameStore.isPackInProgress(pack.id)"
+            color="#e2f2dd"
+            text-color="#2c5e2e"
+            data-testid="resume-quiz"
+            @click="resumeQuiz()"
+          >
+            Pokračovat
+          </n-button>
+          <n-button v-else type="primary" @click="playNow(pack.id)">Play Now</n-button>
         </div>
 
-        <n-button text class="reload-link" data-testid="reload-pack" @click="reloadPack(pack.id)">
-          Reload
-        </n-button>
         <p v-if="reloadResults[pack.id]" class="muted reload-result" data-testid="reload-result">
           {{ reloadResults[pack.id] }}
         </p>
@@ -99,11 +201,12 @@
       <n-card class="quiz-card create-card" :bordered="false">
         <template #cover>
           <div class="thumb create-thumb">
-            <div class="polaroid polaroid-empty">
+            <div class="polaroid-empty">
               <span class="create-icon">+</span>
             </div>
           </div>
         </template>
+        <p class="card-kicker">Přidejte vlastní</p>
         <h2 class="card-title">Vytvořte vlastní</h2>
         <p class="card-desc">Nahrajte své fotky a vytvořte si vlastní rodinný kvíz</p>
         <a
@@ -143,6 +246,14 @@ onMounted(() => library.ensureInitialized());
 const reloadResults = ref({});
 // Summary shown after a whole-library refresh.
 const libraryReloadResult = ref(null);
+// Menu knihovny (☰) nad kartami.
+const menuOpen = ref(false);
+// Otevřené svislé menu (⋮) na kartě — id packu, nebo null.
+const openCardMenu = ref(null);
+
+function toggleCardMenu(packId) {
+  openCardMenu.value = openCardMenu.value === packId ? null : packId;
+}
 
 function questionCount(pack) {
   return pack.photos.reduce((sum, photo) => sum + photo.questions.length, 0);
@@ -165,6 +276,7 @@ function formatReloadResult({ added, removed }) {
 }
 
 async function reloadPack(packId) {
+  openCardMenu.value = null;
   const result = await library.reloadPack(packId);
   reloadResults.value = { ...reloadResults.value, [packId]: formatReloadResult(result) };
 }
@@ -181,6 +293,7 @@ function formatLibraryResult(result) {
 }
 
 async function reloadLibrary() {
+  menuOpen.value = false;
   const result = await library.reloadLibrary();
   libraryReloadResult.value = formatLibraryResult(result);
 }
@@ -188,6 +301,11 @@ async function reloadLibrary() {
 function playNow(packId) {
   // Start quiz immediately with default settings
   gameStore.selectQuizPack(packId);
+  router.push('/presenter');
+}
+
+function resumeQuiz() {
+  // Rozehraný kvíz — žádný reset, jen návrat do presenteru na stejné místo.
   router.push('/presenter');
 }
 
@@ -207,9 +325,41 @@ function editQuiz(packId) {
 .landing {
   min-height: 100vh;
   background: var(--canvas);
-  padding: 2.5rem 2rem 4rem;
+  padding: 2.5rem 2rem 4rem 3.5rem;
   max-width: 1280px;
   margin: 0 auto;
+}
+
+/* Logo — netradiční svislá záložka u levého okraje, téměř černá s invertovaným textem */
+.brand-ribbon {
+  position: fixed;
+  left: 0;
+  top: 2.5rem;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 1.1rem 0.5rem 1.4rem;
+  background: #1e1410;
+  color: var(--canvas);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  box-shadow: 0 8px 24px rgba(30, 20, 16, 0.3);
+}
+
+.brand-star {
+  width: 22px;
+  height: 22px;
+  color: var(--sun);
+}
+
+.brand-name {
+  writing-mode: vertical-rl;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--canvas);
 }
 
 /* Hero — velký žlutý panel, první věc kterou oko potká */
@@ -260,10 +410,80 @@ function editQuiz(packId) {
   gap: 1rem;
 }
 
-.hero-note {
+/* Lišta nad kartami — výsledek synchronizace + menu knihovny vpravo */
+.grid-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.library-menu-wrap {
+  position: relative;
+}
+
+.kebab {
+  width: 2.6rem;
+  height: 2.6rem;
+  font-size: 1.25rem;
+  line-height: 1;
+  border: none;
+  border-radius: 50%;
+  background: rgba(86, 56, 35, 0.07);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.kebab:hover {
+  background: rgba(86, 56, 35, 0.12);
+}
+
+.menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+}
+
+.menu {
+  position: absolute;
+  top: 3rem;
+  right: 0;
+  z-index: 11;
+  min-width: 240px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 24px rgba(86, 56, 35, 0.25);
+  overflow: hidden;
+  text-align: left;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.85rem 1.2rem;
+  font-family: var(--font-body);
   font-size: 1rem;
   font-weight: 700;
+  text-align: left;
+  border: none;
+  background: var(--surface);
   color: var(--ink);
+  cursor: pointer;
+}
+
+.menu-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: var(--ink-soft);
+}
+
+.menu-item:hover {
+  background: var(--field-fill);
 }
 
 /* Hromádka polaroidů — fotky vykukují ze žlutého panelu */
@@ -371,66 +591,76 @@ function editQuiz(packId) {
   gap: 2rem;
 }
 
+/* V klidu tenký šedý rámeček (přes box-shadow ring jako na hoveru),
+   na hover ho nahradí výrazný primární. */
 .quiz-card {
-  overflow: hidden;
-  box-shadow: var(--shadow-soft);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.12),
+    var(--shadow-soft);
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
 }
 
+/* Hover: výrazný rámeček v primární barvě (kreslený přes box-shadow,
+   ať neposkakuje layout) + zvednutí karty. */
 .quiz-card:hover {
   transform: translateY(-4px) rotate(-0.4deg);
   box-shadow:
+    0 0 0 3px var(--accent),
     0 4px 10px rgba(86, 56, 35, 0.08),
     0 18px 40px rgba(86, 56, 35, 0.12);
 }
 
-/* Fotky jako polaroidy — podpisový prvek; pruhy pod nimi se střídají
-   ve veselých pastelech, ať je knihovna barevná jako dětská hra. */
+/* Fotka přes celou šířku karty — bez polaroidového rámečku. */
 .thumb {
-  height: 230px;
+  height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--sun-soft);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   overflow: hidden;
 }
 
-.grid > .quiz-card:nth-child(3n + 2) .thumb {
-  background: #fde0d6;
-}
-
-.grid > .quiz-card:nth-child(3n) .thumb {
-  background: var(--success-soft);
-}
-
-.polaroid {
-  width: 72%;
-  background: #fff;
-  padding: 10px 10px 30px;
-  border-radius: 4px;
-  box-shadow:
-    0 1px 2px rgba(86, 56, 35, 0.12),
-    0 10px 24px rgba(86, 56, 35, 0.18);
-  transform: rotate(-2deg);
-  transition: transform 0.35s ease;
-}
-
-.quiz-card:nth-child(even) .polaroid {
-  transform: rotate(1.6deg);
-}
-
-.polaroid img {
+.thumb img {
   width: 100%;
-  height: 130px;
+  height: 100%;
   object-fit: cover;
   display: block;
   filter: saturate(1.08);
+  transition: transform 0.35s ease;
 }
 
-.quiz-card:hover .polaroid {
-  transform: rotate(0deg) scale(1.05);
+.quiz-card:hover .thumb img {
+  transform: scale(1.04);
+}
+
+.card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.card-menu-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.kebab-card {
+  width: 2.2rem;
+  height: 2.2rem;
+  font-size: 1.2rem;
+}
+
+/* Podtitulek karty — stejný kicker vzor jako v hero, jen menší */
+.card-kicker {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: 0.15rem;
 }
 
 .card-title {
@@ -449,27 +679,18 @@ function editQuiz(packId) {
 }
 
 .meta {
-  margin-top: 1rem;
+  margin-top: 0.9rem;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink-muted);
 }
 
-.meta-chip {
-  font-size: 0.9rem;
-  font-weight: 800;
-  color: var(--ink);
-  padding: 0.3rem 0.85rem;
-  border-radius: 999px;
-}
-
-.chip-sun {
-  background: var(--sun-soft);
-}
-
-.chip-mint {
-  background: var(--success-soft);
+.meta-dot {
+  opacity: 0.6;
 }
 
 .card-actions {
@@ -477,15 +698,6 @@ function editQuiz(packId) {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-}
-
-.card-actions :deep(.n-button) {
-  flex: 1 1 auto;
-}
-
-.reload-link {
-  margin-top: 0.9rem;
-  font-size: 0.95rem;
 }
 
 .reload-result {
@@ -513,11 +725,12 @@ function editQuiz(packId) {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 72%;
   height: 160px;
   padding: 10px;
   border: 2px dashed rgba(245, 106, 71, 0.45);
+  border-radius: var(--radius);
   background: var(--surface);
-  box-shadow: none;
 }
 
 .create-icon {
@@ -554,8 +767,13 @@ function editQuiz(packId) {
     padding: 2.25rem 1.75rem;
   }
 
-  .hero-collage {
+  .hero-collage,
+  .brand-ribbon {
     display: none;
+  }
+
+  .landing {
+    padding-left: 2rem;
   }
 }
 

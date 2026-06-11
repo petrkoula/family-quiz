@@ -11,7 +11,7 @@ So that I can quickly begin a presentation without configuring settings
 **Given** I am on the landing page viewing quiz packs
 **When** I view a quiz pack card
 **Then** I should see a "Play Now" or quick start button
-**And** I should see a "Customize" button for accessing settings
+**And** the card's menu should offer a "Nastavení kvízu" option for accessing settings
 
 ### Scenario 2: Quick start launches quiz with defaults
 **Given** I am on the landing page viewing a quiz pack
@@ -28,9 +28,9 @@ So that I can quickly begin a presentation without configuring settings
 **And** photos should appear in original order
 **And** questions should appear in original order
 
-### Scenario 4: Customize button shows configuration options
+### Scenario 4: "Nastavení kvízu" shows configuration options
 **Given** I am on the landing page viewing a quiz pack
-**When** I click the "Customize" button on a quiz card
+**When** I choose "Nastavení kvízu" from the quiz card's menu
 **Then** I should be shown the quiz configuration options
 **And** I should see all setting options
 **And** I should see "Start Quiz" and "Skip" buttons
@@ -39,9 +39,9 @@ So that I can quickly begin a presentation without configuring settings
 **Given** I am viewing a quiz pack card
 **When** I look at the available actions
 **Then** the "Play Now" button should be visually prominent
-**And** the "Customize" button should be clearly labeled
-**And** both buttons should be easily accessible on desktop
-**And** both buttons should be easily accessible on mobile
+**And** the "Nastavení kvízu" menu option should be clearly labeled
+**And** both actions should be easily accessible on desktop
+**And** both actions should be easily accessible on mobile
 
 ### Scenario 6: Quick start works for all quiz packs
 **Given** there are multiple quiz packs on the landing page

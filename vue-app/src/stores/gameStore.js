@@ -13,6 +13,8 @@ export const useGameStore = defineStore('game', () => {
   const isInitialized = ref(false);
   const currentPackId = ref(null);
   const quizSettings = ref(null);
+  // Rozehraný kvíz: nastaví se při odchodu z presenteru (Esc), zruší novým startem.
+  const quizInProgress = ref(false);
 
   // Getters
   const currentQuiz = computed(() => localQuizData.value[currentPhotoIndex.value]);
@@ -88,9 +90,19 @@ export const useGameStore = defineStore('game', () => {
     answersRevealed.value = false;
   }
 
+  /** Odchod z běžícího kvízu zpět do knihovny — pozice zůstává zachovaná. */
+  function pauseQuiz() {
+    quizInProgress.value = true;
+  }
+
+  function isPackInProgress(packId) {
+    return quizInProgress.value && currentPackId.value === packId;
+  }
+
   function selectQuizPack(packId, settings = null) {
     currentPackId.value = packId;
     quizSettings.value = settings;
+    quizInProgress.value = false; // čerstvý start ruší předchozí rozehraný kvíz
 
     // Load quiz data through the pack library (catalog + saved manual edits),
     // so the presenter immediately plays edited questions.
@@ -163,6 +175,7 @@ export const useGameStore = defineStore('game', () => {
     isInitialized,
     currentPackId,
     quizSettings,
+    quizInProgress,
 
     // Getters
     currentQuiz,
@@ -180,5 +193,7 @@ export const useGameStore = defineStore('game', () => {
     toggleQuestions,
     revealAnswer,
     hideQuestions,
+    pauseQuiz,
+    isPackInProgress,
   };
 });

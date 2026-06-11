@@ -42,9 +42,30 @@ function enterFromFirstCard(buttonText, readySelector) {
   };
 }
 
+/** Vstup přes svislé menu (⋮) na první kartě — Nastavení kvízu / Upravit žijí v něm. */
+function enterFromFirstCardMenu(itemText, readySelector) {
+  return async page => {
+    await page.waitForSelector('[data-testid="quiz-card"]', { timeout: 10000 });
+    await page.evaluate(() => {
+      document.querySelector('[data-testid="quiz-card"] [data-testid="card-menu"]')?.click();
+    });
+    await page.waitForSelector('[data-testid="quiz-card"] [role="menuitem"]', { timeout: 10000 });
+    await page.evaluate(text => {
+      const card = document.querySelector('[data-testid="quiz-card"]');
+      [...card.querySelectorAll('[role="menuitem"]')]
+        .find(item => item.textContent.includes(text))
+        ?.click();
+    }, itemText);
+    await page.waitForSelector(readySelector, { timeout: 10000 });
+  };
+}
+
 const playFirstPack = enterFromFirstCard('Play Now', '[data-testid="photo-progress"]');
-const customizeFirstPack = enterFromFirstCard('Customize', '[data-testid="questions-per-photo"]');
-const editFirstPack = enterFromFirstCard('Upravit', '[data-testid="edit-menu"]');
+const customizeFirstPack = enterFromFirstCardMenu(
+  'Nastavení kvízu',
+  '[data-testid="questions-per-photo"]'
+);
+const editFirstPack = enterFromFirstCardMenu('Upravit', '[data-testid="edit-menu"]');
 
 /**
  * Jeden záběr: route, viewport, volitelný `setup` (akce po načtení routy,
@@ -67,8 +88,6 @@ const SHOT_LIST = [
     keys: [' ', 'a'],
   },
   { name: 'edit', path: '/', viewport: DESKTOP, fullPage: true, setup: editFirstPack },
-  { name: 'admin', path: '/admin', viewport: DESKTOP },
-  { name: 'team', path: '/team', viewport: MOBILE },
 ];
 
 // Po stisku klávesy nech doběhnout slide-in/reveal animace.

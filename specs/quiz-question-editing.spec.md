@@ -92,7 +92,7 @@ So that the quiz fits my family and my adjustments are kept for future sessions
 
 ## Technical Notes (guidance, not contract)
 
-- Route: `/edit/:quizId`, entered via an "✎ Upravit" button on the quiz card.
+- Route: `/edit/:quizId`, entered via the "Upravit" option in the quiz card's menu.
 - Persistence goes through the pack library layer: a Pinia store
   (`packLibraryStore`) backed by `libraryStorage` writing the localStorage key
   `quiz-library-v1`. Stored data holds **per-photo question overrides** —
