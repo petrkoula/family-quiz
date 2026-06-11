@@ -37,21 +37,8 @@ yarn dev
 - **Kvízy se objeví samy**: každá složka = karta s počtem fotek a otázek.
   Hrát jde okamžitě (Play Now) — fotky bez otázek zatím ukazují placeholder
   **„Doplň otázku"** (žádná odpověď není označená jako správná).
-- **Doplň otázky** do banky `vue-app/src/data/quizData.js` — záznam se páruje
-  podle jména souboru:
-
-  ```js
-  {
-    image: 'party1.jpg',
-    questions: [
-      { text: 'Kdo to je?', options: ['Babička', 'Děda', 'Soused', 'Pes'], correct: 0 },
-      // ... celkem 3 otázky
-    ],
-  },
-  ```
-
-- **Ulož, obnov stránku a klikni ↻ Reload na kartě** — placeholdery se nahradí
-  tvými otázkami. Už ručně napsané otázky reload nikdy nepřepíše.
+- **Doplň otázky** a klikni **↻ Reload** na kartě — placeholdery se nahradí
+  tvými otázkami; ručně napsané otázky reload nikdy nepřepíše.
 - **Hrej** — Rychlý (Play Now) nebo Vlastní (Customize), viz bod 5.
 
 > Stav knihovny se pamatuje (localStorage) — další otevření appky je okamžité,
