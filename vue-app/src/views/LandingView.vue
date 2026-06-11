@@ -13,7 +13,6 @@
         :key="pack.id"
         class="quiz-card"
         :style="{ borderColor: pack.color }"
-        @click="selectQuizPack(pack.id)"
       >
         <!-- Thumbnail -->
         <div class="card-thumbnail">
@@ -23,9 +22,6 @@
             loading="lazy"
             class="thumbnail-image"
           />
-          <div class="overlay" :style="{ background: `linear-gradient(135deg, ${pack.color}99, ${pack.color}dd)` }">
-            <span class="play-icon">▶</span>
-          </div>
         </div>
 
         <!-- Card Content -->
@@ -43,6 +39,22 @@
               <span class="icon">❓</span>
               {{ getMetadata(pack.id).questionCount }} otázek
             </span>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="card-actions">
+            <button
+              @click.stop="playNow(pack.id)"
+              class="btn btn-play-now"
+            >
+              ▶ Play Now
+            </button>
+            <button
+              @click.stop="customizeQuiz(pack.id)"
+              class="btn btn-customize"
+            >
+              ⚙ Customize
+            </button>
           </div>
         </div>
       </div>
@@ -89,7 +101,14 @@ function getMetadata(packId) {
   return getPackMetadata(packId);
 }
 
-function selectQuizPack(packId) {
+function playNow(packId) {
+  // Start quiz immediately with default settings
+  gameStore.selectQuizPack(packId);
+  router.push('/presenter');
+}
+
+function customizeQuiz(packId) {
+  // Navigate to customization screen
   gameStore.selectQuizPack(packId);
   router.push(`/customize/${packId}`);
 }
@@ -218,6 +237,50 @@ function selectQuizPack(packId) {
   font-size: 1.2rem;
 }
 
+.card-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.btn {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-play-now {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+}
+
+.btn-play-now:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+}
+
+.btn-customize {
+  background: white;
+  color: #667eea;
+  border: 2px solid #667eea;
+}
+
+.btn-customize:hover {
+  background: #f8f9fa;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
 /* Create Your Own Card */
 .create-card {
   border: 3px dashed #667eea;
@@ -285,6 +348,14 @@ function selectQuizPack(packId) {
 
   .card-thumbnail {
     height: 200px;
+  }
+
+  .card-actions {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
   }
 }
 </style>
