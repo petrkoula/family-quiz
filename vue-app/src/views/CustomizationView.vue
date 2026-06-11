@@ -1,26 +1,27 @@
 <template>
-  <div class="customization-container">
-    <div class="customization-card">
-      <header class="customization-header">
+  <div class="customize-page">
+    <n-card class="customize-card" :bordered="false">
+      <header class="customize-header">
         <h1 class="title">Nastavení kvízu</h1>
         <p class="subtitle">Přizpůsobte si kvíz podle vašich potřeb</p>
       </header>
 
-      <div class="settings-grid">
-        <!-- Timer Settings -->
-        <section class="setting-section">
-          <h2 class="section-title">⏱️ Question Timer / Časovač otázek</h2>
-          <div class="setting-control">
-            <label class="checkbox-label">
-              <input type="checkbox" v-model="settings.timerEnabled" class="checkbox" />
-              <span>Enable Timer / Povolit časovač</span>
-            </label>
+      <div class="settings">
+        <!-- Timer -->
+        <section class="group">
+          <h2 class="group-title">Časovač otázek</h2>
+          <div class="row">
+            <span class="row-label">Povolit časovač</span>
+            <n-switch
+              v-model:value="settings.timerEnabled"
+              aria-label="Enable Timer / Povolit časovač"
+            />
           </div>
-          <div v-if="settings.timerEnabled" class="setting-control">
-            <label class="label">Timer Duration / Délka časovače:</label>
+          <div v-if="settings.timerEnabled" class="row">
+            <span class="row-label">Délka časovače</span>
             <select
               v-model.number="settings.timerDuration"
-              class="select"
+              class="field-select"
               data-testid="timer-duration"
             >
               <option :value="30">30 sekund</option>
@@ -30,93 +31,90 @@
               <option :value="120">120 sekund</option>
             </select>
           </div>
-          <div v-if="!settings.timerEnabled" class="setting-control">
-            <p class="help-text">Timer Duration: No timer (disabled)</p>
-          </div>
         </section>
 
-        <!-- Questions Per Photo -->
-        <section class="setting-section">
-          <h2 class="section-title">❓ Questions Per Photo / Počet otázek na fotku</h2>
-          <div class="setting-control">
-            <label class="label">Questions per photo / Otázek na fotku:</label>
+        <!-- Questions per photo -->
+        <section class="group">
+          <h2 class="group-title">Otázky na fotku</h2>
+          <div class="row">
+            <span class="row-label">Počet otázek</span>
             <select
               v-model.number="settings.questionsPerPhoto"
-              class="select"
+              class="field-select"
               data-testid="questions-per-photo"
             >
               <option :value="1">1 otázka</option>
               <option :value="2">2 otázky</option>
-              <option :value="3">Všechny otázky (3) / All questions</option>
+              <option :value="3">Všechny (3)</option>
             </select>
           </div>
         </section>
 
-        <!-- Randomization -->
-        <section class="setting-section">
-          <h2 class="section-title">🔀 Order Settings / Náhodné pořadí</h2>
-          <div class="setting-control">
-            <label class="checkbox-label">
-              <input type="checkbox" v-model="settings.randomizePhotos" class="checkbox" />
-              <span>Randomize photo order / Zamíchat pořadí fotek</span>
-            </label>
+        <!-- Order -->
+        <section class="group">
+          <h2 class="group-title">Pořadí</h2>
+          <div class="row">
+            <span class="row-label">Zamíchat pořadí fotek</span>
+            <n-switch
+              v-model:value="settings.randomizePhotos"
+              aria-label="Randomize photo order / Zamíchat pořadí fotek"
+            />
           </div>
-          <div class="setting-control">
-            <label class="checkbox-label">
-              <input type="checkbox" v-model="settings.randomizeQuestions" class="checkbox" />
-              <span>Randomize question order / Zamíchat pořadí otázek</span>
-            </label>
+          <div class="row">
+            <span class="row-label">Zamíchat pořadí otázek</span>
+            <n-switch
+              v-model:value="settings.randomizeQuestions"
+              aria-label="Randomize question order / Zamíchat pořadí otázek"
+            />
           </div>
         </section>
 
         <!-- Summary -->
-        <section class="setting-section summary-section">
-          <h2 class="section-title">📊 Souhrn nastavení</h2>
-          <div class="summary-content">
+        <section class="group summary">
+          <h2 class="group-title">Souhrn</h2>
+          <dl class="summary-grid">
             <div class="summary-item">
-              <span class="summary-label">Časovač:</span>
-              <span class="summary-value" data-testid="summary-timer">
+              <dt>Časovač</dt>
+              <dd data-testid="summary-timer">
                 {{ settings.timerEnabled ? `${settings.timerDuration}s` : 'Vypnuto' }}
-              </span>
+              </dd>
             </div>
             <div class="summary-item">
-              <span class="summary-label">Otázek na fotku:</span>
-              <span class="summary-value">{{ settings.questionsPerPhoto }}</span>
+              <dt>Otázek na fotku</dt>
+              <dd>{{ settings.questionsPerPhoto }}</dd>
             </div>
             <div class="summary-item">
-              <span class="summary-label">Zamíchané fotky:</span>
-              <span class="summary-value">{{ settings.randomizePhotos ? 'Ano' : 'Ne' }}</span>
+              <dt>Zamíchané fotky</dt>
+              <dd>{{ settings.randomizePhotos ? 'Ano' : 'Ne' }}</dd>
             </div>
             <div class="summary-item">
-              <span class="summary-label">Zamíchané otázky:</span>
-              <span class="summary-value">{{ settings.randomizeQuestions ? 'Ano' : 'Ne' }}</span>
+              <dt>Zamíchané otázky</dt>
+              <dd>{{ settings.randomizeQuestions ? 'Ano' : 'Ne' }}</dd>
             </div>
             <div class="summary-item">
-              <span class="summary-label">Celkem fotek:</span>
-              <span class="summary-value">{{ totalPhotos }}</span>
+              <dt>Celkem fotek</dt>
+              <dd>{{ totalPhotos }}</dd>
             </div>
             <div class="summary-item">
-              <span class="summary-label">Celkem otázek:</span>
-              <span class="summary-value" data-testid="summary-total-questions">{{
-                totalQuestions
-              }}</span>
+              <dt>Celkem otázek</dt>
+              <dd data-testid="summary-total-questions">{{ totalQuestions }}</dd>
             </div>
-          </div>
+          </dl>
         </section>
       </div>
 
-      <!-- Action Buttons -->
       <div class="actions">
-        <button @click="startQuiz" class="btn btn-primary">Start Quiz</button>
-        <button @click="useDefaults" class="btn btn-secondary">Skip</button>
+        <n-button type="primary" size="large" @click="startQuiz">Start Quiz</n-button>
+        <n-button quaternary size="large" @click="useDefaults">Skip</n-button>
       </div>
-    </div>
+    </n-card>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import { NCard, NSwitch, NButton } from 'naive-ui';
 import { useGameStore } from '@/stores/gameStore';
 import { usePackLibraryStore } from '@/stores/packLibraryStore';
 
@@ -156,213 +154,147 @@ function useDefaults() {
 </script>
 
 <style scoped>
-.customization-container {
+.customize-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 2rem;
+  background: var(--canvas);
+  padding: 3rem 1.5rem;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 }
 
-.customization-card {
-  background: white;
-  border-radius: 16px;
-  padding: 2.5rem;
-  max-width: 900px;
+.customize-card {
+  max-width: 720px;
   width: 100%;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-soft);
 }
 
-.customization-header {
-  text-align: center;
-  margin-bottom: 2.5rem;
+.customize-header {
+  margin-bottom: 2rem;
 }
 
 .title {
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #2c3e50;
-  margin-bottom: 0.5rem;
+  font-size: 1.9rem;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.02em;
 }
 
 .subtitle {
-  font-size: 1.2rem;
-  color: #666;
+  margin-top: 0.35rem;
+  font-size: 1.05rem;
+  color: var(--ink-muted);
 }
 
-.settings-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  margin-bottom: 2.5rem;
+.settings {
+  display: flex;
+  flex-direction: column;
 }
 
-.setting-section {
-  background: #f8f9fa;
-  border-radius: 12px;
-  padding: 1.5rem;
-  border: 2px solid #e9ecef;
-  transition: border-color 0.3s ease;
+.group {
+  padding: 1.4rem 0;
+  border-top: 1px solid var(--hairline);
 }
 
-.setting-section:hover {
-  border-color: #667eea;
+.group:first-child {
+  border-top: none;
+  padding-top: 0;
 }
 
-.summary-section {
-  grid-column: 1 / -1;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  border-color: #667eea;
-}
-
-.section-title {
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: #2c3e50;
-  margin-bottom: 1rem;
-}
-
-.setting-control {
-  margin-bottom: 1rem;
-}
-
-.setting-control:last-child {
-  margin-bottom: 0;
-}
-
-.label {
-  display: block;
+.group-title {
+  font-size: 0.8rem;
   font-weight: 600;
-  color: #495057;
-  margin-bottom: 0.5rem;
-  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+  margin-bottom: 1rem;
 }
 
-.checkbox-label {
+.row {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  cursor: pointer;
-  font-size: 1.1rem;
-  color: #495057;
-  user-select: none;
-}
-
-.checkbox {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-}
-
-.select {
-  width: 100%;
-  padding: 0.75rem;
-  font-size: 1rem;
-  border: 2px solid #dee2e6;
-  border-radius: 8px;
-  background: white;
-  cursor: pointer;
-  transition: border-color 0.3s ease;
-}
-
-.select:hover,
-.select:focus {
-  border-color: #667eea;
-  outline: none;
-}
-
-.summary-content {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  justify-content: space-between;
   gap: 1rem;
+  min-height: 2.4rem;
+}
+
+.row + .row {
+  margin-top: 0.85rem;
+}
+
+.row-label {
+  font-size: 1.05rem;
+  color: var(--ink-soft);
+}
+
+.field-select {
+  appearance: none;
+  -webkit-appearance: none;
+  min-width: 160px;
+  padding: 0.55rem 2.2rem 0.55rem 0.9rem;
+  font-size: 1rem;
+  color: var(--ink);
+  background-color: #f1f3f6;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.field-select:hover {
+  background-color: #eceff3;
+}
+
+.field-select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* Summary */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.5rem 1.5rem;
 }
 
 .summary-item {
   display: flex;
+  align-items: baseline;
   justify-content: space-between;
-  padding: 0.75rem;
-  background: white;
-  border-radius: 8px;
-  border: 1px solid #dee2e6;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
 }
 
-.summary-label {
+.summary-item dt {
+  font-size: 0.95rem;
+  color: var(--ink-muted);
+}
+
+.summary-item dd {
+  font-size: 1.05rem;
   font-weight: 600;
-  color: #495057;
-}
-
-.summary-value {
-  font-weight: bold;
-  color: #667eea;
+  color: var(--ink);
 }
 
 .actions {
   display: flex;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
 }
 
-.btn {
-  padding: 1rem 2.5rem;
-  font-size: 1.2rem;
-  font-weight: bold;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.actions :deep(.n-button) {
+  flex: 1;
 }
 
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-}
-
-.btn-primary:hover {
-  background: linear-gradient(135deg, #5568d3 0%, #63398b 100%);
-}
-
-.btn-secondary {
-  background: #6c757d;
-  color: white;
-}
-
-.btn-secondary:hover {
-  background: #5a6268;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .customization-card {
-    padding: 1.5rem;
-  }
-
-  .title {
-    font-size: 2rem;
-  }
-
-  .settings-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .summary-content {
-    grid-template-columns: 1fr;
-  }
-
-  .actions {
-    flex-direction: column;
-  }
-
-  .btn {
-    width: 100%;
+@media (max-width: 560px) {
+  .customize-page {
+    padding: 1.5rem 1rem;
   }
 }
 </style>

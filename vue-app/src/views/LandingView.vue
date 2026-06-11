@@ -1,98 +1,75 @@
 <template>
-  <div class="landing-container">
+  <div class="landing">
     <!-- Header -->
     <header class="landing-header">
       <h1 class="landing-title">Knihovna Kvízů</h1>
       <p class="landing-subtitle">Vyberte si kvíz a zahrajte si s rodinou</p>
-      <div class="library-toolbar">
-        <button class="btn-reload-library" data-testid="reload-library" @click="reloadLibrary">
+      <div class="toolbar">
+        <n-button tertiary round data-testid="reload-library" @click="reloadLibrary">
           ⟳ Obnovit knihovnu
-        </button>
-        <p
-          v-if="libraryReloadResult"
-          class="library-reload-result"
-          data-testid="library-reload-result"
-        >
+        </n-button>
+        <p v-if="libraryReloadResult" class="muted" data-testid="library-reload-result">
           {{ libraryReloadResult }}
         </p>
       </div>
     </header>
 
     <!-- Quiz Library Grid -->
-    <div class="quiz-library">
-      <div
+    <div class="grid">
+      <n-card
         v-for="pack in library.packs"
         :key="pack.id"
         class="quiz-card"
         data-testid="quiz-card"
-        :style="{ borderColor: pack.color }"
+        :bordered="false"
       >
-        <!-- Thumbnail -->
-        <div class="card-thumbnail">
-          <img
-            :src="getImageUrl(pack.thumbnail)"
-            :alt="pack.title"
-            loading="lazy"
-            class="thumbnail-image"
-          />
+        <template #cover>
+          <div class="thumb">
+            <img :src="getImageUrl(pack.thumbnail)" :alt="pack.title" loading="lazy" />
+          </div>
+        </template>
+
+        <h2 class="card-title">{{ pack.title }}</h2>
+        <p class="card-desc">{{ pack.description }}</p>
+
+        <div class="meta">
+          <span>{{ pack.photos.length }} fotek</span>
+          <span class="meta-dot">·</span>
+          <span>{{ questionCount(pack) }} otázek</span>
         </div>
 
-        <!-- Card Content -->
-        <div class="card-content">
-          <h2 class="card-title">{{ pack.title }}</h2>
-          <p class="card-description">{{ pack.description }}</p>
-
-          <!-- Metadata -->
-          <div class="card-metadata">
-            <span class="metadata-item">
-              <span class="icon">🖼️</span>
-              {{ pack.photos.length }} fotek
-            </span>
-            <span class="metadata-item">
-              <span class="icon">❓</span>
-              {{ questionCount(pack) }} otázek
-            </span>
-          </div>
-
-          <!-- Action Buttons -->
-          <div class="card-actions">
-            <button @click.stop="playNow(pack.id)" class="btn btn-play-now">▶ Play Now</button>
-            <button @click.stop="customizeQuiz(pack.id)" class="btn btn-customize">
-              ⚙ Customize
-            </button>
-            <button @click.stop="editQuiz(pack.id)" class="btn btn-edit">✎ Upravit</button>
-          </div>
-          <button
-            @click.stop="reloadPack(pack.id)"
-            class="btn btn-reload"
-            data-testid="reload-pack"
-          >
-            ↻ Reload
-          </button>
-          <p v-if="reloadResults[pack.id]" class="reload-result" data-testid="reload-result">
-            {{ reloadResults[pack.id] }}
-          </p>
+        <div class="card-actions">
+          <n-button type="primary" @click="playNow(pack.id)">▶ Play Now</n-button>
+          <n-button tertiary @click="customizeQuiz(pack.id)">Customize</n-button>
+          <n-button tertiary @click="editQuiz(pack.id)">Upravit</n-button>
         </div>
-      </div>
+
+        <n-button text class="reload-link" data-testid="reload-pack" @click="reloadPack(pack.id)">
+          ↻ Reload
+        </n-button>
+        <p v-if="reloadResults[pack.id]" class="muted reload-result" data-testid="reload-result">
+          {{ reloadResults[pack.id] }}
+        </p>
+      </n-card>
 
       <!-- Create Your Own Card -->
-      <div class="quiz-card create-card">
-        <div class="card-thumbnail create-thumbnail">
-          <div class="create-icon">✨</div>
-        </div>
-        <div class="card-content">
-          <h2 class="card-title">Vytvořte vlastní</h2>
-          <p class="card-description">Nahrajte své fotky a vytvořte si vlastní rodinný kvíz</p>
-          <a
-            href="https://github.com/petrkoula/family-quiz"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="create-link"
-          >
-            Zjistit více →
-          </a>
-        </div>
-      </div>
+      <n-card class="quiz-card create-card" :bordered="false">
+        <template #cover>
+          <div class="thumb create-thumb">
+            <span class="create-icon">✨</span>
+          </div>
+        </template>
+        <h2 class="card-title">Vytvořte vlastní</h2>
+        <p class="card-desc">Nahrajte své fotky a vytvořte si vlastní rodinný kvíz</p>
+        <a
+          href="https://github.com/petrkoula/family-quiz"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="create-link"
+        >
+          Zjistit více →
+        </a>
+      </n-card>
     </div>
 
     <!-- Footer -->
@@ -105,6 +82,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { NCard, NButton } from 'naive-ui';
 import { useGameStore } from '@/stores/gameStore';
 import { usePackLibraryStore } from '@/stores/packLibraryStore';
 import { getImageUrl } from '@/data/quizData';
@@ -170,11 +148,10 @@ function editQuiz(packId) {
 </script>
 
 <style scoped>
-.landing-container {
+.landing {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 2rem;
-  color: white;
+  background: var(--canvas);
+  padding: 3.5rem 2rem 4rem;
 }
 
 .landing-header {
@@ -183,18 +160,19 @@ function editQuiz(packId) {
 }
 
 .landing-title {
-  font-size: 3.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  font-size: 2.6rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--ink);
 }
 
 .landing-subtitle {
-  font-size: 1.5rem;
-  opacity: 0.9;
+  margin-top: 0.6rem;
+  font-size: 1.15rem;
+  color: var(--ink-muted);
 }
 
-.library-toolbar {
+.toolbar {
   margin-top: 1.5rem;
   display: flex;
   flex-direction: column;
@@ -202,286 +180,146 @@ function editQuiz(packId) {
   gap: 0.5rem;
 }
 
-.btn-reload-library {
-  padding: 0.6rem 1.4rem;
-  font-size: 1rem;
-  font-weight: bold;
-  border: 2px solid rgba(255, 255, 255, 0.7);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.15);
-  color: white;
-  cursor: pointer;
-  transition: all 0.2s ease;
+.muted {
+  font-size: 0.95rem;
+  color: var(--ink-muted);
 }
 
-.btn-reload-library:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.library-reload-result {
-  font-size: 1rem;
-  opacity: 0.9;
-}
-
-.quiz-library {
+.grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 2rem;
-  max-width: 1400px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.75rem;
+  max-width: 1280px;
   margin: 0 auto;
 }
 
 .quiz-card {
-  background: white;
-  border-radius: 12px;
   overflow: hidden;
-  cursor: pointer;
+  box-shadow: var(--shadow-soft);
   transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border: 3px solid transparent;
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .quiz-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px);
+  box-shadow:
+    0 4px 10px rgba(15, 23, 42, 0.06),
+    0 18px 40px rgba(15, 23, 42, 0.1);
 }
 
-.card-thumbnail {
-  position: relative;
-  height: 250px;
+.thumb {
+  height: 200px;
   overflow: hidden;
 }
 
-.thumbnail-image {
+.thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  display: block;
+  transition: transform 0.4s ease;
 }
 
-.quiz-card:hover .thumbnail-image {
-  transform: scale(1.1);
-}
-
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.quiz-card:hover .overlay {
-  opacity: 1;
-}
-
-.play-icon {
-  font-size: 4rem;
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.card-content {
-  padding: 1.5rem;
-  color: #333;
+.quiz-card:hover .thumb img {
+  transform: scale(1.05);
 }
 
 .card-title {
-  font-size: 1.8rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  color: #2c3e50;
+  font-size: 1.35rem;
+  font-weight: 650;
+  color: var(--ink);
+  letter-spacing: -0.01em;
 }
 
-.card-description {
-  font-size: 1.1rem;
-  color: #666;
-  margin-bottom: 1rem;
-}
-
-.card-metadata {
-  display: flex;
-  gap: 1.5rem;
+.card-desc {
+  margin-top: 0.4rem;
   font-size: 1rem;
-  color: #555;
+  line-height: 1.5;
+  color: var(--ink-soft);
 }
 
-.metadata-item {
+.meta {
+  margin-top: 0.9rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--ink-muted);
 }
 
-.icon {
-  font-size: 1.2rem;
+.meta-dot {
+  opacity: 0.6;
 }
 
 .card-actions {
+  margin-top: 1.25rem;
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-
-.btn {
-  flex: 1;
-  padding: 0.75rem 1.5rem;
-  font-size: 1.1rem;
-  font-weight: bold;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   gap: 0.5rem;
 }
 
-.btn-reload {
-  width: 100%;
-  margin-top: 0.75rem;
-  background: white;
-  color: #555;
-  border: 2px solid #cbd5e0;
+.card-actions :deep(.n-button) {
+  flex: 1 1 auto;
 }
 
-.btn-reload:hover {
-  border-color: #667eea;
-  color: #667eea;
+.reload-link {
+  margin-top: 0.9rem;
+  font-size: 0.9rem;
 }
 
 .reload-result {
   margin-top: 0.5rem;
-  font-size: 0.95rem;
-  color: #555;
   text-align: center;
 }
 
-.btn-play-now {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
-}
-
-.btn-play-now:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
-}
-
-.btn-customize {
-  background: white;
-  color: #667eea;
-  border: 2px solid #667eea;
-}
-
-.btn-customize:hover {
-  background: #f8f9fa;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
-}
-
-.btn-edit {
-  background: white;
-  color: #764ba2;
-  border: 2px solid #764ba2;
-}
-
-.btn-edit:hover {
-  background: #f8f9fa;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(118, 75, 162, 0.2);
-}
-
-/* Create Your Own Card */
+/* Create-your-own card */
 .create-card {
-  border: 3px dashed #667eea;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border: 1px dashed var(--hairline) !important;
+  background: transparent;
 }
 
-.create-card:hover {
-  border-color: #764ba2;
-}
-
-.create-thumbnail {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.create-thumb {
+  background: var(--accent-soft);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .create-icon {
-  font-size: 6rem;
-  animation: sparkle 2s ease-in-out infinite;
-}
-
-@keyframes sparkle {
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.7;
-    transform: scale(1.1);
-  }
+  font-size: 3.5rem;
 }
 
 .create-link {
   display: inline-block;
-  margin-top: 1rem;
-  padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  margin-top: 1.1rem;
+  color: var(--accent);
+  font-weight: 600;
   text-decoration: none;
-  border-radius: 6px;
-  font-weight: bold;
-  transition: transform 0.2s ease;
 }
 
 .create-link:hover {
-  transform: scale(1.05);
+  text-decoration: underline;
 }
 
 .landing-footer {
   text-align: center;
-  margin-top: 4rem;
-  opacity: 0.8;
-  font-size: 1.1rem;
+  margin-top: 3.5rem;
+  color: var(--ink-muted);
+  font-size: 0.95rem;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 560px) {
+  .landing {
+    padding: 2rem 1rem 3rem;
+  }
+
   .landing-title {
-    font-size: 2.5rem;
-  }
-
-  .landing-subtitle {
-    font-size: 1.2rem;
-  }
-
-  .quiz-library {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .card-thumbnail {
-    height: 200px;
+    font-size: 2rem;
   }
 
   .card-actions {
     flex-direction: column;
-  }
-
-  .btn {
-    width: 100%;
   }
 }
 </style>

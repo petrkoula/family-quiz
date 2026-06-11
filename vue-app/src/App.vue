@@ -1,12 +1,16 @@
 <template>
-  <div id="app">
-    <RouterView />
-  </div>
+  <n-config-provider :theme-overrides="themeOverrides">
+    <div id="app">
+      <RouterView />
+    </div>
+  </n-config-provider>
 </template>
 
 <script setup>
 import { onMounted } from 'vue';
+import { NConfigProvider } from 'naive-ui';
 import { useGameStore } from '@/stores/gameStore';
+import { themeOverrides } from '@/theme';
 
 const gameStore = useGameStore();
 

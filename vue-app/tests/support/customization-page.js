@@ -47,7 +47,10 @@ class CustomizationPage {
   // --- Co uživatel vidí ------------------------------------------------------
 
   timerEnabled() {
-    return this.view.getByRole('checkbox', { name: /Enable Timer/i }).checked;
+    return (
+      this.view.getByRole('switch', { name: /Enable Timer/i }).getAttribute('aria-checked') ===
+      'true'
+    );
   }
 
   hasDurationSelect() {
@@ -73,7 +76,7 @@ class CustomizationPage {
   // --- Co uživatel dělá ------------------------------------------------------
 
   async enableTimer() {
-    await fireEvent.click(this.view.getByRole('checkbox', { name: /Enable Timer/i }));
+    await fireEvent.click(this.view.getByRole('switch', { name: /Enable Timer/i }));
   }
 
   async setTimerDuration(seconds) {
@@ -85,7 +88,7 @@ class CustomizationPage {
   }
 
   async toggleRandomizePhotos() {
-    await fireEvent.click(this.view.getByRole('checkbox', { name: /Randomize photo order/i }));
+    await fireEvent.click(this.view.getByRole('switch', { name: /Randomize photo order/i }));
   }
 
   async startQuiz() {

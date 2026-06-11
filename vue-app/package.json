@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build", 
+    "build": "vite build",
     "preview": "vite preview",
     "test": "node scripts/vitest-run-suite.mjs",
     "test:unit": "vitest run",
@@ -14,6 +14,7 @@
     "format:check": "prettier --check \"src/**/*.{js,vue,json,css}\""
   },
   "dependencies": {
+    "naive-ui": "^2.44.1",
     "pinia": "^2.1.7",
     "vue": "^3.4.0",
     "vue-router": "^4.2.5"
