@@ -12,6 +12,7 @@ export const useGameStore = defineStore('game', () => {
   const localQuizData = ref([]);
   const isInitialized = ref(false);
   const currentPackId = ref(null);
+  const quizSettings = ref(null);
 
   // Getters
   const currentQuiz = computed(() => localQuizData.value[currentPhotoIndex.value]);
@@ -87,9 +88,19 @@ export const useGameStore = defineStore('game', () => {
     answersRevealed.value = false;
   }
 
-  function selectQuizPack(packId) {
+  function selectQuizPack(packId, settings = null) {
     currentPackId.value = packId;
-    localQuizData.value = getQuizDataForPack(packId);
+    quizSettings.value = settings;
+
+    // Load quiz data
+    let quizData = getQuizDataForPack(packId);
+
+    // Apply settings if provided
+    if (settings) {
+      quizData = applyQuizSettings(quizData, settings);
+    }
+
+    localQuizData.value = quizData;
     isInitialized.value = true;
 
     // Reset navigation state
@@ -101,6 +112,46 @@ export const useGameStore = defineStore('game', () => {
     console.log(`Quiz pack "${packId}" loaded:`, localQuizData.value.length, 'photos');
   }
 
+  function applyQuizSettings(quizData, settings) {
+    let data = JSON.parse(JSON.stringify(quizData)); // Deep clone
+
+    // Randomize photos if enabled
+    if (settings.randomizePhotos) {
+      data = shuffleArray(data);
+    }
+
+    // Process each photo
+    data = data.map(photo => {
+      let questions = [...photo.questions];
+
+      // Randomize questions if enabled
+      if (settings.randomizeQuestions) {
+        questions = shuffleArray(questions);
+      }
+
+      // Limit questions per photo
+      if (settings.questionsPerPhoto < questions.length) {
+        questions = questions.slice(0, settings.questionsPerPhoto);
+      }
+
+      return {
+        ...photo,
+        questions,
+      };
+    });
+
+    return data;
+  }
+
+  function shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  }
+
   return {
     // State
     currentPhotoIndex,
@@ -110,6 +161,7 @@ export const useGameStore = defineStore('game', () => {
     localQuizData,
     isInitialized,
     currentPackId,
+    quizSettings,
 
     // Getters
     currentQuiz,

@@ -9,6 +9,11 @@ const router = createRouter({
       component: () => import('@/views/LandingView.vue'),
     },
     {
+      path: '/customize/:quizId',
+      name: 'customize',
+      component: () => import('@/views/CustomizationView.vue'),
+    },
+    {
       path: '/presenter',
       name: 'presenter',
       component: () => import('@/views/PresenterView.vue'),

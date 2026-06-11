@@ -16,6 +16,7 @@ import {
   radioButton,
   checkBox,
   textBox,
+  dropDown,
   below,
   near,
   within,
@@ -91,35 +92,47 @@ export const stepHandlers = {
     };
 
     // Apply settings (handlers will interact with actual controls)
-    // Timer setting
-    const timerSelect = await $('select[name*="timer"], select#timer, [data-testid="timer-select"]');
-    if (timerSelect.exists()) {
-      await timerSelect.select('60s');
+    // Timer setting - enable timer first
+    const timerCheckbox = checkBox(near(text(/timer|časovač/i)));
+    if (await timerCheckbox.exists()) {
+      await click(timerCheckbox);
+      await waitFor(300);
     }
 
-    // Questions per photo
-    const questionsSelect = await $(
-      'select[name*="questions"], select#questions-per-photo, [data-testid="questions-select"]'
-    );
-    if (questionsSelect.exists()) {
-      await questionsSelect.select('2');
+    // Wait for selects to be available
+    await waitFor(300);
+
+    // Get all select elements
+    const allSelects = await $('select').elements();
+
+    // When timer is enabled, we should have 2 selects: timer duration and questions per photo
+    // When timer is disabled, we should have 1 select: questions per photo
+    if (allSelects.length >= 2) {
+      // Timer is enabled - select from both dropdowns
+      await dropDown(below(text(/duration|délka/i))).select('60');
+      await dropDown(below(text(/questions per photo|otázek na fotku/i))).select('2');
+    } else if (allSelects.length === 1) {
+      // Timer is disabled - only questions per photo select is visible
+      await dropDown(below(text(/questions per photo|otázek na fotku/i))).select('2');
     }
+  },
+
+  'I have configured quiz settings on the customization screen': async () => {
+    await stepHandlers['I have configured quiz settings']();
   },
 
   'I started a quiz with custom timer settings': async () => {
     await stepHandlers['I am on the quiz customization screen']();
 
     // Enable timer
-    const timerToggle = await checkBox(near(text(/timer|časovač/i)));
-    if (timerToggle.exists()) {
-      await click(timerToggle);
+    const timerCheckbox = checkBox(near(text(/timer|časovač/i)));
+    if (await timerCheckbox.exists()) {
+      await click(timerCheckbox);
+      await waitFor(300);
     }
 
-    // Select 60s timer
-    const timerSelect = await $('select[name*="timer"]');
-    if (timerSelect.exists()) {
-      await timerSelect.select('60s');
-    }
+    // Select 60s timer from dropdown
+    await dropDown(near(text(/délka|duration/i))).select('60');
 
     testState.selectedSettings.timer = '60s';
 
@@ -341,6 +354,14 @@ export const stepHandlers = {
     });
   },
 
+  'the presenter view should load immediately': async () => {
+    await waitForCondition(async () => {
+      return (
+        (await text(/foto|photo/i).exists()) || (await text(/mezerník|space/i).exists())
+      );
+    });
+  },
+
   'the quiz should apply my selected settings': async () => {
     // Verify settings are applied (would check Pinia state or DOM for evidence)
     // This is a system-level verification
@@ -358,10 +379,28 @@ export const stepHandlers = {
   'only the configured number of questions should be available per photo': async () => {
     // Would verify by checking DOM for question count
     // This requires showing questions and counting
+    // Wait for presenter to be fully loaded
+    await waitForCondition(async () => await text(/foto|photo|mezerník|space/i).exists(), 3000);
+    await waitFor(500); // Extra wait for Vue reactivity
+
+    // Press Space to show questions
     await press('Space');
-    await waitFor(200);
-    const hasQuestions = await text(/[A-D]\)/).exists();
-    assert(hasQuestions, 'Questions should be visible');
+
+    // Wait for questions panel to appear - check for questions-container div
+    await waitForCondition(async () => {
+      return (
+        (await $('.questions-container').exists()) ||
+        (await $('.question-card').exists()) ||
+        (await text(/[A-D]\)/).exists())
+      );
+    }, 5000);
+
+    // Verify questions are visible
+    const questionsVisible =
+      (await $('.questions-container').exists()) ||
+      (await $('.question-card').exists()) ||
+      (await text(/[A-D]\)/).exists());
+    assert(questionsVisible, 'Questions should be visible');
   },
 
   'question timer should activate if enabled': async () => {

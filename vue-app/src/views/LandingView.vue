@@ -91,7 +91,7 @@ function getMetadata(packId) {
 
 function selectQuizPack(packId) {
   gameStore.selectQuizPack(packId);
-  router.push('/presenter');
+  router.push(`/customize/${packId}`);
 }
 </script>
 
