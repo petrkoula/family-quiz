@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { quizData } from '@/data/quizData';
+import { getQuizDataForPack } from '@/data/quizPacks';
 
 export const useGameStore = defineStore('game', () => {
   // State
@@ -10,6 +11,7 @@ export const useGameStore = defineStore('game', () => {
   const answersRevealed = ref(false);
   const localQuizData = ref([]);
   const isInitialized = ref(false);
+  const currentPackId = ref(null);
 
   // Getters
   const currentQuiz = computed(() => localQuizData.value[currentPhotoIndex.value]);
@@ -85,6 +87,20 @@ export const useGameStore = defineStore('game', () => {
     answersRevealed.value = false;
   }
 
+  function selectQuizPack(packId) {
+    currentPackId.value = packId;
+    localQuizData.value = getQuizDataForPack(packId);
+    isInitialized.value = true;
+
+    // Reset navigation state
+    currentPhotoIndex.value = 0;
+    currentQuestionIndex.value = 0;
+    questionsVisible.value = false;
+    answersRevealed.value = false;
+
+    console.log(`Quiz pack "${packId}" loaded:`, localQuizData.value.length, 'photos');
+  }
+
   return {
     // State
     currentPhotoIndex,
@@ -93,6 +109,7 @@ export const useGameStore = defineStore('game', () => {
     answersRevealed,
     localQuizData,
     isInitialized,
+    currentPackId,
 
     // Getters
     currentQuiz,
@@ -102,6 +119,7 @@ export const useGameStore = defineStore('game', () => {
 
     // Actions
     initializeQuizData,
+    selectQuizPack,
     nextPhoto,
     previousPhoto,
     nextQuestion,

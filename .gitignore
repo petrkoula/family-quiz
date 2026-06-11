@@ -13,6 +13,6 @@ vue-app/tests/screenshots/
 .taiko/
 
 # Workflow artifacts (keep structure, ignore temp files)
-.ub-workflows/specs/*.draft.md
 .ub-workflows/tmp/
 .ub-workflows/.cache/
+images
