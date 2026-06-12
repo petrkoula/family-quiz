@@ -14,6 +14,7 @@ import {
   setPackCatalogSource,
   resetPhotoCatalogSource,
 } from '@/data/photoCatalog';
+import { setLibraryBackup, resetLibraryStorage } from '@/data/libraryStorage';
 import { quizPacks } from '@/data/quizPacks';
 import { useGameStore } from '@/stores/gameStore';
 import { usePackLibraryStore } from '@/stores/packLibraryStore';
@@ -37,14 +38,18 @@ function makeRouter() {
  * @param {{
  *   catalog?: (packId: string, currentImages: string[]) => string[],
  *   folders?: () => Array<{id: string, photos: string[]}> | null,
+ *   backup?: {load: () => any, save: (state: any) => void},
  * }} [opts]
  *   `catalog` = zdroj fotek jednoho packu (per-card reload),
- *   `folders` = zdroj seznamu složek (refresh celé knihovny).
+ *   `folders` = zdroj seznamu složek (refresh celé knihovny),
+ *   `backup` = fake záloha knihovny „vedle složek" (viz library-disk-backup.spec.md).
  */
-export async function renderLandingForReload({ catalog, folders } = {}) {
+export async function renderLandingForReload({ catalog, folders, backup } = {}) {
   resetPhotoCatalogSource();
+  resetLibraryStorage();
   if (catalog) setPhotoCatalogSource(catalog);
   if (folders) setPackCatalogSource(folders);
+  if (backup) setLibraryBackup(backup);
 
   const pinia = createPinia();
   setActivePinia(pinia);
@@ -58,6 +63,7 @@ export async function renderLandingForReload({ catalog, folders } = {}) {
 
 export function resetCatalog() {
   resetPhotoCatalogSource();
+  resetLibraryStorage(); // vrátí výchozí úložiště i zálohu knihovny
   localStorage.clear(); // zapamatovaný stav knihovny nesmí prosakovat mezi testy
 }
 

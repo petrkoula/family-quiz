@@ -2,7 +2,7 @@
  * Acceptance test: Landing page (knihovna kvízů).
  *
  * Kontrakt: specs/landing-page.spec.md – stránka ukáže knihovnu karet kvízů
- * s metadaty, „Vytvořte vlastní" sekcí, a z karty jde kvíz spustit (Play Now)
+ * s metadaty, „Vytvořte vlastní" sekcí, a z karty jde kvíz spustit (Spustit)
  * nebo přizpůsobit („Nastavení kvízu" v menu karty).
  *
  * Vrstva: jsdom (chování komponenty + Pinia + vue-router), selektory v
@@ -33,12 +33,12 @@ describe('Landing page', () => {
     }
   });
 
-  it('na každé kartě nabídne Play Now i menu s Nastavením kvízu', async () => {
+  it('na každé kartě nabídne Spustit i menu s Nastavením kvízu', async () => {
     const page = await renderLanding();
 
     for (const pack of quizPacks) {
       const card = page.card(pack);
-      expect(card.getByRole('button', { name: /Play Now/i })).toBeInTheDocument();
+      expect(card.getByRole('button', { name: /Spustit/i })).toBeInTheDocument();
       await page.openCardMenu(pack);
       expect(card.getByRole('menuitem', { name: /Nastavení kvízu/i })).toBeInTheDocument();
       expect(card.getByRole('menuitem', { name: /Upravit/ })).toBeInTheDocument();
@@ -51,7 +51,7 @@ describe('Landing page', () => {
     expect(page.hasCreateYourOwn()).toBe(true);
   });
 
-  it('Play Now spustí prezentaci vybraného kvízu', async () => {
+  it('Spustit spustí prezentaci vybraného kvízu', async () => {
     const page = await renderLanding();
 
     await page.playNow(quizPacks[0]);

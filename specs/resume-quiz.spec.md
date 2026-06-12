@@ -6,7 +6,7 @@ I want to leave a running quiz back to the library and resume it later
 So that an interrupted game night can continue right where it left off
 
 This builds on:
-- `quick-start-quiz.spec.md` — how a quiz starts from a card (Play Now, defaults)
+- `quick-start-quiz.spec.md` — how a quiz starts from a card (Spustit, defaults)
 - `landing-page.spec.md` — the quiz library cards
 
 ## Acceptance Criteria
@@ -21,8 +21,8 @@ This builds on:
 ### Scenario 2: In-progress quiz card offers "Pokračovat"
 **Given** a quiz is in progress
 **When** I view the library
-**Then** that quiz's card should show a "Pokračovat" button instead of "Play Now"
-**And** every other card should still show "Play Now"
+**Then** that quiz's card should show a "Pokračovat" button instead of "Spustit"
+**And** every other card should still show "Spustit"
 
 ### Scenario 3: "Pokračovat" resumes at the same spot
 **Given** a quiz was left in progress on a later photo
@@ -38,7 +38,7 @@ This builds on:
 
 ### Scenario 5: A fresh start clears previous progress
 **Given** a quiz is in progress
-**When** I start a quiz with "Play Now"
+**When** I start a quiz with "Spustit"
 **Then** the quiz should start from the first photo
 **And** no quiz should be marked as in progress anymore
 
@@ -46,4 +46,4 @@ This builds on:
 - Esc keeps its cascade in the presenter: help overlay closes first, then open
   questions hide, then fullscreen exits, and only then Esc leaves to the library.
 - Position (photo/question index) lives in the game store; resume must not
-  reset it — only a fresh `selectQuizPack` (Play Now / Start Quiz) does.
+  reset it — only a fresh `selectQuizPack` (Spustit / Start Quiz) does.

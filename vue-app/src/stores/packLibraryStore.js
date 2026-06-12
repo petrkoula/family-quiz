@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { quizData } from '@/data/quizData';
 import { listPhotos, listPacks } from '@/data/photoCatalog';
-import { loadLibrary, saveLibrary } from '@/data/libraryStorage';
+import { loadLibrary, saveLibrary, loadLibraryBackup } from '@/data/libraryStorage';
 import { getPackCatalog } from '@/data/packCatalog';
 
 export const QUESTION_LIMITS = {
@@ -161,6 +161,14 @@ export const usePackLibraryStore = defineStore('packLibrary', () => {
   async function ensureInitialized() {
     if (initialized.value) return;
     initialized.value = true;
+    // Ztracená paměť prohlížeče: nejdřív záloha vedle složek; složky samotné
+    // se promítnou až explicitním obnovením (specs/library-disk-backup.spec.md).
+    const backedUp = await loadLibraryBackup();
+    if (Array.isArray(backedUp?.packs)) {
+      packs.value = backedUp.packs;
+      persist();
+      return;
+    }
     await reloadLibrary();
   }
 

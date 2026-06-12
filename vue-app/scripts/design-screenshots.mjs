@@ -60,7 +60,7 @@ function enterFromFirstCardMenu(itemText, readySelector) {
   };
 }
 
-const playFirstPack = enterFromFirstCard('Play Now', '[data-testid="photo-progress"]');
+const playFirstPack = enterFromFirstCard('Spustit', '[data-testid="photo-progress"]');
 const customizeFirstPack = enterFromFirstCardMenu(
   'Nastavení kvízu',
   '[data-testid="questions-per-photo"]'

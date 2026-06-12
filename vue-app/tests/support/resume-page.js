@@ -61,7 +61,7 @@ class ResumeFlow {
   }
 
   playNowButton(pack) {
-    return this.card(pack).queryByRole('button', { name: /Play Now/i });
+    return this.card(pack).queryByRole('button', { name: /Spustit/i });
   }
 
   photoProgress() {
@@ -75,7 +75,7 @@ class ResumeFlow {
   // --- Co uživatel dělá ------------------------------------------------------
 
   async playNow(pack) {
-    await fireEvent.click(this.card(pack).getByRole('button', { name: /Play Now/i }));
+    await fireEvent.click(this.card(pack).getByRole('button', { name: /Spustit/i }));
     await flushPromises();
   }
 

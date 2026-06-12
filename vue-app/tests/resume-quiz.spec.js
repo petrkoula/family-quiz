@@ -3,7 +3,7 @@
  *
  * Kontrakt: specs/resume-quiz.spec.md – Esc opustí běžící kvíz zpět do
  * knihovny, karta rozehraného kvízu nabídne „Pokračovat" a návrat pokračuje
- * na stejné fotce. Čerstvý start (Play Now) rozehraný stav ruší.
+ * na stejné fotce. Čerstvý start (Spustit) rozehraný stav ruší.
  *
  * Vrstva: jsdom (Landing ↔ Presenter přes skutečný router), selektory v
  * tests/support/resume-page.js. Viz TESTING.md.
@@ -28,7 +28,7 @@ describe('Resume quiz', () => {
   });
 
   // Scénář 2
-  it('karta rozehraného kvízu ukáže „Pokračovat", ostatní dál „Play Now"', async () => {
+  it('karta rozehraného kvízu ukáže „Pokračovat", ostatní dál „Spustit"', async () => {
     const app = await renderApp();
 
     await app.playNow(quizPacks[0]);
@@ -71,7 +71,7 @@ describe('Resume quiz', () => {
   });
 
   // Scénář 5
-  it('čerstvý start přes Play Now zruší předchozí rozehraný kvíz', async () => {
+  it('čerstvý start přes Spustit zruší předchozí rozehraný kvíz', async () => {
     const app = await renderApp();
 
     await app.playNow(quizPacks[0]);

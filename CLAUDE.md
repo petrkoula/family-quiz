@@ -154,6 +154,13 @@ The folder structure IS the library (see `specs/quiz-library-sync.spec.md` and
   and changes **only on explicit reload**: per-card ↻ Reload syncs one pack's
   photos; „Obnovit knihovnu" full-syncs the pack list and all photos. First
   visit (no remembered state) populates from current folders.
+- **Disk backup** (see `specs/library-disk-backup.spec.md`): every library save
+  also mirrors fire-and-forget to `images/library.json` beside the pack folders
+  via `GET`/`PUT /__catalog/library` (dev server). localStorage stays primary;
+  the backup is read only when the browser has no remembered state (restore),
+  and quietly no-ops where the endpoints don't exist (production).
+  `images/library.json` is the one git-tracked file in `images/` (photos stay
+  ignored), so library state is versioned through commit history.
 - **Questions**: `quizData.js` acts as a question bank matched by photo
   filename; photos without known questions get placeholder questions (no
   correct answer) until an author fills them in.
@@ -175,12 +182,13 @@ Specs in `specs/*.spec.md` are the contracts; each implemented scenario maps to 
 editable `*.spec.js` test:
 - `tests/presenter.spec.js` — photo/question navigation, reveal, navigation blocking
 - `tests/landing-page.spec.js` — quiz library cards, metadata, navigation
-- `tests/quick-start-quiz.spec.js` — Play Now / „Nastavení kvízu" (card menu) from a card
+- `tests/quick-start-quiz.spec.js` — Spustit / „Nastavení kvízu" (card menu) from a card
 - `tests/resume-quiz.spec.js` — Esc leaves a running quiz to the library, „Pokračovat" resumes it
 - `tests/customization.spec.js` — timer, questions-per-photo, summary, Start/Skip
 - `tests/quiz-card-reload.spec.js` — reload a pack from current photo files (placeholder questions for new photos)
 - `tests/quiz-library-sync.spec.js` — library from photo folders, localStorage cache, full sync
-- `tests/photo-catalog-plugin.spec.js` — folder→pack listing rules (node env)
+- `tests/library-disk-backup.spec.js` — backup beside photo folders mirrors saves, restores lost browser state
+- `tests/photo-catalog-plugin.spec.js` — folder→pack listing rules, library backup file (node env)
 
 Run via the unified runner: `yarn test [tests/<suite>.spec.js]` —
 exit 0 = green; on failure read the printed `test-results/<suite>.failures.txt`.

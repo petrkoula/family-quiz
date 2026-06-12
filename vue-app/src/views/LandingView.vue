@@ -122,7 +122,7 @@
               >
                 Pokračovat
               </n-button>
-              <n-button v-else type="primary" @click="playNow(pack.id)">Play Now</n-button>
+              <n-button v-else type="primary" @click="playNow(pack.id)">Spustit</n-button>
             </div>
           </div>
         </template>

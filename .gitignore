@@ -14,5 +14,6 @@ vue-app/test-results/
 # Workflow artifacts (keep structure, ignore temp files)
 .ub-workflows/tmp/
 .ub-workflows/.cache/
-images
+images/*
+!images/library.json
 .review-images-flat

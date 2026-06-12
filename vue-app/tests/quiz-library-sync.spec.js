@@ -77,7 +77,7 @@ describe('Quiz library sync', () => {
     expect(page.photoCount('Celebrations')).toBe(3);
 
     folders = FOLDERS.map(f =>
-      f.id === 'celebrations' ? { ...f, photos: f.photos.slice(0, 2) } : f,
+      f.id === 'celebrations' ? { ...f, photos: f.photos.slice(0, 2) } : f
     );
     await page.clickLibraryReload();
 

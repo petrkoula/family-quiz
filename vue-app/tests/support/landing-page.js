@@ -76,7 +76,7 @@ class LandingPage {
   // --- Co uživatel dělá ------------------------------------------------------
 
   async playNow(pack) {
-    await fireEvent.click(this.card(pack).getByRole('button', { name: /Play Now/i }));
+    await fireEvent.click(this.card(pack).getByRole('button', { name: /Spustit/i }));
     await flushPromises();
   }
 

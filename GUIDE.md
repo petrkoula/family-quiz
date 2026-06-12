@@ -35,11 +35,11 @@ yarn dev
 ## 3. Objeví se kvízy — doplň otázky a hrej
 
 - **Kvízy se objeví samy**: každá složka = karta s počtem fotek a otázek.
-  Hrát jde okamžitě (Play Now) — fotky bez otázek zatím ukazují placeholder
+  Hrát jde okamžitě (Spustit) — fotky bez otázek zatím ukazují placeholder
   **„Doplň otázku"** (žádná odpověď není označená jako správná).
 - **Doplň otázky** a klikni **↻ Reload** na kartě — placeholdery se nahradí
   tvými otázkami; ručně napsané otázky reload nikdy nepřepíše.
-- **Hrej** — Rychlý (Play Now) nebo Vlastní (Customize), viz bod 5.
+- **Hrej** — Rychlý (Spustit) nebo Vlastní (Customize), viz bod 5.
 
 > Stav knihovny se pamatuje (localStorage) — další otevření appky je okamžité,
 > disk se znovu čte jen na kliknutí Reload / Obnovit knihovnu.
@@ -60,7 +60,7 @@ všech kvízů najednou.
 
 ## 5. Hraj — Rychlý nebo Vlastní
 
-- **Rychlý** (▶ Play Now na kartě) — prezentace startuje okamžitě s výchozím
+- **Rychlý** (▶ Spustit na kartě) — prezentace startuje okamžitě s výchozím
   nastavením: bez časovače, všechny 3 otázky na fotku, původní pořadí.
 - **Vlastní** (⚙ Customize na kartě) — před startem si nastavíš časovač,
   počet otázek na fotku a zamíchání fotek/otázek; pak **Start Quiz**

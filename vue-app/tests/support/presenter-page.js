@@ -25,7 +25,7 @@ export function renderPresenter() {
 }
 
 /**
- * Spustí prezentaci vybraného balíčku nad AKTIVNÍ Pinia (jako „Play Now").
+ * Spustí prezentaci vybraného balíčku nad AKTIVNÍ Pinia (jako „Spustit").
  * Předchozí obrazovky odmountuje, aby v DOMu nehrály dvě views najednou.
  */
 export function startPresentationForPack(packId) {
@@ -72,7 +72,7 @@ class PresenterPage {
   revealedCorrectAnswer() {
     const correct = this.view
       .getAllByTestId('option')
-      .find((el) => el.getAttribute('data-correct') === 'true');
+      .find(el => el.getAttribute('data-correct') === 'true');
     return correct ? correct.textContent.trim() : null;
   }
 

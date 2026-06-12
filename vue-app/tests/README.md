@@ -44,9 +44,10 @@ to a readable `it()` block:
 
 - `presenter.spec.js` — photo/question navigation, answer reveal, navigation blocking
 - `landing-page.spec.js` — quiz library cards, metadata, navigation
-- `quick-start-quiz.spec.js` — Play Now / „Nastavení kvízu" (menu karty) from a card
+- `quick-start-quiz.spec.js` — Spustit / „Nastavení kvízu" (menu karty) from a card
 - `resume-quiz.spec.js` — Esc leaves a running quiz to the library, „Pokračovat" resumes it
 - `customization.spec.js` — timer, questions-per-photo, live summary, Start / Skip
+- `library-disk-backup.spec.js` — backup beside photo folders mirrors saves, restores lost browser state
 
 ## Conventions
 

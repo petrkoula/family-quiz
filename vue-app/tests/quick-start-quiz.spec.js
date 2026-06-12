@@ -1,8 +1,8 @@
 /**
- * Acceptance test: Quick start quiz from card (Play Now).
+ * Acceptance test: Quick start quiz from card (Spustit).
  *
  * Kontrakt: specs/quick-start-quiz.spec.md – z karty jde kvíz spustit hned
- * tlačítkem „Play Now" s výchozím nastavením (bez časovače, všechny 3 otázky,
+ * tlačítkem „Spustit" s výchozím nastavením (bez časovače, všechny 3 otázky,
  * původní pořadí), nebo otevřít „Nastavení kvízu" z menu karty.
  *
  * Vrstva: jsdom (komponenta + Pinia + vue-router), selektory v
@@ -12,16 +12,16 @@ import { describe, it, expect } from 'vitest';
 import { renderLanding, quizPacks } from './support/landing-page.js';
 
 describe('Quick start quiz', () => {
-  it('na kartě nabízí výrazné „Play Now" i „Nastavení kvízu" v menu', async () => {
+  it('na kartě nabízí výrazné „Spustit" i „Nastavení kvízu" v menu', async () => {
     const page = await renderLanding();
     const card = page.card(quizPacks[0]);
 
-    expect(card.getByRole('button', { name: /Play Now/i })).toBeInTheDocument();
+    expect(card.getByRole('button', { name: /Spustit/i })).toBeInTheDocument();
     await page.openCardMenu(quizPacks[0]);
     expect(card.getByRole('menuitem', { name: /Nastavení kvízu/i })).toBeInTheDocument();
   });
 
-  it('Play Now spustí kvíz okamžitě s výchozím nastavením', async () => {
+  it('Spustit spustí kvíz okamžitě s výchozím nastavením', async () => {
     const page = await renderLanding();
 
     await page.playNow(quizPacks[0]);
@@ -33,7 +33,7 @@ describe('Quick start quiz', () => {
     expect(page.store.totalQuestions).toBe(3);
   });
 
-  it('Play Now spustí správný vybraný balíček', async () => {
+  it('Spustit spustí správný vybraný balíček', async () => {
     const page = await renderLanding();
 
     await page.playNow(quizPacks[1]);
