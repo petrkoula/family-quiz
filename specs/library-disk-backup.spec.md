@@ -48,11 +48,17 @@ This builds on:
 **When** I open the app
 **Then** the library should reflect the current photo folders
 
-### Scenario 6: The app works when the backup location is unavailable
-**Given** the backup location is unavailable
+### Scenario 6: The app works when the backup cannot be written
+**Given** the backup location cannot be written to
 **When** the library changes
 **Then** the app should keep working without errors
 **And** the change should still be remembered for the next visit
+
+### Scenario 7: The published app reads the backup shipped beside the photos
+**Given** the app is published together with its photo folders and their backup
+**And** my browser has no remembered library
+**When** I open the published app
+**Then** the library should be restored from the shipped backup
 
 ## Technical Notes (guidance, not contract)
 - The backup lives as human-readable JSON at the images root, next to the pack
@@ -64,7 +70,8 @@ This builds on:
 - Client side, the backup is a second swappable storage behind
   `libraryStorage.js` (like the photo catalog sources): every save mirrors to
   it fire-and-forget; it is read only when the browser has no remembered state.
-- On static production hosting the endpoints don't exist: backup load returns
-  "nothing", backup save quietly no-ops — behaviour falls back to
-  `quiz-library-sync.spec.md` exactly as today. A hosted store later replaces
-  the backup the same way it replaces the catalog sources.
+- On static production hosting the dev endpoints don't exist, but deploy copies
+  the images root (backup included) into the served site — so backup load falls
+  back to the statically served `/images/library.json` (scenario 7), while
+  backup save quietly no-ops (scenario 6). A hosted store later replaces the
+  backup the same way it replaces the catalog sources.

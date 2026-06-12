@@ -65,12 +65,12 @@ do not yet have any.
 **And** the summary should indicate how many photos were added or removed
 **And** if nothing changed, it should indicate that the pack is up to date
 
-### Scenario 9: Placeholders give way to newly written questions
+### Scenario 9: Placeholders persist until an author writes questions
 **Given** a photo currently has placeholder questions
-**And** hand-written questions for that photo have since become available
-**When** I reload the card
-**Then** the photo should use the hand-written questions
-**And** photos whose questions were already hand-written keep them unchanged
+**When** I reload the card with no file changes
+**Then** the photo should still have its placeholder questions
+**And** after I edit those questions (see `quiz-question-editing.spec.md`),
+  reloading the card should keep my edited questions
 
 ## Technical Notes (guidance, not contract)
 - The set of "current photo files" comes from a **swappable catalog source**.

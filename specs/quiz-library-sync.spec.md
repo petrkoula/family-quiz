@@ -38,12 +38,11 @@ This builds on:
 **When** I refresh the library
 **Then** that card should no longer appear in the library
 
-### Scenario 5: Known photos keep their hand-written questions
-**Given** a photo file appears in a folder
-**And** hand-written questions exist for that photo (matched by its filename)
+### Scenario 5: Authored questions survive a library sync
+**Given** the library already has authored questions for a photo
 **When** the library is synced
-**Then** that photo's quiz should use the hand-written questions
-**And** only photos without known questions should get placeholders
+**Then** that photo's quiz should keep its authored questions
+**And** only photos without authored questions should get placeholders
 
 ### Scenario 6: Library state persists between visits
 **Given** the library was synced and shows packs from folders
@@ -69,7 +68,14 @@ This builds on:
 **When** I refresh the library
 **Then** that pack's card should reflect the folder's current photos
 **And** the per-photo rules of `quiz-card-reload.spec.md` should apply
-  (placeholders for unknown photos, hand-written questions preserved)
+  (placeholders for unknown photos, authored questions preserved)
+
+### Scenario 10: The app ships with no built-in quizzes
+**Given** I have never opened the app before
+**And** no photo folders exist and no library backup exists
+**When** I open the app
+**Then** the library should be empty
+**And** the app should still offer creating my own quiz
 
 ## Technical Notes (guidance, not contract)
 - The folder source is the same swappable catalog interface used by per-card
@@ -78,6 +84,10 @@ This builds on:
   without changing the behaviour above.
 - The remembered state lives in browser local storage behind a small storage
   interface, so it can later move to a local DB or hosted store.
-- Per-card reload behaviour (placeholders, preservation of hand-written
-  questions, per-card summary) is specified in `quiz-card-reload.spec.md` and
-  must keep holding after a library refresh.
+- Per-card reload behaviour (placeholders, preservation of authored questions,
+  per-card summary) is specified in `quiz-card-reload.spec.md` and must keep
+  holding after a library refresh.
+- The app bundles no quiz content of its own: all packs, titles and questions
+  live in the library state (browser storage + the disk backup of
+  `library-disk-backup.spec.md`); authoring happens in the edit screen
+  (`quiz-question-editing.spec.md`).

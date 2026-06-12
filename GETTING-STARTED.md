@@ -92,8 +92,9 @@ family-quiz/
 │   │   │   └── QuestionCard.vue     # Question display component
 │   │   ├── stores/
 │   │   │   └── gameStore.js         # Pinia state management
-│   │   ├── data/
-│   │   │   └── quizData.js          # YOUR QUIZ QUESTIONS HERE
+│   │   ├── data/                    # library storage + photo catalog layers
+│   │   │   ├── libraryStorage.js    # localStorage + disk backup (library.json)
+│   │   │   └── photoCatalog.js      # photo folder source (dev server / hosted)
 │   │   └── router/
 │   │       └── index.js             # Vue Router setup
 │   ├── tests/
@@ -135,43 +136,23 @@ The app uses Pinia for state management. All quiz state is in `src/stores/gameSt
 
 ### Adding Your Own Photos
 
-1. **Add images** to the `images/` folder
+There is no quiz data in the source code — the photo folders are the library,
+and questions live in the library state (browser storage, mirrored to
+`images/library.json`).
+
+1. **Add images** to a pack folder (one folder per quiz):
    ```bash
-   cp /path/to/your/photos/* images/
+   cp /path/to/your/photos/* images/my-quiz/
    ```
 
-2. **Update quiz data** in `vue-app/src/data/quizData.js`:
+2. **Reload in the app**: open the quiz card's menu → ↻ Reload (or
+   „Obnovit knihovnu" to sync the whole library). New folders become new
+   quiz cards; new photos get placeholder questions.
 
-   ```javascript
-   export const quizData = [
-     {
-       image: "your-photo-1.jpg",
-       questions: [
-         {
-           text: "What year was this photo taken?",
-           options: ["1980", "1985", "1990", "1995"],
-           correct: 1  // Index of correct answer (1985)
-         },
-         {
-           text: "Where was this photo taken?",
-           options: ["Beach", "Mountains", "City", "Home"],
-           correct: 2
-         },
-         {
-           text: "Who is in the photo?",
-           options: ["Grandma", "Mom", "Aunt Jane", "All of them"],
-           correct: 3
-         }
-       ]
-     },
-     // Add more photos...
-   ]
-   ```
-
-3. **Copy images** to public folder:
-   ```bash
-   cp -r images/* vue-app/public/images/
-   ```
+3. **Write the questions** in the app: card menu → **Upravit** opens the
+   edit screen where you fill in text, options and the correct answer.
+   Your edits are saved to the library state and backed up to
+   `images/library.json` automatically.
 
 ### Customizing Questions
 

@@ -18,6 +18,11 @@
  * @typedef {() => Array<{id: string, photos: string[]}> | null | Promise<Array<{id: string, photos: string[]}> | null>} PacksSource
  */
 
+/** URL, pod kterou se obrázek servíruje (dev plugin i produkční public dir). */
+export function getImageUrl(imageName) {
+  return `/images/${imageName}`;
+}
+
 /** @type {PhotosSource} */
 async function defaultPhotosSource(packId, currentImages) {
   try {

@@ -233,7 +233,7 @@ import { useRouter } from 'vue-router';
 import { NCard, NButton } from 'naive-ui';
 import { useGameStore } from '@/stores/gameStore';
 import { usePackLibraryStore } from '@/stores/packLibraryStore';
-import { getImageUrl } from '@/data/quizData';
+import { getImageUrl } from '@/data/photoCatalog';
 
 const router = useRouter();
 const gameStore = useGameStore();

@@ -10,7 +10,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { renderLanding, quizPacks } from './support/landing-page.js';
-import { getPackMetadata } from '@/data/quizPacks';
+import { fixtureMetadata } from './support/fixture-library.js';
 
 describe('Landing page', () => {
   it('zobrazí nadpis knihovny a kartu pro každý kvíz', async () => {
@@ -25,7 +25,7 @@ describe('Landing page', () => {
 
     for (const pack of quizPacks) {
       const card = page.card(pack);
-      const meta = getPackMetadata(pack.id);
+      const meta = fixtureMetadata(pack.id);
 
       expect(card.getByText(pack.description)).toBeInTheDocument();
       expect(card.getByText(new RegExp(`${meta.photoCount}\\s+fotek`))).toBeInTheDocument();

@@ -62,28 +62,39 @@ docker-compose up prod   # Production build
 
 ### State Management (Pinia)
 
-The app uses a single Pinia store (`gameStore.js`) that manages:
-- **Photo navigation**: `currentPhotoIndex`, `nextPhoto()`, `previousPhoto()`
-- **Question navigation**: `currentQuestionIndex`, `nextQuestion()`, `previousQuestion()`
-- **UI state**: `questionsVisible`, `answersRevealed`
-- **Quiz data**: Loaded from `quizData.js` (local-first design)
+Two Pinia stores:
+- **`gameStore.js`** — the running presentation: photo navigation
+  (`currentPhotoIndex`, `nextPhoto()`, `previousPhoto()`), question navigation
+  (`currentQuestionIndex`, `nextQuestion()`, `previousQuestion()`), UI state
+  (`questionsVisible`, `answersRevealed`). Quiz data enters only via
+  `selectQuizPack(packId)` from the library store.
+- **`packLibraryStore.js`** — the quiz library. **There is no bundled quiz
+  content**: the library is exactly what the remembered state (localStorage)
+  and the disk backup/folders say (see Images & Quiz Library below).
 
 Key pattern: Photo navigation is blocked when questions are visible. Users must hide questions (SPACE or ESC) before navigating to different photos.
 
 ### Data Structure
 
-Quiz data is defined in `vue-app/src/data/quizData.js`:
+Library state (`{ packs: [...] }` in localStorage + `images/library.json`)
+holds packs of photos with questions:
 ```javascript
 {
-  image: "filename.jpg",  // Located in /images or public/images
-  questions: [
-    {
-      text: "Question text in Czech",
-      options: ["A", "B", "C", "D"],  // 2-4 options
-      correct: 0  // Zero-based index
-    }
-    // Exactly 3 questions per photo
-  ]
+  id: "pack-id",            // = folder name under images/
+  title: "Titulek",         // humanized from folder name until renamed
+  description: "", color: "#4a90e2", thumbnail: "pack-id/a.jpg",
+  photos: [{
+    image: "pack-id/filename.jpg",
+    questions: [
+      {
+        text: "Question text in Czech",
+        options: ["A", "B", "C", "D"],  // 2-4 options
+        correct: 0,                      // Zero-based index
+        placeholder: true                // only on auto-generated questions
+      }
+      // 1-3 questions per photo
+    ]
+  }]
 }
 ```
 
@@ -157,13 +168,16 @@ The folder structure IS the library (see `specs/quiz-library-sync.spec.md` and
 - **Disk backup** (see `specs/library-disk-backup.spec.md`): every library save
   also mirrors fire-and-forget to `images/library.json` beside the pack folders
   via `GET`/`PUT /__catalog/library` (dev server). localStorage stays primary;
-  the backup is read only when the browser has no remembered state (restore),
-  and quietly no-ops where the endpoints don't exist (production).
+  the backup is read only when the browser has no remembered state (restore).
+  In production the dev endpoints don't exist: saves quietly no-op, but loads
+  fall back to the statically served `/images/library.json` (deploy copies the
+  images root), so the shipped backup IS the production data source.
   `images/library.json` is the one git-tracked file in `images/` (photos stay
   ignored), so library state is versioned through commit history.
-- **Questions**: `quizData.js` acts as a question bank matched by photo
-  filename; photos without known questions get placeholder questions (no
-  correct answer) until an author fills them in.
+- **Questions**: there is **no bundled question bank** — questions live only in
+  the library state (localStorage + `library.json`). Newly discovered photos
+  get placeholder questions (no correct answer) until an author writes real
+  ones in the edit screen (`specs/quiz-question-editing.spec.md`).
 - **Swap point for a hosted store** (Google DB / Google Photos planned):
   `setPhotoCatalogSource` / `setPackCatalogSource` in `src/data/photoCatalog.js`.
 - **Production**: images copied to `vue-app/public/images/` during deploy;

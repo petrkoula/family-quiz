@@ -296,7 +296,7 @@
 import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { usePackLibraryStore, isValidQuestion, QUESTION_LIMITS } from '@/stores/packLibraryStore';
-import { getImageUrl } from '@/data/quizData';
+import { getImageUrl } from '@/data/photoCatalog';
 
 const route = useRoute();
 const library = usePackLibraryStore();

@@ -50,13 +50,15 @@ Documentation drift is a defect when skills lack docs, docs reference removed pa
 ## Project-Specific Standards
 
 ### Quiz Application Architecture
-- **Local-First**: Quiz data embedded in bundle, works offline
+- **Local-First**: no bundled quiz data — the library lives in localStorage,
+  mirrored to `images/library.json` beside the photo folders (disk backup)
 - **Composition API**: Vue 3 with `<script setup>` exclusively
 - **Presentation Focus**: Optimized for projector/TV displays (high contrast, large fonts)
 - **Czech Language**: All quiz content in Czech; UI controls in English comments
 
 ### File Organization
-- Quiz data: `vue-app/src/data/quizData.js`
+- Quiz data: `images/<pack-id>/` photo folders + `images/library.json`
+  (library state; questions are authored in the app's edit screen)
 - Components: `vue-app/src/components/`
 - Views: `vue-app/src/views/`
 - Stores: `vue-app/src/stores/`

@@ -10,6 +10,7 @@ import { flushPromises } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import { createRouter, createMemoryHistory } from 'vue-router';
 import { useGameStore } from '@/stores/gameStore';
+import { seedLibraryIfEmpty } from './fixture-library.js';
 import CustomizationView from '@/views/CustomizationView.vue';
 
 function makeRouter() {
@@ -24,6 +25,7 @@ function makeRouter() {
 }
 
 export async function renderCustomization(packId = 'retro-style') {
+  seedLibraryIfEmpty(); // appka žádná vestavěná data nemá — knihovna z fixture
   const pinia = createPinia();
   setActivePinia(pinia);
   const store = useGameStore();

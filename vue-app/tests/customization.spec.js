@@ -10,7 +10,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { renderCustomization } from './support/customization-page.js';
-import { getPackMetadata } from '@/data/quizPacks';
+import { fixtureMetadata } from './support/fixture-library.js';
 
 describe('Quiz customization', () => {
   it('startuje s výchozími hodnotami (časovač vypnutý, 3 otázky)', async () => {
@@ -34,7 +34,7 @@ describe('Quiz customization', () => {
 
   it('přepočítá celkový počet otázek podle voleb na fotku', async () => {
     const page = await renderCustomization('retro-style');
-    const photos = getPackMetadata('retro-style').photoCount;
+    const photos = fixtureMetadata('retro-style').photoCount;
 
     expect(page.summaryTotalQuestions()).toBe(photos * 3);
 

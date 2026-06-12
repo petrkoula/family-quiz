@@ -94,7 +94,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 import { useGameStore } from '@/stores/gameStore';
-import { getImageUrl } from '@/data/quizData';
+import { getImageUrl } from '@/data/photoCatalog';
 import QuestionCard from '@/components/QuestionCard.vue';
 
 // Volitelně — část jsdom testů renderuje presenter bez routeru.

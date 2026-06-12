@@ -15,7 +15,7 @@ import {
   resetPhotoCatalogSource,
 } from '@/data/photoCatalog';
 import { setLibraryBackup, resetLibraryStorage } from '@/data/libraryStorage';
-import { quizPacks } from '@/data/quizPacks';
+import { fixturePacks, seedLibraryIfEmpty } from './fixture-library.js';
 import { useGameStore } from '@/stores/gameStore';
 import { usePackLibraryStore } from '@/stores/packLibraryStore';
 import LandingView from '@/views/LandingView.vue';
@@ -50,6 +50,9 @@ export async function renderLandingForReload({ catalog, folders, backup } = {}) 
   if (catalog) setPhotoCatalogSource(catalog);
   if (folders) setPackCatalogSource(folders);
   if (backup) setLibraryBackup(backup);
+  // Bez vlastních složek/zálohy startujeme nad fixture knihovnou (zapamatovaný
+  // stav) — appka žádná vestavěná data nemá.
+  if (!folders && !backup) seedLibraryIfEmpty();
 
   const pinia = createPinia();
   setActivePinia(pinia);
@@ -75,6 +78,7 @@ export function resetCatalog() {
 export async function playPackAfterReload(packId, { catalog } = {}) {
   if (catalog) setPhotoCatalogSource(catalog);
   else resetPhotoCatalogSource();
+  seedLibraryIfEmpty(); // pokud si test nepředvyplnil vlastní zapamatovaný stav
 
   const pinia = createPinia();
   setActivePinia(pinia);
@@ -174,8 +178,13 @@ class ReloadPage {
   /** Titulky všech karet kvízů (bez karty „Vytvořte vlastní"). */
   cardTitles() {
     return this.view
-      .getAllByTestId('quiz-card')
+      .queryAllByTestId('quiz-card')
       .map(card => within(card).getByRole('heading', { level: 2 }).textContent.trim());
+  }
+
+  /** Sekce „Vytvořte vlastní" je nabízená i v prázdné knihovně. */
+  hasCreateYourOwn() {
+    return this.view.queryByRole('heading', { name: 'Vytvořte vlastní' }) !== null;
   }
 
   /** Obnovení knihovny žije v menu knihovny (☰) nad kartami. */
@@ -200,4 +209,4 @@ class ReloadPage {
   }
 }
 
-export { quizPacks };
+export { fixturePacks as quizPacks };

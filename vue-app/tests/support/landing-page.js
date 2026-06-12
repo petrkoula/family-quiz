@@ -10,7 +10,7 @@ import { flushPromises } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import { createRouter, createMemoryHistory } from 'vue-router';
 import { useGameStore } from '@/stores/gameStore';
-import { quizPacks } from '@/data/quizPacks';
+import { fixturePacks, seedLibrary } from './fixture-library.js';
 import LandingView from '@/views/LandingView.vue';
 
 /** Minimální router se stejnými cestami jako produkční, ale bez lazy importů. */
@@ -28,6 +28,7 @@ function makeRouter() {
 }
 
 export async function renderLanding() {
+  seedLibrary(); // knihovna = zapamatovaný stav; appka žádná vestavěná data nemá
   const router = makeRouter();
   const pinia = createPinia();
   setActivePinia(pinia);
@@ -98,4 +99,4 @@ class LandingPage {
   }
 }
 
-export { quizPacks };
+export { fixturePacks as quizPacks };

@@ -10,11 +10,12 @@ import { flushPromises } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import { createRouter, createMemoryHistory } from 'vue-router';
 import { useGameStore } from '@/stores/gameStore';
-import { quizPacks } from '@/data/quizPacks';
+import { fixturePacks, seedLibrary } from './fixture-library.js';
 import LandingView from '@/views/LandingView.vue';
 import PresenterView from '@/views/PresenterView.vue';
 
 export async function renderApp() {
+  seedLibrary(); // knihovna = zapamatovaný stav; appka žádná vestavěná data nemá
   const stub = { template: '<div />' };
   const router = createRouter({
     history: createMemoryHistory(),
@@ -102,4 +103,4 @@ class ResumeFlow {
   }
 }
 
-export { quizPacks };
+export { fixturePacks as quizPacks };

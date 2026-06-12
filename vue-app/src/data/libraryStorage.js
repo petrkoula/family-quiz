@@ -11,6 +11,7 @@
 
 const STORAGE_KEY = 'quiz-library-v1';
 const BACKUP_URL = '/__catalog/library';
+const STATIC_BACKUP_URL = '/images/library.json';
 
 export const LIBRARY_STORAGE_KEY = STORAGE_KEY;
 
@@ -32,15 +33,21 @@ export const browserLibraryStorage = {
   },
 };
 
+async function fetchJson(url) {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null; // unreachable or not JSON → behave as if there is nothing
+  }
+}
+
 export const devServerLibraryBackup = {
   async load() {
-    try {
-      const res = await fetch(BACKUP_URL);
-      if (!res.ok) return null;
-      return await res.json();
-    } catch {
-      return null; // backup unreachable → behave as if there is no backup
-    }
+    // Dev server first; published builds ship the backup statically beside
+    // the photos (deploy copies the images root), so fall back to that.
+    return (await fetchJson(BACKUP_URL)) ?? (await fetchJson(STATIC_BACKUP_URL));
   },
   save(state) {
     try {

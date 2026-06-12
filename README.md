@@ -125,36 +125,22 @@ npm run preview
 - **Pinia** - State management store
 - **Vue Router** - Navigation between views
 - **Vite** - Fast build tool and dev server
-- **Local-First** - Quiz data embedded, works offline
+- **Local-First** - Library lives in your browser + `images/library.json`, works offline
 
 ## 🛠️ Configuration
 
 ### Edit Questions
 
-Questions are in `vue-app/src/data/quizData.js`:
-
-```javascript
-export const quizData = [
-  {
-    image: "IMG_4246_1.jpg",
-    questions: [
-      {
-        text: "Your question in Czech?",
-        options: ["A", "B", "C", "D"],
-        correct: 0  // Index of correct answer
-      }
-      // ... 2 more questions
-    ]
-  }
-  // ... 22 more photos
-]
-```
+Open a quiz card's menu → **Upravit** and edit questions in the app. The
+library state (packs, titles, questions) is remembered in the browser and
+mirrored to `images/library.json` beside the photo folders — there is no
+hardcoded quiz data in the source.
 
 ### Add More Photos
 
-1. Add images to `/images` folder
-2. Add quiz entry in `vue-app/src/data/quizData.js`
-3. Reload the app
+1. Add images to an `images/<pack-id>/` folder (one folder per quiz)
+2. In the app, use the card's ↻ Reload (or „Obnovit knihovnu" for everything)
+3. New photos get placeholder questions — fill them in via **Upravit**
 
 ## 📁 Project Structure
 

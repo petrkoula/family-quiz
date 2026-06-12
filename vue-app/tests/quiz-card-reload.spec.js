@@ -112,10 +112,10 @@ describe('Reload quiz pack', () => {
     expect(play.revealedCorrectAnswer()).toBeNull();
   });
 
-  // Scénář 9
-  it('placeholder otázky ustoupí nově doplněným ručním otázkám', async () => {
-    // Dříve synchronizovaný stav: fotka má zapamatované placeholdery,
-    // mezitím autor otázky doplnil (banka je pro IMG_4246_1.jpg má).
+  // Scénář 9 — placeholdery reload nemění; autorskými se stanou až úpravou
+  it('placeholder otázky po reloadu zůstanou, dokud je autor neupraví', async () => {
+    // Zapamatovaný stav: fotka má placeholdery; žádná vestavěná banka otázek
+    // neexistuje, takže je smí nahradit jen úprava v editoru.
     localStorage.setItem(
       'quiz-library-v1',
       JSON.stringify({
@@ -139,10 +139,10 @@ describe('Reload quiz pack', () => {
     });
 
     await play.showQuestions();
-    expect(play.questionText()).not.toBe('Doplň otázku');
+    expect(play.questionText()).toBe('Doplň otázku');
 
     await play.revealAnswer();
-    expect(play.revealedCorrectAnswer()).not.toBeNull();
+    expect(play.revealedCorrectAnswer()).toBeNull();
   });
 
   // Scénář 5

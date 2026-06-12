@@ -13,7 +13,7 @@ import { describe, it, expect, afterEach } from 'vitest';
 import { renderLanding, quizPacks } from './support/landing-page.js';
 import { renderEdit, injectPackCatalog, resetLibraryEnvironment } from './support/edit-page.js';
 import { startPresentationForPack } from './support/presenter-page.js';
-import { quizData } from '@/data/quizData';
+import { fixturePacks } from './support/fixture-library.js';
 
 afterEach(() => {
   resetLibraryEnvironment();
@@ -38,8 +38,8 @@ describe('Quiz question editing', () => {
     expect(page.photoCount()).toBe(8);
     expect(page.photo(0).questionCount()).toBe(3);
 
-    // První otázka první fotky odpovídá vestavěným datům včetně správné odpovědi.
-    const expected = quizData[0].questions[0];
+    // První otázka první fotky odpovídá knihovně (fixture) včetně správné odpovědi.
+    const expected = fixturePacks[1].photos[0].questions[0];
     const question = page.photo(0).question(0);
     expect(question.text()).toBe(expected.text);
     expect(question.options()).toEqual(expected.options);

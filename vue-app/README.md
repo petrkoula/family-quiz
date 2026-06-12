@@ -51,9 +51,11 @@ vue-app/
 │   │   ├── EditView.vue
 │   │   └── PresenterView.vue
 │   ├── stores/          # Pinia stores
-│   │   └── gameStore.js
-│   ├── data/            # Quiz data
-│   │   └── quizData.js
+│   │   ├── gameStore.js
+│   │   └── packLibraryStore.js
+│   ├── data/            # Library storage + photo catalog layers
+│   │   ├── libraryStorage.js
+│   │   └── photoCatalog.js
 │   ├── router/          # Vue Router
 │   │   └── index.js
 │   ├── App.vue
@@ -75,22 +77,10 @@ vue-app/
 
 ### Quiz Data
 
-Edit `src/data/quizData.js` to modify questions:
-
-```javascript
-export const quizData = [
-  {
-    image: "IMG_4246_1.jpg",
-    questions: [
-      {
-        text: "Your question?",
-        options: ["A", "B", "C", "D"],
-        correct: 0
-      }
-    ]
-  }
-]
-```
+There is no quiz data in the source. Photos live in `../images/<pack-id>/`
+folders (one folder per quiz); questions are authored in the app's edit
+screen (`/edit/:quizId`). The library state is remembered in localStorage
+and mirrored to `../images/library.json` (disk backup, git-tracked).
 
 ### Images
 
@@ -224,8 +214,8 @@ See [tests/README.md](tests/README.md) for details.
 ## 🐛 Troubleshooting
 
 ### Images not loading
-- Check image paths in `quizData.js`
-- Ensure images in `/images` folder (dev) or `public/images` (prod)
+- Ensure images in `../images/<pack-id>/` folders (dev) or `public/images` (prod)
+- Use the card's ↻ Reload (or „Obnovit knihovnu") after changing folders
 
 ### Build errors
 ```bash

@@ -10,15 +10,18 @@
 import { render, fireEvent, cleanup } from '@testing-library/vue';
 import { setActivePinia, createPinia } from 'pinia';
 import { useGameStore } from '@/stores/gameStore';
+import { fixturePacks, seedLibrary } from './fixture-library.js';
 import PresenterView from '@/views/PresenterView.vue';
 
 /**
- * Vyrenderuje presenter s čerstvým Pinia store a načtenými quiz daty –
- * stejně, jako kdyby uživatel přišel na /presenter.
+ * Vyrenderuje presenter s čerstvým Pinia store a spuštěným prvním kvízem
+ * z fixture knihovny – stejně, jako kdyby uživatel z knihovny dal „Spustit".
+ * (Appka žádná vestavěná data nemá; bez vybraného kvízu není co prezentovat.)
  */
 export function renderPresenter() {
+  seedLibrary();
   setActivePinia(createPinia());
-  useGameStore().initializeQuizData();
+  useGameStore().selectQuizPack(fixturePacks[0].id);
 
   const view = render(PresenterView);
   return new PresenterPage(view);

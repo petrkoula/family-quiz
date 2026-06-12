@@ -1,9 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { quizData } from '@/data/quizData';
 import { listPhotos, listPacks } from '@/data/photoCatalog';
 import { loadLibrary, saveLibrary, loadLibraryBackup } from '@/data/libraryStorage';
-import { getPackCatalog } from '@/data/packCatalog';
 
 export const QUESTION_LIMITS = {
   minQuestionsPerPhoto: 1,
@@ -44,9 +42,6 @@ export function humanizeTitle(folderName) {
     .join(' ');
 }
 
-// Hand-written questions from the bundled data, keyed by photo filename.
-const questionBank = new Map(quizData.map(item => [item.image, item.questions]));
-
 function filenameOf(imagePath) {
   return imagePath.split('/').pop();
 }
@@ -59,19 +54,18 @@ function cloneQuestion(question) {
 
 function buildPhoto(packId, file, existingPhotos) {
   const existing = existingPhotos?.find(photo => filenameOf(photo.image) === file);
-  const handWritten =
-    existing && !existing.questions.every(q => q.placeholder) ? existing.questions : null;
   return {
     image: `${packId}/${file}`,
-    questions:
-      handWritten ?? questionBank.get(file) ?? existing?.questions ?? makePlaceholderQuestions(),
+    questions: existing?.questions ?? makePlaceholderQuestions(),
   };
 }
 
 export const usePackLibraryStore = defineStore('packLibrary', () => {
+  // Žádná vestavěná data: knihovna je přesně to, co říká zapamatovaný stav;
+  // bez něj se naplní až ze zálohy/složek v ensureInitialized().
   const remembered = loadLibrary();
   const rememberedPacks = Array.isArray(remembered?.packs) ? remembered.packs : null;
-  const packs = ref(rememberedPacks ?? getPackCatalog());
+  const packs = ref(rememberedPacks ?? []);
   const initialized = ref(rememberedPacks != null);
 
   function persist() {

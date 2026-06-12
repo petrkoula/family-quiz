@@ -1,508 +1,957 @@
 {
   "packs": [
     {
-      "id": "celebrations",
-      "title": "Celebrations",
+      "id": "normalized",
+      "title": "Normalized",
       "description": "",
       "color": "#4a90e2",
-      "thumbnail": "celebrations/IMG_4246_10.jpg",
+      "thumbnail": "normalized/IMG_4250.jpg",
       "photos": [
         {
-          "image": "celebrations/IMG_4246_10.jpg",
+          "image": "normalized/IMG_4250.jpg",
           "questions": [
             {
-              "text": "Tohle je:",
+              "text": "Uhodněte datum pořízení fotografie a místo:",
               "options": [
-                "Pracovní schůzka",
-                "Rodinné setkání",
-                "Koncert",
-                "Protest"
-              ],
-              "correct": 1
-            },
-            {
-              "text": "Kolik lidí je u stolu?",
-              "options": [
-                "2-3 lidé",
-                "4-5 lidí",
-                "6-7 lidí",
-                "Moc na počítání"
-              ],
-              "correct": 1
-            },
-            {
-              "text": "Co je na stole?",
-              "options": [
-                "Jen talíře",
-                "Jídlo a nádobí",
-                "Domácí úkoly",
-                "Deskové hry"
-              ],
-              "correct": 1
-            }
-          ]
-        },
-        {
-          "image": "celebrations/IMG_4246_11.jpg",
-          "questions": [
-            {
-              "text": "Jaké vozidlo je na fotce?",
-              "options": [
-                "Kolo",
-                "Auto",
-                "Motorka",
-                "Skateboard"
-              ],
-              "correct": 2
-            },
-            {
-              "text": "Osoba:",
-              "options": [
-                "Jede na ní",
-                "Stojí vedle ní",
-                "Opravuje ji",
-                "Prodává ji"
-              ],
-              "correct": 1
-            },
-            {
-              "text": "Tahle motorka vypadá:",
-              "options": [
-                "Úplně nová",
-                "Vintage cool",
-                "Rozbitá",
-                "Neviditelná"
-              ],
-              "correct": 1
-            }
-          ]
-        },
-        {
-          "image": "celebrations/IMG_4246_12.jpg",
-          "questions": [
-            {
-              "text": "Jaké zvíře je na fotce?",
-              "options": [
-                "Pes",
-                "Kočka",
-                "Křeček",
-                "Drak"
-              ],
-              "correct": 1
-            },
-            {
-              "text": "Vlasy osoby jsou:",
-              "options": [
-                "Rovné",
-                "Kudrnaté/afro",
-                "Holá hlava",
-                "Duhové"
-              ],
-              "correct": 1
-            },
-            {
-              "text": "Kdo je šťastnější - člověk nebo kočka?",
-              "options": [
-                "Člověk",
-                "Kočka",
-                "Oba stejně",
-                "Ani jeden - kočka vypadá naštvaně"
-              ],
-              "correct": 0
-            }
-          ]
-        },
-        {
-          "image": "celebrations/IMG_4246_13.jpg",
-          "questions": [
-            {
-              "text": "Kde byla pořízena tahle fotka?",
-              "options": [
-                "Pláž/nábřeží",
-                "Poušť",
-                "Les",
-                "Nákupní centrum"
+                "Vyhlídka Vysoký Kámen r. 1986",
+                "Vyhlídka Olověný Vrch – Bublava r. 1985",
+                "Mosty u Jablunkova r. 1983"
               ],
               "correct": 0
             },
             {
-              "text": "O co se opírá?",
+              "text": "Doplň otázku",
               "options": [
-                "Nic",
-                "Zábradlí lodi",
-                "Auto",
-                "Kamarádku"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 1
+              "correct": null,
+              "placeholder": true
             },
             {
-              "text": "Její styl oblečení je:",
+              "text": "Doplň otázku",
               "options": [
-                "Formální šaty",
-                "Casual letní oblečení",
-                "Zimní kabát",
-                "Skafandr"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 1
+              "correct": null,
+              "placeholder": true
             }
           ]
         },
         {
-          "image": "celebrations/IMG_4246_14.jpg",
+          "image": "normalized/IMG_4252.jpg",
           "questions": [
             {
-              "text": "Kolik lidí je na fotce?",
+              "text": "Doplň otázku",
               "options": [
-                "2-3",
-                "4-6",
-                "7-9",
-                "Celý dav (10+)"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 2
+              "correct": null,
+              "placeholder": true
             },
             {
-              "text": "Je tam miminko v:",
+              "text": "Doplň otázku",
               "options": [
-                "Batohu",
-                "Kočárku",
-                "Náručí",
-                "Košíku"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 1
+              "correct": null,
+              "placeholder": true
             },
             {
-              "text": "Budova za nimi vypadá jako:",
+              "text": "Doplň otázku",
               "options": [
-                "Škola",
-                "Kostel/vládní budova",
-                "Nákupní centrum",
-                "Hrad"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 1
+              "correct": null,
+              "placeholder": true
             }
           ]
         },
         {
-          "image": "celebrations/IMG_4246_15.jpg",
+          "image": "normalized/IMG_4253.jpg",
           "questions": [
             {
-              "text": "Tento pár je oblečený na:",
+              "text": "Doplň otázku",
               "options": [
-                "Den na pláži",
-                "Formální akci (ples/svatba)",
-                "Tělocvik",
-                "Halloween"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 1
+              "correct": null,
+              "placeholder": true
             },
             {
-              "text": "Jaká je kvalita fotky?",
+              "text": "Doplň otázku",
               "options": [
-                "Křišťálově čistá",
-                "Zrnitá vintage",
-                "Photoshopovaná",
-                "Holografická"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 1
+              "correct": null,
+              "placeholder": true
             },
             {
-              "text": "Pánův motýlek je:",
+              "text": "Doplň otázku",
               "options": [
-                "Na klipsu",
-                "Skutečný motýlek",
-                "Chybí",
-                "Vlastně normální kravata"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 1
+              "correct": null,
+              "placeholder": true
             }
           ]
         },
         {
-          "image": "celebrations/IMG_4246_16.jpg",
+          "image": "normalized/IMG_4255.jpg",
           "questions": [
             {
-              "text": "Co tato osoba dělá?",
+              "text": "Doplň otázku",
               "options": [
-                "Tančí",
-                "Objímá někoho",
-                "Cvičí",
-                "Plave"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 1
+              "correct": null,
+              "placeholder": true
             },
             {
-              "text": "Jak vypadají její šaty?",
+              "text": "Doplň otázku",
               "options": [
-                "Tmavé elegantní",
-                "Světlé s mašlí",
-                "Sportovní",
-                "Neviditelné"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 1
+              "correct": null,
+              "placeholder": true
             },
             {
-              "text": "Tahle fotka je:",
+              "text": "Doplň otázku",
               "options": [
-                "Spontánní okamžik",
-                "Pečlivě naaranžovaná",
-                "Náhodný snímek",
-                "Fotomontáž"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 0
+              "correct": null,
+              "placeholder": true
             }
           ]
         },
         {
-          "image": "celebrations/IMG_4246_9.jpg",
+          "image": "normalized/IMG_4257.jpg",
           "questions": [
             {
-              "text": "S čím si miminko hraje?",
+              "text": "Doplň otázku",
               "options": [
-                "Plyšák",
-                "Košík/přepravka",
-                "Telefon",
-                "Dálkový ovladač"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 1
+              "correct": null,
+              "placeholder": true
             },
             {
-              "text": "Výraz miminka je:",
+              "text": "Doplň otázku",
               "options": [
-                "Pláč",
-                "Hysterický smích",
-                "Zmatený",
-                "Plánuje ovládnout svět"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 1
+              "correct": null,
+              "placeholder": true
             },
             {
-              "text": "Tahle fotka byla pořízena v:",
+              "text": "Doplň otázku",
               "options": [
-                "Parku",
-                "Postýlce",
-                "Autě",
-                "Restauraci"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 1
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "family-vintage",
-      "title": "Rodinná Klasika",
-      "description": "Vintage rodinné fotografie z 60. až 80. let",
-      "color": "#4a90e2",
-      "thumbnail": "family-vintage/IMG_4246_1.jpg",
-      "photos": [
-        {
-          "image": "family-vintage/IMG_4246_1.jpg",
-          "questions": [
-            {
-              "text": "Který módní prvek křičí '70. léta cool'?",
-              "options": [
-                "Kožená bunda",
-                "Zvonové kalhoty",
-                "Boty na platformě",
-                "Disco koule"
-              ],
-              "correct": 0
-            },
-            {
-              "text": "Ty kníry by se daly nejlépe popsat jako:",
-              "options": [
-                "Sotva viditelné",
-                "Legendární",
-                "Ironický hipster",
-                "Náhodné"
-              ],
-              "correct": 1
-            },
-            {
-              "text": "Co chybí této klasické póze?",
-              "options": [
-                "Sluneční brýle",
-                "Cigareta",
-                "Kytara",
-                "Nic - je to dokonalé"
-              ],
-              "correct": 3
+              "correct": null,
+              "placeholder": true
             }
           ]
         },
         {
-          "image": "family-vintage/IMG_4246_2.jpg",
+          "image": "normalized/IMG_4259.jpg",
           "questions": [
             {
-              "text": "Kolik miminek je na gauči?",
+              "text": "Doplň otázku",
               "options": [
-                "Jedno hodně široké",
-                "Dvě roztomilá miminka",
-                "Tři maličká miminka",
-                "Sněm miminek"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 1
+              "correct": null,
+              "placeholder": true
             },
             {
-              "text": "Co si tato miminka myslí?",
+              "text": "Doplň otázku",
               "options": [
-                "Kdy je svačina?",
-                "Proč jsme napůl nazí?",
-                "Je to fotka?",
-                "Všechno výše uvedené"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 3
+              "correct": null,
+              "placeholder": true
             },
             {
-              "text": "Které miminko vypadá víc překvapeně?",
+              "text": "Doplň otázku",
               "options": [
-                "Levé miminko",
-                "Pravé miminko",
-                "Obě stejně šokovaná",
-                "Ani jedno - jsou profíci"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 1
+              "correct": null,
+              "placeholder": true
             }
           ]
         },
         {
-          "image": "family-vintage/IMG_4246_5.jpg",
+          "image": "normalized/IMG_4262.jpg",
           "questions": [
             {
-              "text": "Kolik laku na vlasy bylo použito?",
+              "text": "Doplň otázku",
               "options": [
-                "Trochu",
-                "Půl plechovky",
-                "Celá plechovka",
-                "Celý obchod"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 2
+              "correct": null,
+              "placeholder": true
             },
             {
-              "text": "Tohle je nejspíš:",
+              "text": "Doplň otázku",
               "options": [
-                "Casual selfie",
-                "Profesionální portrét",
-                "Fotka na pas",
-                "Policejní fotka"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 1
+              "correct": null,
+              "placeholder": true
             },
             {
-              "text": "Její úsměv naznačuje:",
+              "text": "Doplň otázku",
               "options": [
-                "Mírný diskomfort",
-                "Čistou sebevědomost",
-                "Fotograf něco řekl",
-                "Myslí na oběd"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 1
+              "correct": null,
+              "placeholder": true
             }
           ]
         },
         {
-          "image": "family-vintage/IMG_4246_6.jpg",
+          "image": "normalized/IMG_4263.jpg",
           "questions": [
             {
-              "text": "Kdo je hvězdou této pouliční fotky?",
+              "text": "Doplň otázku",
               "options": [
-                "Osoba v pozadí",
-                "Usmívající se žena v popředí",
-                "Samotná ulice",
-                "Všichni stejně"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 1
+              "correct": null,
+              "placeholder": true
             },
             {
-              "text": "Tohle vypadá jako:",
+              "text": "Doplň otázku",
               "options": [
-                "Běžná procházka",
-                "Nákupy",
-                "Foto příležitost",
-                "Útěk"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 2
+              "correct": null,
+              "placeholder": true
             },
             {
-              "text": "Kolik lidí můžete napočítat?",
+              "text": "Doplň otázku",
               "options": [
-                "Jen jednoho",
-                "Dva lidi",
-                "Tři nebo více",
-                "Dav"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 2
+              "correct": null,
+              "placeholder": true
             }
           ]
         },
         {
-          "image": "family-vintage/IMG_4246_7.jpg",
+          "image": "normalized/IMG_4264.jpg",
           "questions": [
             {
-              "text": "V jaké formaci jsou tito tři lidé?",
+              "text": "Doplň otázku",
               "options": [
-                "Vedle sebe",
-                "Lidská pyramida/věž",
-                "V kruhu",
-                "Náhodný chaos"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 1
+              "correct": null,
+              "placeholder": true
             },
             {
-              "text": "Všichni mají na sobě:",
+              "text": "Doplň otázku",
               "options": [
-                "Casual oblečení",
-                "Uniformy",
-                "Kostýmy",
-                "Pyžama"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 1
+              "correct": null,
+              "placeholder": true
             },
             {
-              "text": "Kdo má na fotce nejtěžší práci?",
+              "text": "Doplň otázku",
               "options": [
-                "Člověk dole",
-                "Člověk uprostřed",
-                "Člověk nahoře",
-                "Fotograf"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 0
+              "correct": null,
+              "placeholder": true
             }
           ]
         },
         {
-          "image": "family-vintage/IMG_4246_8.jpg",
+          "image": "normalized/IMG_4266.jpg",
           "questions": [
             {
-              "text": "Na čem jedou tyto dvě osoby?",
+              "text": "Doplň otázku",
               "options": [
-                "Kolo",
-                "Skútr/motorka",
-                "Kůň",
-                "Kouzelný koberec"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 1
+              "correct": null,
+              "placeholder": true
             },
             {
-              "text": "Jak vypadají?",
+              "text": "Doplň otázku",
               "options": [
-                "Vyděšeně",
-                "Znuděně",
-                "Šťastně a bezstarostně",
-                "Ztraceně"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 2
+              "correct": null,
+              "placeholder": true
             },
             {
-              "text": "Viditelné bezpečnostní vybavení:",
+              "text": "Doplň otázku",
               "options": [
-                "Plná výbava",
-                "Pouze helmy",
-                "Nic - čistý 70s vibe",
-                "Bublinkové fólie"
+                "—",
+                "—",
+                "—",
+                "—"
               ],
-              "correct": 2
+              "correct": null,
+              "placeholder": true
+            }
+          ]
+        },
+        {
+          "image": "normalized/IMG_4268.jpg",
+          "questions": [
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            }
+          ]
+        },
+        {
+          "image": "normalized/IMG_4270.jpg",
+          "questions": [
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            }
+          ]
+        },
+        {
+          "image": "normalized/IMG_4272.jpg",
+          "questions": [
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            }
+          ]
+        },
+        {
+          "image": "normalized/IMG_4273.jpg",
+          "questions": [
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            }
+          ]
+        },
+        {
+          "image": "normalized/IMG_4274.jpg",
+          "questions": [
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            }
+          ]
+        },
+        {
+          "image": "normalized/IMG_4275.jpg",
+          "questions": [
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            }
+          ]
+        },
+        {
+          "image": "normalized/IMG_4276.jpg",
+          "questions": [
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            }
+          ]
+        },
+        {
+          "image": "normalized/IMG_4277.jpg",
+          "questions": [
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            }
+          ]
+        },
+        {
+          "image": "normalized/IMG_4279.jpg",
+          "questions": [
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            }
+          ]
+        },
+        {
+          "image": "normalized/IMG_4280.jpg",
+          "questions": [
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            }
+          ]
+        },
+        {
+          "image": "normalized/IMG_4281.jpg",
+          "questions": [
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            }
+          ]
+        },
+        {
+          "image": "normalized/IMG_4282.jpg",
+          "questions": [
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            }
+          ]
+        },
+        {
+          "image": "normalized/IMG_4283.jpg",
+          "questions": [
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            }
+          ]
+        },
+        {
+          "image": "normalized/IMG_4284.jpg",
+          "questions": [
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            }
+          ]
+        },
+        {
+          "image": "normalized/IMG_4285.jpg",
+          "questions": [
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
+            },
+            {
+              "text": "Doplň otázku",
+              "options": [
+                "—",
+                "—",
+                "—",
+                "—"
+              ],
+              "correct": null,
+              "placeholder": true
             }
           ]
         }

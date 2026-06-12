@@ -55,12 +55,13 @@ wedding3.jpg
 **And** PNG files should be included
 **And** non-image files should be excluded
 
-### Scenario 7: Quiz data structure remains backward compatible
-**Given** existing quizData.js format with questions
+### Scenario 7: Questions belong to the library state
+**Given** the library already holds authored questions for a pack's photos
 **When** loading quiz packs from subfolders
-**Then** the system should maintain compatibility
-**And** questions should still be loaded from quizData.js
-**And** questions should be matched to images by filename
+**Then** those photos should keep their authored questions
+**And** photos without authored questions should get placeholder questions
+**And** the app should bundle no question content of its own
+  (see `quiz-library-sync.spec.md` scenario 10)
 
 ### Scenario 8: Multiple quiz packs can coexist
 **Given** multiple subfolders exist:

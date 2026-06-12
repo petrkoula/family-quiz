@@ -79,7 +79,7 @@ describe('Library backup beside the photo folders', () => {
 
     const second = await renderLandingForReload({ folders: () => FOLDERS, backup });
     expect(second.cardTitles()).not.toContain('Moje Svatba');
-    expect(second.cardTitles()).toEqual(['Rodinná Klasika', 'Celebrations']);
+    expect(second.cardTitles()).toEqual(['Family Vintage', 'Celebrations']);
   });
 
   // Scénář 3 — ztracená paměť prohlížeče se obnoví ze zálohy
@@ -116,10 +116,10 @@ describe('Library backup beside the photo folders', () => {
     const backup = makeFakeBackup(null);
     const page = await renderLandingForReload({ folders: () => FOLDERS, backup });
 
-    expect(page.cardTitles()).toEqual(['Rodinná Klasika', 'Celebrations']);
+    expect(page.cardTitles()).toEqual(['Family Vintage', 'Celebrations']);
   });
 
-  // Scénář 6 — nedostupná záloha (produkce) nic nerozbije
+  // Scénář 6 — záloha, do které nejde zapisovat (produkce), nic nerozbije
   it('s nedostupnou zálohou appka funguje a stav se pamatuje v prohlížeči', async () => {
     // bez vstřiknuté zálohy běží výchozí backend, který v testu nikam nedosáhne
     const first = await renderLandingForReload({ folders: () => FOLDERS });
@@ -128,6 +128,6 @@ describe('Library backup beside the photo folders', () => {
     first.unmount();
 
     const second = await renderLandingForReload({ folders: () => FOLDERS });
-    expect(second.cardTitles()).toEqual(['Rodinná Klasika', 'Celebrations']);
+    expect(second.cardTitles()).toEqual(['Family Vintage', 'Celebrations']);
   });
 });

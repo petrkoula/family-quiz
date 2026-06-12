@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import { quizData } from '@/data/quizData';
 import { usePackLibraryStore } from '@/stores/packLibraryStore';
 
 export const useGameStore = defineStore('game', () => {
@@ -29,13 +28,6 @@ export const useGameStore = defineStore('game', () => {
   });
 
   // Actions
-  function initializeQuizData() {
-    // Local-first: Load quiz data immediately from bundled data
-    localQuizData.value = quizData;
-    isInitialized.value = true;
-    console.log('Quiz data initialized locally:', localQuizData.value.length, 'photos');
-  }
-
   function nextPhoto() {
     if (questionsVisible.value) return; // Block navigation when questions visible
     if (currentPhotoIndex.value < totalPhotos.value - 1) {
@@ -184,7 +176,6 @@ export const useGameStore = defineStore('game', () => {
     totalQuestions,
 
     // Actions
-    initializeQuizData,
     selectQuizPack,
     nextPhoto,
     previousPhoto,

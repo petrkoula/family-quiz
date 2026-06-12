@@ -5,25 +5,25 @@
  * přístupný název (role button), strukturu fotek/otázek přes `data-testid`
  * (role na opakované bloky nestačí). Viz TESTING.md.
  *
- * Testy nikdy nesahají na síť/disk – katalog balíčků jde podstrčit přes
- * `injectPackCatalog()` a mezi testy se uklízí `resetLibraryEnvironment()`.
+ * Testy nikdy nesahají na síť/disk – knihovna balíčků se předvyplní přes
+ * `injectPackCatalog()` (zapamatovaný stav) a mezi testy se uklízí
+ * `resetLibraryEnvironment()`. Appka žádná vestavěná data nemá.
  */
 import { render, within, fireEvent, cleanup } from '@testing-library/vue';
 import { flushPromises } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import { createRouter, createMemoryHistory } from 'vue-router';
-import { setPackCatalogSource, resetPackCatalogSource } from '@/data/packCatalog';
 import { LIBRARY_STORAGE_KEY } from '@/data/libraryStorage';
+import { seedLibrary, seedLibraryIfEmpty } from './fixture-library.js';
 import EditView from '@/views/EditView.vue';
 
-/** Podstrčí testovací katalog balíčků (místo vestavěných dat). */
+/** Podstrčí testovací knihovnu balíčků (jako zapamatovaný stav). */
 export function injectPackCatalog(packs) {
-  setPackCatalogSource(() => packs);
+  seedLibrary(packs);
 }
 
-/** Úklid mezi testy: vestavěný katalog + prázdné úložiště knihovny. */
+/** Úklid mezi testy: prázdné úložiště knihovny. */
 export function resetLibraryEnvironment() {
-  resetPackCatalogSource();
   window.localStorage.removeItem(LIBRARY_STORAGE_KEY);
 }
 
@@ -40,6 +40,7 @@ function makeRouter() {
 }
 
 export async function renderEdit(packId) {
+  seedLibraryIfEmpty(); // výchozí fixture, pokud si test nepodstrčil vlastní packy
   const pinia = createPinia();
   setActivePinia(pinia);
 

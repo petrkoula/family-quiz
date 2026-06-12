@@ -30,10 +30,40 @@ describe('Quiz library sync', () => {
   it('první návštěva naplní knihovnu z aktuálních složek', async () => {
     const page = await renderLandingForReload({ folders: () => FOLDERS });
 
-    // známý pack si nechá svůj titulek, nové se humanizují ze jména složky
-    expect(page.cardTitles()).toEqual(['Rodinná Klasika', 'Celebrations', 'Funny']);
+    // žádná vestavěná data: všechny titulky se humanizují ze jména složky
+    expect(page.cardTitles()).toEqual(['Family Vintage', 'Celebrations', 'Funny']);
     expect(page.photoCount('Celebrations')).toBe(3);
     expect(page.photoCount('Funny')).toBe(1);
+  });
+
+  // Scénář 1 — známý (zapamatovaný) pack si po obnovení nechá svůj titulek
+  it('zapamatovaný pack si po obnovení knihovny nechá svůj titulek', async () => {
+    localStorage.setItem(
+      'quiz-library-v1',
+      JSON.stringify({
+        packs: [
+          {
+            id: 'family-vintage',
+            title: 'Rodinná Klasika',
+            description: '',
+            color: '#4a90e2',
+            thumbnail: 'family-vintage/IMG_4246_1.jpg',
+            photos: [
+              {
+                image: 'family-vintage/IMG_4246_1.jpg',
+                questions: [{ text: 'Kdo?', options: ['A', 'B'], correct: 0 }],
+              },
+            ],
+          },
+        ],
+      })
+    );
+    const page = await renderLandingForReload({ folders: () => FOLDERS });
+
+    await page.clickLibraryReload();
+
+    // známý pack drží vlastní titulek, nově objevené složky se humanizují
+    expect(page.cardTitles()).toEqual(['Rodinná Klasika', 'Celebrations', 'Funny']);
   });
 
   // Scénář 3 + 8
@@ -85,15 +115,50 @@ describe('Quiz library sync', () => {
     expect(page.libraryReloadResult()).toMatch(/Aktualizováno: 1/);
   });
 
-  // Scénář 5 — otázky se párují podle jména souboru
-  it('fotka se známými ručními otázkami je dostane i v nově objeveném packu', async () => {
-    // IMG_4246_1.jpg má ruční otázky v bance; new.jpg nikoli.
-    const folders = [{ id: 'brand-new', photos: ['IMG_4246_1.jpg', 'new.jpg'] }];
+  // Scénář 5 — autorské otázky v knihovně přežijí sync; nové fotky dostanou placeholdery
+  it('autorské otázky přežijí obnovení knihovny; nová fotka dostane placeholdery', async () => {
+    // Zapamatovaný stav: fotka s jednou autorskou otázkou.
+    localStorage.setItem(
+      'quiz-library-v1',
+      JSON.stringify({
+        packs: [
+          {
+            id: 'family-vintage',
+            title: 'Rodinná Klasika',
+            description: '',
+            color: '#4a90e2',
+            thumbnail: 'family-vintage/IMG_4246_1.jpg',
+            photos: [
+              {
+                image: 'family-vintage/IMG_4246_1.jpg',
+                questions: [
+                  { text: 'Kdo chytil kytici?', options: ['Teta', 'Babička'], correct: 0 },
+                ],
+              },
+            ],
+          },
+        ],
+      })
+    );
+    // Ve složce mezitím přibyla nová fotka.
+    const folders = [{ id: 'family-vintage', photos: ['IMG_4246_1.jpg', 'new.jpg'] }];
     const page = await renderLandingForReload({ folders: () => folders });
 
-    const meta = page.questionCount('Brand New');
-    // 3 ruční + 3 placeholdery = 6 otázek na kartě
-    expect(meta).toBe(6);
+    await page.clickLibraryReload();
+
+    // 1 autorská otázka zůstala + 3 placeholdery nové fotky
+    expect(page.questionCount('Rodinná Klasika')).toBe(4);
+  });
+
+  // Scénář 10 — appka nemá žádná vestavěná data
+  it('bez zapamatovaného stavu, zálohy i složek je knihovna prázdná', async () => {
+    const page = await renderLandingForReload({
+      folders: () => null, // zdroj složek nedostupný
+      backup: { load: () => null, save() {} }, // žádná záloha
+    });
+
+    expect(page.cardTitles()).toEqual([]);
+    expect(page.hasCreateYourOwn()).toBe(true);
   });
 
   // Scénář 6 — stav přežije mezi návštěvami, změny až po refreshi
